@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.visionTesting;
+package org.firstinspires.ftc.teamcode.vision.visionTesting;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
