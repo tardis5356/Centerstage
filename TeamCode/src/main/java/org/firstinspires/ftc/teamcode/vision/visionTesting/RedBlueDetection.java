@@ -27,6 +27,7 @@ public class RedBlueDetection extends LinearOpMode {
     SkystoneDeterminationPipeline pipeline;
 
     private static String tardisPosition = "NONE";
+    private static String elementColor = "NONE";
 
     @Override
     public void runOpMode() {
@@ -85,6 +86,7 @@ public class RedBlueDetection extends LinearOpMode {
 //            telemetry.addData("Number of Rings", pipeline.getTEPosition());
             telemetry.addData("position", pipeline.getTEPosition());
             telemetry.addData("position", getPosition());
+            telemetry.addData("elementColor", elementColor);
             telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample
@@ -107,7 +109,10 @@ public class RedBlueDetection extends LinearOpMode {
             RIGHT,
             NONE
         }
-
+        public enum teamElementColor {
+            RED,
+            BLUE
+        }
         /*
          * Some color constants
          */
@@ -117,9 +122,9 @@ public class RedBlueDetection extends LinearOpMode {
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(10, 70);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(130, 70);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(253, 70);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0, 70);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(140, 60);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(267, 70);
         static final int REGION_WIDTH = 50; //HEIGHT on screen
         static final int REGION_HEIGHT = 100; //WIDTH on screen
         // static final int FOUR_RING_THRESHOLD = 110;
@@ -152,8 +157,8 @@ public class RedBlueDetection extends LinearOpMode {
                 REGION2_TOPLEFT_ANCHOR_POINT.x,
                 REGION2_TOPLEFT_ANCHOR_POINT.y);
         Point region2_pointB = new Point(
-                REGION2_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
-                REGION2_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+                REGION2_TOPLEFT_ANCHOR_POINT.x + REGION_HEIGHT,
+                REGION2_TOPLEFT_ANCHOR_POINT.y + REGION_WIDTH);
         Point region3_pointA = new Point(
                 REGION3_TOPLEFT_ANCHOR_POINT.x,
                 REGION3_TOPLEFT_ANCHOR_POINT.y);
@@ -167,10 +172,13 @@ public class RedBlueDetection extends LinearOpMode {
          */
         Mat region1_Cb, region2_Cb, region3_Cb;
         Mat region1_Cr, region2_Cr, region3_Cr;
+//        Mat region1_RGB, region2_RGB, region3_RGB;
         Mat YCrCb = new Mat();
         Mat Y = new Mat();
         Mat Cb = new Mat();
         Mat Cr = new Mat();
+
+//        Mat RGB = new Mat();
         int avg1, avg2, avg3;
 
         // Volatile since accessed by OpMode thread w/o synchronization
@@ -222,6 +230,10 @@ public class RedBlueDetection extends LinearOpMode {
             region1_Cr = Cr.submat(new Rect(region1_pointA, region1_pointB));
             region2_Cr = Cr.submat(new Rect(region2_pointA, region2_pointB));
             region3_Cr = Cr.submat(new Rect(region3_pointA, region3_pointB));
+
+//            region1_RGB = RGB.submat(new Rect(region1_pointA, region1_pointB));
+//            region2_RGB = RGB.submat(new Rect(region2_pointA, region2_pointB));
+//            region3_RGB = RGB.submat(new Rect(region3_pointA, region3_pointB));
         }
 
         @Override
@@ -284,6 +296,10 @@ public class RedBlueDetection extends LinearOpMode {
             avg2 = (int) Core.mean(region2_Cr).val[0];
             avg3 = (int) Core.mean(region3_Cr).val[0];
 
+//            avg1 = (int) Core.mean(region1_RGB).val[0];
+//            avg2 = (int) Core.mean(region2_RGB).val[0];
+//            avg3 = (int) Core.mean(region3_RGB).val[0];
+
 
 
             /*
@@ -326,14 +342,33 @@ public class RedBlueDetection extends LinearOpMode {
             int minOneTwo = Math.min(avg1, avg2);
             int min = Math.min(minOneTwo, avg3);
 
+            double superMean = (avg1 + avg2 + avg3) / 3;
+            double diffLeft = Math.abs(avg1 - superMean);
+            double diffCenter = Math.abs(avg2 - superMean);
+            double diffRight = Math.abs(avg3 - superMean);
+
+            double maxLeftCenter = Math.max(diffLeft, diffCenter);
+            double superMax = Math.max(maxLeftCenter, diffRight);
+
+
+            //adding in math for mean and abs value
+            //(avg1 + avg2 + avg3) / 3; - mean
+            //
+
             /*
              * Now that we found the max, we actually need to go and
              * figure out which sample region that value was from
              */
-            if (min == avg1) // Was it from region 1?
-            {
+//            if (min == avg1) // Was it from region 1?
+            if (superMax == diffLeft) {
                 tardisPosition = "LEFT";
                 position = PowerCellPosition.LEFT; // Record our analysis
+                diffLeft = avg1 - superMean;
+                if (diffLeft > 0) {
+                    elementColor = "RED";
+                } else if (diffLeft < 0) {
+                    elementColor = "BLUE";
+                }
 
                 /*
                  * Draw a solid rectangle on top of the chosen region.
@@ -345,10 +380,16 @@ public class RedBlueDetection extends LinearOpMode {
                         region1_pointB, // Second point which defines the rectangle
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
-            } else if (min == avg2) // Was it from region 2?
-            {
+//            } else if (min == avg2) // Was it from region 2?
+            } else if (superMax == diffCenter) {
                 tardisPosition = "CENTER";
                 position = PowerCellPosition.CENTER; // Record our analysis
+                diffCenter = avg2 - superMean;
+                if (diffCenter > 0) {
+                    elementColor = "RED";
+                } else if (diffCenter < 0) {
+                    elementColor = "BLUE";
+                }
 
                 /*
                  * Draw a solid rectangle on top of the chosen region.
@@ -360,10 +401,17 @@ public class RedBlueDetection extends LinearOpMode {
                         region2_pointB, // Second point which defines the rectangle
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
-            } else if (min == avg3) // Was it from region 3?
+//            } else if (min == avg3) // Was it from region 3?
+            } else if (superMax == diffRight)
             {
                 tardisPosition = "RIGHT";
                 position = PowerCellPosition.RIGHT; // Record our analysis
+                diffRight = avg3 - superMean;
+                if (diffRight > 0) {
+                    elementColor = "RED";
+                } else if (diffRight < 0) {
+                    elementColor = "BLUE";
+                }
 
                 /*
                  * Draw a solid rectangle on top of the chosen region.

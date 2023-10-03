@@ -24,7 +24,7 @@ public class CSTB_Teleop extends Base_CSTB{
             double gP1sLx = gamepad1.left_stick_x;
             double gP1sRx = gamepad1.right_stick_x;
 
-            CSTB.CSTBDrive(gP1sLy,gP1sLx,gP1sRx);
+            CSTB.CSTBDrive(gP1sLy,gP1sLx,-gP1sRx);
             double FLPOWER = gP1sLy+gP1sLx+gP1sRx;
             double FRPOWER = gP1sLy-gP1sLx-gP1sRx;
             double BLPOWER = gP1sLy-gP1sLx+gP1sRx;

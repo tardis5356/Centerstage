@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public abstract class Base_CSTB extends LinearOpMode {
     DcMotor mFL;
@@ -21,8 +22,10 @@ public abstract class Base_CSTB extends LinearOpMode {
         mBR = hardwareMap.get(DcMotor.class,  "mBR");
         mBL = hardwareMap.get(DcMotor.class,  "mBL");
 
-        mFL.setDirection(DcMotor.Direction.REVERSE);
+//        mFL.setDirection(DcMotor.Direction.REVERSE);
         mBL.setDirection(DcMotor.Direction.REVERSE);
+        mBR.setDirection(DcMotor.Direction.REVERSE);
+        mFR.setDirection(DcMotor.Direction.REVERSE);
 
     }
 }
