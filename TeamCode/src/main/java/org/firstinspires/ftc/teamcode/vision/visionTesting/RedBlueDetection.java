@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 //        import org.firstinspires.ftc.teamcode.EasyOpenCV_Examples.WebcamExample;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -16,6 +18,9 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
+
+import java.util.concurrent.TimeUnit;
+//
 /*
  * This sample demonstrates a basic (but battle-tested and essentially
  * 100% accurate) method of detecting the skystone when lined up with
@@ -25,9 +30,11 @@ import org.openftc.easyopencv.OpenCvPipeline;
 public class RedBlueDetection extends LinearOpMode {
     OpenCvCamera webcam;
     SkystoneDeterminationPipeline pipeline;
-
+//    private VisionPortal visionPortal = null;        // Used to manage the video source.
     private static String tardisPosition = "NONE";
     private static String elementColor = "NONE";
+
+    ExposureControl myExposureControl;
 
     @Override
     public void runOpMode() {
@@ -40,6 +47,10 @@ public class RedBlueDetection extends LinearOpMode {
 
 //        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 //        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
+
+//        visionPortal = new VisionPortal.Builder()
+//                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+//                .build();
 
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -68,6 +79,9 @@ public class RedBlueDetection extends LinearOpMode {
                  */
             }
         });
+        // Set camera controls unless we are stopping.
+
+
 
         waitForStart();
 
@@ -109,10 +123,12 @@ public class RedBlueDetection extends LinearOpMode {
             RIGHT,
             NONE
         }
+
         public enum teamElementColor {
             RED,
             BLUE
         }
+
         /*
          * Some color constants
          */
@@ -122,9 +138,9 @@ public class RedBlueDetection extends LinearOpMode {
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0, 70);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(140, 60);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(267, 70);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(55, 130);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(120, 140);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(230, 140);
         static final int REGION_WIDTH = 50; //HEIGHT on screen
         static final int REGION_HEIGHT = 100; //WIDTH on screen
         // static final int FOUR_RING_THRESHOLD = 110;
@@ -172,13 +188,13 @@ public class RedBlueDetection extends LinearOpMode {
          */
         Mat region1_Cb, region2_Cb, region3_Cb;
         Mat region1_Cr, region2_Cr, region3_Cr;
-//        Mat region1_RGB, region2_RGB, region3_RGB;
+        Mat region1_RGB, region2_RGB, region3_RGB;
         Mat YCrCb = new Mat();
         Mat Y = new Mat();
         Mat Cb = new Mat();
         Mat Cr = new Mat();
 
-//        Mat RGB = new Mat();
+        Mat RGB = new Mat();
         int avg1, avg2, avg3;
 
         // Volatile since accessed by OpMode thread w/o synchronization
@@ -214,23 +230,24 @@ public class RedBlueDetection extends LinearOpMode {
              * buffer would be re-allocated the first time a real frame
              * was crunched)
              */
-//            inputToCb(firstFrame);
 
-            /*
-             * Submats are a persistent reference to a region of the parent
-             * buffer. Any changes to the child affect the parent, and the
-             * reverse also holds true.
-             */
+//            inputToCb(firstFrame);
+//
+//            /*
+//             * Submats are a persistent reference to a region of the parent
+//             * buffer. Any changes to the child affect the parent, and the
+//             * reverse also holds true.
+//             */
 //            region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
 //            region2_Cb = Cb.submat(new Rect(region2_pointA, region2_pointB));
 //            region3_Cb = Cb.submat(new Rect(region3_pointA, region3_pointB));
-
-            inputToCr(firstFrame);
-
-            region1_Cr = Cr.submat(new Rect(region1_pointA, region1_pointB));
-            region2_Cr = Cr.submat(new Rect(region2_pointA, region2_pointB));
-            region3_Cr = Cr.submat(new Rect(region3_pointA, region3_pointB));
-
+//
+//            inputToCr(firstFrame);
+//
+//            region1_Cr = Cr.submat(new Rect(region1_pointA, region1_pointB));
+//            region2_Cr = Cr.submat(new Rect(region2_pointA, region2_pointB));
+//            region3_Cr = Cr.submat(new Rect(region3_pointA, region3_pointB));
+//
 //            region1_RGB = RGB.submat(new Rect(region1_pointA, region1_pointB));
 //            region2_RGB = RGB.submat(new Rect(region2_pointA, region2_pointB));
 //            region3_RGB = RGB.submat(new Rect(region3_pointA, region3_pointB));
@@ -276,7 +293,7 @@ public class RedBlueDetection extends LinearOpMode {
             /*
              * Get the Cb channel of the input frame after conversion to YCrCb
              */
-//            inputToCb(input);
+            inputToCb(input);
 
 
             /*
@@ -290,15 +307,15 @@ public class RedBlueDetection extends LinearOpMode {
 //            avg2 = (int) Core.mean(region2_Cb).val[0];
 //            avg3 = (int) Core.mean(region3_Cb).val[0];
 
-            inputToCr(input);
+             inputToCr(input);
 
-            avg1 = (int) Core.mean(region1_Cr).val[0];
-            avg2 = (int) Core.mean(region2_Cr).val[0];
-            avg3 = (int) Core.mean(region3_Cr).val[0];
+//            avg1 = (int) Core.mean(region1_Cr).val[0];
+//            avg2 = (int) Core.mean(region2_Cr).val[0];
+//            avg3 = (int) Core.mean(region3_Cr).val[0];
 
-//            avg1 = (int) Core.mean(region1_RGB).val[0];
-//            avg2 = (int) Core.mean(region2_RGB).val[0];
-//            avg3 = (int) Core.mean(region3_RGB).val[0];
+            avg1 = (int) Core.mean(region1_RGB).val[0];
+            avg2 = (int) Core.mean(region2_RGB).val[0];
+            avg3 = (int) Core.mean(region3_RGB).val[0];
 
 
 
@@ -402,8 +419,7 @@ public class RedBlueDetection extends LinearOpMode {
                         GREEN, // The color the rectangle is drawn in
                         -1); // Negative thickness means solid fill
 //            } else if (min == avg3) // Was it from region 3?
-            } else if (superMax == diffRight)
-            {
+            } else if (superMax == diffRight) {
                 tardisPosition = "RIGHT";
                 position = PowerCellPosition.RIGHT; // Record our analysis
                 diffRight = avg3 - superMean;
@@ -452,4 +468,7 @@ public class RedBlueDetection extends LinearOpMode {
     static public String getPosition() {
         return tardisPosition;
     }
+
 }
+
+
