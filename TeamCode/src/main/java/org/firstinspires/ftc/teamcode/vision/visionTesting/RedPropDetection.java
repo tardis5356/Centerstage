@@ -23,17 +23,17 @@ public class RedPropDetection implements VisionProcessor {
 
     static final Rect LEFT_RECTANGLE = new Rect(
             new Point(0, 0),
-            new Point(0, 0)
+            new Point(212, 480)
     );
 
     static final Rect RIGHT_RECTANGLE = new Rect(
-            new Point(0, 0),
-            new Point(0, 0)
+            new Point(424 , 0),
+            new Point(640, 480)
     );
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
-
+//        inputToCb(firstFrame);
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 
 @TeleOp(name="Optimus_TeleOp")
-public class Opimus_TeleOp extends LinearOpMode{
+public class Optimus_TeleOp extends LinearOpMode{
 
     // create objects and give them classes
     DcMotor mL;
