@@ -19,7 +19,7 @@ public class Gripper extends SubsystemBase {
     }
 
     public void open(){
-        servoL.setPosition(0.6);
+        servoL.setPosition(1);
         servoR.setPosition(0.2);
     }
 
