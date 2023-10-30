@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.DemoBots.optimus;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.Robot;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.RobotToIntakePositionCommand;
-import org.firstinspires.ftc.teamcode.DemoBots.optimus.subsystems.Gripper;
-import org.firstinspires.ftc.teamcode.DemoBots.optimus.subsystems.Wrist;
+import org.firstinspires.ftc.teamcode.DemoBots.optimus.Optimus_subsystems.Gripper;
+import org.firstinspires.ftc.teamcode.DemoBots.optimus.Optimus_subsystems.Wrist;
 
 public class Optimus_Command_Based extends CommandOpMode {
     private GamepadEx driver;
