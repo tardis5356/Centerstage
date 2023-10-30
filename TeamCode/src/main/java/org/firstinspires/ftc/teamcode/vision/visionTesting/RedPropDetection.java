@@ -50,7 +50,7 @@ public class RedPropDetection implements VisionProcessor {
 
         //RED!!
         Scalar lowHSVRedLower = new Scalar(0, 100, 20);  //Beginning of Color Wheel
-        Scalar lowHSVRedUpper = new Scalar(10, 255, 255);
+        Scalar lowHSVRedUpper = new Scalar(10, 255, 255);10/
 
         Scalar redHSVRedLower = new Scalar(160, 100, 20); //Wraps around Color Wheel
         Scalar highHSVRedUpper = new Scalar(180, 255, 255);
@@ -72,7 +72,7 @@ public class RedPropDetection implements VisionProcessor {
         double averagedRightBoxRed = rightBoxRed / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
 
         //BLUE!!
-        Scalar lowHSVBlueLower = new Scalar(0, 100, 20);  //Beginning of Color Wheel
+        Scalar lowHSVBlueLower = new Scalar(235,100,27);  //Beginning of Color Wheel
         Scalar lowHSVBlueUpper = new Scalar(10, 255, 255);
 
         Scalar redHSVBLueLower = new Scalar(160, 100, 20); //Wraps around Color Wheel
@@ -88,8 +88,8 @@ public class RedPropDetection implements VisionProcessor {
         lowMatBlue.release();
         highMatBlue.release();
 
-        double leftBox = Core.sumElems(finalMatBlue.submat(LEFT_RECTANGLE)).val[0];
-        double rightBox = Core.sumElems(finalMatBlue.submat(RIGHT_RECTANGLE)).val[0];
+        double leftBoxBlue = Core.sumElems(finalMatBlue.submat(LEFT_RECTANGLE)).val[0];
+        double rightBoxBlue = Core.sumElems(finalMatBlue.submat(RIGHT_RECTANGLE)).val[0];
 
         double averagedLeftBoxBlue = leftBoxBlue / LEFT_RECTANGLE.area() / 255;
         double averagedRightBoxBlue = rightBoxBlue / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
