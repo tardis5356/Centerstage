@@ -47,10 +47,16 @@ public class RedPropDetection implements VisionProcessor {
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
         Imgproc.cvtColor(frame, testMatRed, Imgproc.COLOR_RGB2HSV);
+        Imgproc.cvtColor(frame, testMatBlue, Imgproc.COLOR_RGB2HSV);
+
+
+        //notes: In OpenCV, Hue has values from 0 to 180, Saturation and Value from 0 to 255.
+        // Thus, OpenCV uses HSV ranges between (0-180, 0-255, 0-255). In OpenCV, the H values 179,
+        // 178, 177 and so on are as close to the true RED as H value 1, 2, 3 and so on.
 
         //RED!!
         Scalar lowHSVRedLower = new Scalar(0, 100, 20);  //Beginning of Color Wheel
-        Scalar lowHSVRedUpper = new Scalar(10, 255, 255);10/
+        Scalar lowHSVRedUpper = new Scalar(10, 255, 255);
 
         Scalar redHSVRedLower = new Scalar(160, 100, 20); //Wraps around Color Wheel
         Scalar highHSVRedUpper = new Scalar(180, 255, 255);
@@ -71,22 +77,22 @@ public class RedPropDetection implements VisionProcessor {
         double averagedLeftBoxRed = leftBoxRed / LEFT_RECTANGLE.area() / 255;
         double averagedRightBoxRed = rightBoxRed / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
 
-        //BLUE!!
-        Scalar lowHSVBlueLower = new Scalar(235,100,27);  //Beginning of Color Wheel
-        Scalar lowHSVBlueUpper = new Scalar(10, 255, 255);
+//        //BLUE!!
+        Scalar lowHSVBlueLower = new Scalar(115, 100, 27);  //Beginning of Color Wheel
+        Scalar lowHSVBlueUpper = new Scalar(130, 255, 255);
 
-        Scalar redHSVBLueLower = new Scalar(160, 100, 20); //Wraps around Color Wheel
-        Scalar highHSVBlueUpper = new Scalar(180, 255, 255);
-
-        Core.inRange(testMatBlue, lowHSVRedLower, lowHSVRedUpper, lowMatBlue);
-        Core.inRange(testMatBlue, redHSVRedLower, highHSVRedUpper, highMatBlue);
-
+//        Scalar blueHSVBLueLower = new Scalar(40, 100, 20); //Wraps around Color Wheel
+//        Scalar highHSVBlueUpper = new Scalar(55, 255, 255);
+//
+        Core.inRange(testMatBlue, lowHSVBlueLower, lowHSVBlueUpper, finalMatBlue);
+//        Core.inRange(testMatBlue, blueHSVBLueLower, highHSVBlueUpper, highMatBlue);
+//
         testMatBlue.release();
 
-        Core.bitwise_or(lowMatBlue, highMatBlue, finalMatBlue);
+//        Core.bitwise_or(lowMatBlue, highMatBlue, finalMatBlue);
 
-        lowMatBlue.release();
-        highMatBlue.release();
+//        lowMatBlue.release();
+//        highMatBlue.release();
 
         double leftBoxBlue = Core.sumElems(finalMatBlue.submat(LEFT_RECTANGLE)).val[0];
         double rightBoxBlue = Core.sumElems(finalMatBlue.submat(RIGHT_RECTANGLE)).val[0];
@@ -101,7 +107,15 @@ public class RedPropDetection implements VisionProcessor {
             outStr = "right";
         } else {
             outStr = "center";
+
+//        if (averagedLeftBoxRed > redThreshold) {        //Must Tune Red Threshold
+//            outStr = "left";
+//        } else if (averagedRightBoxRed > redThreshold) {
+//            outStr = "right";
+//        } else {
+//            outStr = "center";
         }
+
 
 //        finalMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline
 //                                  on the driver station stream, do not use this permanently in your code as
