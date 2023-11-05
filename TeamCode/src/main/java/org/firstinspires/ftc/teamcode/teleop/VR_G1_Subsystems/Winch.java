@@ -10,4 +10,13 @@ public class Winch extends SubsystemBase {
     public Winch(HardwareMap hardwareMap){
         WMotor = hardwareMap.get(DcMotor.class, "mW");
     }
+//    @Override
+//    public void periodic() {}
+//
+//    public void Raise(){
+//
+//    }
+//    public void Lower(){
+//
+//    }
 }

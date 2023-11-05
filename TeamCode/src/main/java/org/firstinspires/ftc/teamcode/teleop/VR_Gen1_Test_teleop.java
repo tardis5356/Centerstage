@@ -26,24 +26,24 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
     double LR;
     double Rotation;
 
-    private Intake intake;
-    private IntakeIn intakeIn;
-    private IntakeOut intakeOut;
+//    private Intake intake;
+//    private IntakeIn intakeIn;
+//    private IntakeOut intakeOut;
     @Override
     public void initialize(){
 
         driver1 = new GamepadEx(gamepad1);
         driver2 = new GamepadEx(gamepad2);
 
-        intake = new Intake(hardwareMap);
-        intakeIn = new IntakeIn(intake);
-        intakeOut = new IntakeOut(intake);
+//        intake = new Intake(hardwareMap);
+//        intakeIn = new IntakeIn(intake);
+//        intakeOut = new IntakeOut(intake);
 
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) == true)
-                .whenActive(intakeIn);
-
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) == true)
-                .whenActive(intakeOut);
+//        new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) == true)
+//                .whenActive(intakeIn);
+//
+//        new Trigger(() -> driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) == true)
+//                .whenActive(intakeOut);
 
         mFL = hardwareMap.get(DcMotorEx.class, "mFL");
         mFR = hardwareMap.get(DcMotorEx.class, "mFR");

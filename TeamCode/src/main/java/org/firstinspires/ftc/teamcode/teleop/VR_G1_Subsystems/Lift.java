@@ -1,14 +1,19 @@
 package org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class Lift extends SubsystemBase {
-    private DcMotorEx LLiftM;
-    private DcMotorEx RLiftM;
+//    private PIDController controller,
+//            extendController, retractController;
+
+
+
+    private DcMotorEx LLiftM, RLiftM;
     private TouchSensor LSence;
     public Lift(HardwareMap hardwareMap){
         LLiftM = hardwareMap.get(DcMotorEx.class, "mLL");
