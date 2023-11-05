@@ -15,25 +15,33 @@ public class Lift extends SubsystemBase {
 
     private DcMotorEx LLiftM, RLiftM;
     private TouchSensor LSence;
+
     public Lift(HardwareMap hardwareMap){
         LLiftM = hardwareMap.get(DcMotorEx.class, "mLL");
         RLiftM = hardwareMap.get(DcMotorEx.class, "mLR");
         LSence = hardwareMap.get(TouchSensor.class, "lT");
     }
 
+
     @Override
     public void periodic() {}
 
-    public void Raise(){
-        LLiftM.setPower(-.2);
-        RLiftM.setPower(-.2);
-    }
+//    public void Raise(){
+//        LLiftM.setPower(-.2);
+//        RLiftM.setPower(-.2);
+//    }
     public void Lower(){
-        LLiftM.setPower(.2);
-        RLiftM.setPower(.2);
+        if(LSence.isPressed() == false){
+            LLiftM.setPower(.2);
+            RLiftM.setPower(.2);
+        }
+        else{
+            LLiftM.setPower(0);
+            RLiftM.setPower(0);
+        }
     }
-    public void Stay(){
-        LLiftM.setPower(0);
-        RLiftM.setPower(0);
-    }
+//    public void Stay(){
+//        LLiftM.setPower(0);
+//        RLiftM.setPower(0);
+//    }
 }
