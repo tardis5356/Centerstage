@@ -13,13 +13,21 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 public class RedPropDetection implements VisionProcessor {
-    Mat testMat = new Mat();
-    Mat highMat = new Mat();
-    Mat lowMat = new Mat();
-    Mat finalMat = new Mat();
+
+    Mat testMatRed = new Mat();
+    Mat highMatRed = new Mat();
+    Mat lowMatRed = new Mat();
+    Mat finalMatRed = new Mat();
+    Mat testMatBlue = new Mat();
+    Mat highMatBlue = new Mat();
+    Mat lowMatBlue = new Mat();
+    Mat finalMatBlue = new Mat();
     double redThreshold = 0.5;
+    double blueThreshold = 0.5;
 
     String outStr = "left"; //Set a default value in case vision does not work
+
+    static final Scalar BLUE = new Scalar(0, 0, 255);
 
     static final Rect LEFT_RECTANGLE = new Rect(
             new Point(0, 0),
@@ -38,43 +46,107 @@ public class RedPropDetection implements VisionProcessor {
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
-        Imgproc.cvtColor(frame, testMat, Imgproc.COLOR_RGB2HSV);
+        Imgproc.cvtColor(frame, testMatRed, Imgproc.COLOR_RGB2HSV);
+        Imgproc.cvtColor(frame, testMatBlue, Imgproc.COLOR_RGB2HSV);
 
 
+        //notes: In OpenCV, Hue has values from 0 to 180, Saturation and Value from 0 to 255.
+        // Thus, OpenCV uses HSV ranges between (0-180, 0-255, 0-255). In OpenCV, the H values 179,
+        // 178, 177 and so on are as close to the true RED as H value 1, 2, 3 and so on.
+
+        //RED!!
         Scalar lowHSVRedLower = new Scalar(0, 100, 20);  //Beginning of Color Wheel
         Scalar lowHSVRedUpper = new Scalar(10, 255, 255);
 
         Scalar redHSVRedLower = new Scalar(160, 100, 20); //Wraps around Color Wheel
         Scalar highHSVRedUpper = new Scalar(180, 255, 255);
 
-        Core.inRange(testMat, lowHSVRedLower, lowHSVRedUpper, lowMat);
-        Core.inRange(testMat, redHSVRedLower, highHSVRedUpper, highMat);
+        Core.inRange(testMatRed, lowHSVRedLower, lowHSVRedUpper, lowMatRed);
+        Core.inRange(testMatRed, redHSVRedLower, highHSVRedUpper, highMatRed);
 
-        testMat.release();
+        testMatRed.release();
 
-        Core.bitwise_or(lowMat, highMat, finalMat);
+        Core.bitwise_or(lowMatRed, highMatRed, finalMatRed);
 
-        lowMat.release();
-        highMat.release();
+        lowMatRed.release();
+        highMatRed.release();
 
-        double leftBox = Core.sumElems(finalMat.submat(LEFT_RECTANGLE)).val[0];
-        double rightBox = Core.sumElems(finalMat.submat(RIGHT_RECTANGLE)).val[0];
+        double leftBoxRed = Core.sumElems(finalMatRed.submat(LEFT_RECTANGLE)).val[0];
+        double rightBoxRed = Core.sumElems(finalMatRed.submat(RIGHT_RECTANGLE)).val[0];
 
-        double averagedLeftBox = leftBox / LEFT_RECTANGLE.area() / 255;
-        double averagedRightBox = rightBox / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
+        double averagedLeftBoxRed = leftBoxRed / LEFT_RECTANGLE.area() / 255;
+        double averagedRightBoxRed = rightBoxRed / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
+
+//        //BLUE!!
+        Scalar lowHSVBlueLower = new Scalar(115, 100, 27);  //Beginning of Color Wheel
+        Scalar lowHSVBlueUpper = new Scalar(130, 255, 255);
+
+//        Scalar blueHSVBLueLower = new Scalar(40, 100, 20); //Wraps around Color Wheel
+//        Scalar highHSVBlueUpper = new Scalar(55, 255, 255);
+//
+        Core.inRange(testMatBlue, lowHSVBlueLower, lowHSVBlueUpper, finalMatBlue);
+//        Core.inRange(testMatBlue, blueHSVBLueLower, highHSVBlueUpper, highMatBlue);
+//
+        testMatBlue.release();
+
+//        Core.bitwise_or(lowMatBlue, highMatBlue, finalMatBlue);
+
+//        lowMatBlue.release();
+//        highMatBlue.release();
+
+        double leftBoxBlue = Core.sumElems(finalMatBlue.submat(LEFT_RECTANGLE)).val[0];
+        double rightBoxBlue = Core.sumElems(finalMatBlue.submat(RIGHT_RECTANGLE)).val[0];
+
+        double averagedLeftBoxBlue = leftBoxBlue / LEFT_RECTANGLE.area() / 255;
+        double averagedRightBoxBlue = rightBoxBlue / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
 
 
-        if (averagedLeftBox > redThreshold) {        //Must Tune Red Threshold
+        if (averagedLeftBoxRed > redThreshold || averagedLeftBoxBlue > blueThreshold) {        //Must Tune Red Threshold
             outStr = "left";
-        } else if (averagedRightBox > redThreshold) {
-            outStr = "center";
-        } else {
+        } else if (averagedRightBoxRed > redThreshold || averagedRightBoxBlue > blueThreshold) {
             outStr = "right";
+        } else {
+            outStr = "center";
+
+//        if (averagedLeftBoxRed > redThreshold) {        //Must Tune Red Threshold
+//            outStr = "left";
+//        } else if (averagedRightBoxRed > redThreshold) {
+//            outStr = "right";
+//        } else {
+//            outStr = "center";
         }
 
-        finalMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline
-                                  on the driver station stream, do not use this permanently in your code as
-                                  you use the "frame" mat for all of your pipelines, such as April Tags*/
+
+//        finalMat.copyTo(frame); /*This line should only be added in when you want to see your custom pipeline
+//                                  on the driver station stream, do not use this permanently in your code as
+//                                  you use the "frame" mat for all of your pipelines, such as April Tags*/
+        Imgproc.rectangle(
+                frame, // Buffer to draw on
+                new Point(LEFT_RECTANGLE.x,LEFT_RECTANGLE.y), // First point which defines the rectangle
+                new Point(LEFT_RECTANGLE.width, LEFT_RECTANGLE.height), // Second point which defines the rectangle
+                BLUE, // The color the rectangle is drawn in
+                2); // Thickness of the rectangle lines
+
+        /*
+         * Supposed to be center block; we don't need it because it's just everything that isn't already drawn
+//         */
+//        Imgproc.rectangle(
+//                frame, // Buffer to draw on
+//                region2_pointA, // First point which defines the rectangle
+//                region2_pointB, // Second point which defines the rectangle
+//                BLUE, // The color the rectangle is drawn in
+//                2); // Thickness of the rectangle lines
+        /*
+         * Draw a rectangle showing sample region 3 on the screen.
+         * Simply a visual aid. Serves no functional purpose.
+         */
+        Imgproc.rectangle(
+                frame, // Buffer to draw on
+                new Point(RIGHT_RECTANGLE.x, RIGHT_RECTANGLE.y), // First point which defines the rectangle
+                new Point(RIGHT_RECTANGLE.width, RIGHT_RECTANGLE.height), // Second point which defines the rectangle
+                BLUE, // The color the rectangle is drawn in
+                2); // Thickness of the rectangle lines
+
         return null;            //You do not return the original mat anymore, instead return null
 
 
