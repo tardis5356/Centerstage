@@ -8,13 +8,13 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class Winch extends SubsystemBase {
     private DcMotor WMotor;
-    private Servo LinServ;
+    private Servo WServ;
     private Servo BraceL;
     private Servo BraceR;
 
     public Winch(HardwareMap hardwareMap){
         WMotor = hardwareMap.get(DcMotor.class, "mW");
-        LinServ = hardwareMap.get(Servo.class, "sW");
+        WServ = hardwareMap.get(Servo.class, "sW");
         BraceL = hardwareMap.get(Servo.class, "sBL");
         BraceR = hardwareMap.get(Servo.class, "sBR");
     }
@@ -23,14 +23,14 @@ public class Winch extends SubsystemBase {
     public void periodic() {}
 
     public void scissorDep(){
-        LinServ.setPosition (.2);
+        WServ.setPosition (.2);
     }
     public void braceDep(){
         BraceL.setPosition (.5);
         BraceR.setPosition (.5);
     }
     public void retract() {
-        LinServ.setPosition(.7);
+        WServ.setPosition(.7);
     }
     public void PullUp(){
         WMotor.setPower(.8);
