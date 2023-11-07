@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeComs.IntakeIn;
@@ -16,6 +17,9 @@ import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeComs.IntakeOut
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Winch;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WinchComs.DeployWinch;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WinchComs.PullUpBot;
+
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Lift;
+import org.firstinspires.ftc.teamcode.commands.LiftToPositionCommand;
 
 
 @TeleOp(name="VR_Gen1_Debug")
@@ -43,6 +47,11 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
     private DeployWinch deployWinch;
     private PullUpBot pullUpBot;
 
+    //lift and lift coms
+    private Lift lift;
+    private LiftToPositionCommand liftToIntakePositionCommand;
+
+
     @Override
     public void initialize(){
 
@@ -60,6 +69,10 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         deployWinch = new DeployWinch(winch);
         pullUpBot = new PullUpBot(winch);
 
+        //init lift stuff
+        lift = new Lift(hardwareMap);
+        liftToIntakePositionCommand = new LiftToPositionCommand(lift, -10, 20);
+
         //button map intake commands
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) == true)
                 .whenActive(intakeIn);
@@ -68,11 +81,15 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
                 .whenActive(intakeOut);
 
         //button map winch commands
-        new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_UP) == true)
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP) == true)
                 .whenActive(deployWinch);
 
-        new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_DOWN) == true)
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN) == true)
                 .whenActive(pullUpBot);
+
+        //map buttons to lift positions
+        new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_DOWN) == true)
+                .whenActive(liftToIntakePositionCommand);
 
         //init and set up drive motors
         mFL = hardwareMap.get(DcMotorEx.class, "mFL");
@@ -87,6 +104,8 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
     @Override
     public void run() {
         super.run();
+        lift.manualControl(-gamepad2.left_stick_y, -gamepad2.right_stick_y);
+
 
         //map drive vars to inputs
         FB = gamepad1.left_stick_y;

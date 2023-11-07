@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-
+@Disabled
 public class Lift_Victor extends SubsystemBase {
 //    private PIDController controller,
 //            extendController, retractController;

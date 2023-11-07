@@ -30,7 +30,7 @@ public class Winch extends SubsystemBase {
         BraceR.setPosition (.5);
     }
     public void retract() {
-        WServ.setPosition(.7);
+        WServ.setPosition(.6);
     }
     public void PullUp(){
         WMotor.setPower(.8);
