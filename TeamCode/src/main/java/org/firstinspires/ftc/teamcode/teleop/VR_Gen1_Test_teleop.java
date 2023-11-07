@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WinchComs.DeployWinc
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WinchComs.PullUpBot;
 
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Lift;
-import org.firstinspires.ftc.teamcode.commands.LiftToPositionCommand;
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.LiftToPositionCommand;
 
 
 @TeleOp(name="VR_Gen1_Debug")
