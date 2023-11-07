@@ -1,16 +1,16 @@
 package org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024;
 
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.encoderTicksToInches;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_DriveConstants.MAX_ANG_ACCEL;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_DriveConstants.kV;
 
 import androidx.annotation.NonNull;
 
@@ -42,6 +42,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner;
@@ -96,10 +97,10 @@ public class CSTB_SampleMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-        imu = hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
-        imu.initialize(parameters);
+//        imu = hardwareMap.get(IMU.class, "imu");
+//        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+//                DriveConstants.LOGO_FACING_DIR, DriveConstants.USB_FACING_DIR));
+//        imu.initialize(parameters);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "mFL");
         leftRear = hardwareMap.get(DcMotorEx.class, "mBL");
@@ -134,7 +135,7 @@ public class CSTB_SampleMecanumDrive extends MecanumDrive {
         List<Integer> lastTrackingEncVels = new ArrayList<>();
 
         // TODO: if desired, use setLocalizer() to change the localization method
-        // setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
+         setLocalizer(new CSTB_StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
                 follower, HEADING_PID, batteryVoltageSensor,
@@ -296,12 +297,12 @@ public class CSTB_SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public double getRawExternalHeading() {
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        return 0; //imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 
     @Override
     public Double getExternalHeadingVelocity() {
-        return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
+        return 0.0;  //(double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {

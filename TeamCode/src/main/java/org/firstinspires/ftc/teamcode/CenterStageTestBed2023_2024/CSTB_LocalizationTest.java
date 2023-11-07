@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_SampleMecanumDrive;
 
@@ -37,8 +38,14 @@ public class CSTB_LocalizationTest extends LinearOpMode {
             drive.update();
 
             Pose2d poseEstimate = drive.getPoseEstimate();
-            telemetry.addData("vx", poseEstimate.getX());
-            telemetry.addData("vy", poseEstimate.getY());
+            telemetry.addData("x", poseEstimate.getX());
+            telemetry.addData("y", poseEstimate.getY());
+            telemetry.addData("heading", poseEstimate.getHeading());
+            telemetry.addData("wheel positions", drive.getWheelPositions());
+            telemetry.addData("mFL", hardwareMap.get(DcMotorEx.class, "mFL").getCurrentPosition() );
+            telemetry.addData("mFR", hardwareMap.get(DcMotorEx.class, "mFR").getCurrentPosition() );
+            telemetry.addData("mBL", hardwareMap.get(DcMotorEx.class, "mBL").getCurrentPosition() );
+            telemetry.addData("mBR", hardwareMap.get(DcMotorEx.class, "mBR").getCurrentPosition() );
             telemetry.addData("heading", poseEstimate.getHeading());
             telemetry.update();
         }

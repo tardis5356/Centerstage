@@ -75,6 +75,10 @@ public class VisionPortalRedBlueDetection extends LinearOpMode {
             telemetry.addData("Gain Min" , gainControl.getMinGain());
             telemetry.addData("Gain Max" , gainControl.getMaxGain());
             telemetry.addData("Prop Position", redPropThreshold.getPropPosition());
+            telemetry.addData("Averaged Left Box Red", "%.4f", redPropThreshold.getAveragedLeftBoxRed());
+            telemetry.addData("Averaged Right Box Red", "%.4f", redPropThreshold.getAveragedRightBoxRed());
+            telemetry.addData("Averaged Left Box Blue", "%.4f", redPropThreshold.getAveragedLeftBoxBlue());
+            telemetry.addData("Averaged Right Box Blue", "%.4f", redPropThreshold.getAveragedRightBoxBlue());
             telemetry.update();
         }
 

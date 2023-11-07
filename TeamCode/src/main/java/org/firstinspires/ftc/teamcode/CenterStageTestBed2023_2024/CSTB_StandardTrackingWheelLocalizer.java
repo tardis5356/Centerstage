@@ -29,10 +29,10 @@ import java.util.List;
 @Config
 public class CSTB_StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
     public static double TICKS_PER_REV = 8192;
-    public static double WHEEL_RADIUS = 0.6875; // in
+    public static double WHEEL_RADIUS = 0.625; //0.6875; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
-    public static double LATERAL_DISTANCE = 13.75; // in; distance between the left and right odometers
+    public static double LATERAL_DISTANCE = 13.625; // 13.75; // in; distance between the left and right odometers
     public static double FORWARD_OFFSET = -5.5; // in; offset of the lateral wheel
 
     public static double X_MULTIPLIER = 1;
@@ -58,9 +58,9 @@ public class CSTB_StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocal
 
         // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
 
-        frontEncoder.setDirection(Encoder.Direction.REVERSE);
+//        frontEncoder.setDirection(Encoder.Direction.REVERSE);
         leftEncoder.setDirection((Encoder.Direction.REVERSE));
-        rightEncoder.setDirection((Encoder.Direction.REVERSE));
+//        rightEncoder.setDirection((Encoder.Direction.REVERSE));
     }
 
     public static double encoderTicksToInches(double ticks) {

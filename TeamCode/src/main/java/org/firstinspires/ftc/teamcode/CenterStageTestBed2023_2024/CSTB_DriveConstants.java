@@ -46,7 +46,7 @@ public class CSTB_DriveConstants {
      */
     public static double WHEEL_RADIUS = 1.9685; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 16.25; // in
+    public static double TRACK_WIDTH = 14.25; // 16.25 in
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -65,7 +65,7 @@ public class CSTB_DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 61.316*0.8;
+    public static double MAX_VEL = 64.3159 * 0.8; // 61.316*0.8;
     public static double MAX_ACCEL = 30;
     public static double MAX_ANG_VEL = Math.toRadians(60);
     public static double MAX_ANG_ACCEL = Math.toRadians(60);
@@ -74,9 +74,9 @@ public class CSTB_DriveConstants {
      * Adjust the orientations here to match your robot. See the FTC SDK documentation for details.
      */
     public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
-            RevHubOrientationOnRobot.LogoFacingDirection.UP;
+            RevHubOrientationOnRobot.LogoFacingDirection.FORWARD;
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
-            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+            RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
 
 
     public static double encoderTicksToInches(double ticks) {
