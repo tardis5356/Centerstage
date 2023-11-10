@@ -17,13 +17,19 @@ public class Gripper extends SubsystemBase{
     @Override
     public void periodic(){}
 
-    public void release(){
-        sGR.setPosition(.8);
+    public void releaseLeft(){
         sGL.setPosition(.3);
     }
 
-    public void grab(){
-        sGR.setPosition(.2);
+    public void releaseRight(){
+        sGR.setPosition(.8);
+    }
+
+    public void grabLeft(){
         sGL.setPosition(.9);
+    }
+
+    public void grabRight(){
+        sGR.setPosition(.2);
     }
 }
