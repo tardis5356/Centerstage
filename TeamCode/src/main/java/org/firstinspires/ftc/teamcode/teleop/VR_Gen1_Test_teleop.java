@@ -21,6 +21,8 @@ import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WinchComs.PullUpBot;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Lift;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.LiftToPositionCommand;
 
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.LEDs;
+
 
 @TeleOp(name="VR_Gen1_Debug")
 public class VR_Gen1_Test_teleop extends CommandOpMode {
@@ -51,6 +53,9 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
     private Lift lift;
     private LiftToPositionCommand liftToIntakePositionCommand;
 
+    //LEDs and coms
+    private LEDs leds;
+
 
     @Override
     public void initialize(){
@@ -61,7 +66,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         //init intake stuff
         intake = new Intake(hardwareMap);
-        intakeIn = new IntakeIn(intake);
+        intakeIn = new IntakeIn(intake, leds);
         intakeOut = new IntakeOut(intake);
 
         //init winch stuff

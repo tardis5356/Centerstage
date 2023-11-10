@@ -5,13 +5,17 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Intake;
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.LEDs;
 
 public class IntakeIn extends SequentialCommandGroup {
-    public IntakeIn(Intake IntakeM){
+    public IntakeIn(Intake intake, LEDs led){
         addCommands(
-                new InstantCommand(IntakeM :: in),
-                new WaitCommand(1500),
-                new InstantCommand(IntakeM :: stop)
+                new InstantCommand(intake :: in),
+                new InstantCommand(intake :: stop),
+                new InstantCommand(()->{
+                    LEDs.setLEDstate("Intaking");
+                })
+
         );
     }
 }

@@ -39,7 +39,7 @@ public class Lift extends SubsystemBase {
 
         controller = new PIDController(p, i, d);
 
-        liftBase = hardwareMap.get(TouchSensor.class, "lT");
+        liftBase = hardwareMap.get(TouchSensor.class, "touchLift");
 
         mLR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         mLL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
