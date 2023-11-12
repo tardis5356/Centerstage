@@ -5,9 +5,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+
 public class Gripper extends SubsystemBase{
     private Servo sGR;
     private Servo sGL;
+
 
     public Gripper(HardwareMap hardwareMap){
         sGR = hardwareMap.get(Servo.class, "sGR");
@@ -18,18 +20,18 @@ public class Gripper extends SubsystemBase{
     public void periodic(){}
 
     public void releaseLeft(){
-        sGL.setPosition(.3);
+        sGL.setPosition(BotPositions.LEFT_GRIPPER_OPEN_POSITION);
     }
 
     public void releaseRight(){
-        sGR.setPosition(.8);
+        sGR.setPosition(BotPositions.RIGHT_GRIPPER_OPEN_POSITION);
     }
 
     public void grabLeft(){
-        sGL.setPosition(.9);
+        sGL.setPosition(BotPositions.LEFT_GRIPPER_CLOSED_POSITION);
     }
 
     public void grabRight(){
-        sGR.setPosition(.2);
+        sGR.setPosition(BotPositions.RIGHT_GRIPPER_CLOSED_POSITION);
     }
 }
