@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -14,16 +15,25 @@ public class LEDs extends SubsystemBase {
     private ColorSensor colorLeft, colorRight;
     private RevBlinkinLedDriver blinkin;
 
+    ElapsedTime runtime = new ElapsedTime();
+
+    double EvenOrOdd = 0;
+
+
+
+
     // setup colors
-    RevBlinkinLedDriver.BlinkinPattern
+    public RevBlinkinLedDriver.BlinkinPattern
             IdleAnim = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES,
-            Yellow  = RevBlinkinLedDriver.BlinkinPattern.GOLD,
             YellowBlink = RevBlinkinLedDriver.BlinkinPattern.CP2_HEARTBEAT_SLOW,
+            RedBlink = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED,
+            Yellow  = RevBlinkinLedDriver.BlinkinPattern.GOLD,
             Purple = RevBlinkinLedDriver.BlinkinPattern.VIOLET,
             White = RevBlinkinLedDriver.BlinkinPattern.WHITE,
-            Green = RevBlinkinLedDriver.BlinkinPattern.DARK_GREEN,
-            Red = RevBlinkinLedDriver.BlinkinPattern.DARK_RED,
-            RedBlink = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED;
+            Green = RevBlinkinLedDriver.BlinkinPattern.DARK_GREEN;
+    private RevBlinkinLedDriver.BlinkinPattern PixColor1;
+    private RevBlinkinLedDriver.BlinkinPattern PixColor2;
+
 
     // setup the switch variable
     static String LEDstate = "Idle";
@@ -49,6 +59,26 @@ public class LEDs extends SubsystemBase {
             //triggers the Signal set and
             case "Signaling" :
 
+                int currentRunTime = (int) runtime.seconds();
+
+                if (currentRunTime%2 == 0){
+                    EvenOrOdd = 0;
+                }
+                else {
+                    EvenOrOdd = 1;
+                }
+
+                if(!checkLeftPixel() && !checkRightPixel() && EvenOrOdd == 0){
+                    setNoPixelsColor1(PixColor1);
+                }
+                else if(!checkLeftPixel() && !checkRightPixel() && EvenOrOdd == 1){
+                    setNoPixelsColor1(PixColor2);
+                }
+
+                if(checkLeftPixel() && !checkRightPixel() || !checkLeftPixel() && checkRightPixel()){
+                LEDstate = "Intaking";
+                }
+
                 break;
 
             //triggers the Intakeing set and has procedural based on the color sensor readings to enact different colors.
@@ -66,6 +96,7 @@ public class LEDs extends SubsystemBase {
         }
     }
 
+
     // This method allows other java classes to pass a state to LEDstate.
     // It allows other classes to use the swich from periodic.
     public static void setLEDstate(String state){
@@ -81,6 +112,11 @@ public class LEDs extends SubsystemBase {
 
         blinkin.setPattern(IdleAnim);
 
+    }
+
+    public void changeColor (RevBlinkinLedDriver.BlinkinPattern ColorInput){
+        PixColor2 = PixColor1;
+        PixColor1 = ColorInput;
     }
 
     // The following two methods use the color sensor to detect a pixel based on distance
@@ -118,8 +154,12 @@ public class LEDs extends SubsystemBase {
         }
     }
 
-    public void setNoPixels(){
-        blinkin.setPattern(Green);
+    public void setNoPixelsColor1(RevBlinkinLedDriver.BlinkinPattern C1){
+        blinkin.setPattern(C1);
+    }
+
+    public void setNoPixelsColor2(RevBlinkinLedDriver.BlinkinPattern C2){
+        blinkin.setPattern(C2);
     }
 
     // Method sets color to a blinking gold
