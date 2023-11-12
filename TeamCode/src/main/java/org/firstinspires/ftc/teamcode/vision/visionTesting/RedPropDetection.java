@@ -22,21 +22,24 @@ public class RedPropDetection implements VisionProcessor {
     Mat highMatBlue = new Mat();
     Mat lowMatBlue = new Mat();
     Mat finalMatBlue = new Mat();
-    double redThreshold = 0.5;
-    double blueThreshold = 0.5;
+    double redThreshold = 0.2;
+    double blueThreshold = 0.2;
+    double averagedLeftBoxRed;
+    double averagedRightBoxRed;
+    double averagedLeftBoxBlue;
+    double averagedRightBoxBlue;
 
     String outStr = "left"; //Set a default value in case vision does not work
 
     static final Scalar BLUE = new Scalar(0, 0, 255);
 
-    static final Rect LEFT_RECTANGLE = new Rect(
-            new Point(0, 0),
-            new Point(212, 480)
-    );
-
+        static final Rect LEFT_RECTANGLE = new Rect( // 640 x 480 (X by Y)
+                new Point(90, 0), //anchor (upper left corner)
+                new Point(200, 100) //width, height
+        );
     static final Rect RIGHT_RECTANGLE = new Rect(
-            new Point(424 , 0),
-            new Point(640, 480)
+            new Point(250 , 140),
+            new Point(50, 100)
     );
 
     @Override
@@ -74,8 +77,8 @@ public class RedPropDetection implements VisionProcessor {
         double leftBoxRed = Core.sumElems(finalMatRed.submat(LEFT_RECTANGLE)).val[0];
         double rightBoxRed = Core.sumElems(finalMatRed.submat(RIGHT_RECTANGLE)).val[0];
 
-        double averagedLeftBoxRed = leftBoxRed / LEFT_RECTANGLE.area() / 255;
-        double averagedRightBoxRed = rightBoxRed / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
+        averagedLeftBoxRed =  leftBoxRed / LEFT_RECTANGLE.area() / 255;
+        averagedRightBoxRed = rightBoxRed / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
 
 //        //BLUE!!
         Scalar lowHSVBlueLower = new Scalar(115, 100, 27);  //Beginning of Color Wheel
@@ -97,8 +100,8 @@ public class RedPropDetection implements VisionProcessor {
         double leftBoxBlue = Core.sumElems(finalMatBlue.submat(LEFT_RECTANGLE)).val[0];
         double rightBoxBlue = Core.sumElems(finalMatBlue.submat(RIGHT_RECTANGLE)).val[0];
 
-        double averagedLeftBoxBlue = leftBoxBlue / LEFT_RECTANGLE.area() / 255;
-        double averagedRightBoxBlue = rightBoxBlue / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
+        averagedLeftBoxBlue = leftBoxBlue / LEFT_RECTANGLE.area() / 255;
+        averagedRightBoxBlue = rightBoxBlue / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
 
 
         if (averagedLeftBoxRed > redThreshold || averagedLeftBoxBlue > blueThreshold) {        //Must Tune Red Threshold
@@ -140,12 +143,19 @@ public class RedPropDetection implements VisionProcessor {
          * Draw a rectangle showing sample region 3 on the screen.
          * Simply a visual aid. Serves no functional purpose.
          */
-        Imgproc.rectangle(
-                frame, // Buffer to draw on
-                new Point(RIGHT_RECTANGLE.x, RIGHT_RECTANGLE.y), // First point which defines the rectangle
-                new Point(RIGHT_RECTANGLE.width, RIGHT_RECTANGLE.height), // Second point which defines the rectangle
-                BLUE, // The color the rectangle is drawn in
-                2); // Thickness of the rectangle lines
+//        Imgproc.rectangle(
+//                frame, // Buffer to draw on
+//                new Point(RIGHT_RECTANGLE.x, RIGHT_RECTANGLE.y), // First point which defines the rectangle
+//                new Point(RIGHT_RECTANGLE.width, RIGHT_RECTANGLE.height), // Second point which defines the rectangle
+//                BLUE, // The color the rectangle is drawn in
+//                2); // Thickness of the rectangle lines
+
+//        Imgproc.rectangle(
+//                frame, // Buffer to draw on
+//                new Point(LEFT_RECTANGLE.x, LEFT_RECTANGLE.y), // First point which defines the rectangle
+//                new Point(LEFT_RECTANGLE.width, LEFT_RECTANGLE.height), // Second point which defines the rectangle
+//                BLUE, // The color the rectangle is drawn in
+//                2); // Thickness of the rectangle lines
 
         return null;            //You do not return the original mat anymore, instead return null
 
@@ -161,4 +171,18 @@ public class RedPropDetection implements VisionProcessor {
     public String getPropPosition() {  //Returns postion of the prop in a String
         return outStr;
     }
-}
+
+        public double getAveragedLeftBoxRed() {  //Returns postion of the prop in a String
+            return averagedLeftBoxRed;
+        }
+            public double getAveragedRightBoxRed() {  //Returns postion of the prop in a String
+                return averagedRightBoxRed;
+            }
+                public double getAveragedLeftBoxBlue() {  //Returns postion of the prop in a String
+                    return averagedLeftBoxBlue;
+                }
+                public double getAveragedRightBoxBlue() {  //Returns postion of the prop in a String
+                    return averagedRightBoxBlue;
+                }
+    }
+
