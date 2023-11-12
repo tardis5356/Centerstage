@@ -16,12 +16,12 @@ public class Lift extends SubsystemBase {
 
     private TouchSensor liftBase;
 
-    public static double p = 0, i = 0, d = 0;
-    public static double ff = 0.22;
+    public static double p = BotPositions.LIFT_p, i = BotPositions.LIFT_i, d = BotPositions.LIFT_d;
+    public static double ff = BotPositions.LIFT_ff;
 
     public static int target = 0;
 
-    public static int tolerance = 25;
+    public static int tolerance = BotPositions.LIFT_TOLERANCE;
 
     public double power = 0;
     public double stickValue = 0;

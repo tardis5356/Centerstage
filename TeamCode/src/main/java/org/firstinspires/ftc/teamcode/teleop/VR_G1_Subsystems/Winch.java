@@ -31,22 +31,22 @@ public class Winch extends SubsystemBase {
 
     //deploys the scissor lift
     public void scissorDep(){
-        WServ.setPosition (.2);
+        WServ.setPosition (BotPositions.WINCH_SERVO_DEPLOYED_POSITION);
     }
 
     //deploys the braces
     public void braceDep(){
-        BraceL.setPosition (.8);
-        BraceR.setPosition (.8);
+        BraceL.setPosition (BotPositions.LEFT_BRACE_POSITION);
+        BraceR.setPosition (BotPositions.RIGHT_BRACE_POSITION);
     }
 
     //retracts the scissor lift
     public void retract() {
-        WServ.setPosition(.6);
+        WServ.setPosition(BotPositions.WINCH_SERVO_RETRACTED_POSITION);
     }
 
     //actually lifts the bot. pls work
     public void PullUp(){
-        WMotor.setPower(.8);
+        WMotor.setPower(BotPositions.WINCH_MOTOR_POWER);
     }
 }

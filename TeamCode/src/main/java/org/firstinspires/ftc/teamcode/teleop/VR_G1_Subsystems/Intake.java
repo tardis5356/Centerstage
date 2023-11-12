@@ -16,12 +16,12 @@ public class Intake extends SubsystemBase {
     public void periodic(){}
 
     public void in() {
-        IntakeM.setPower(-0.8);
+        IntakeM.setPower(BotPositions.INTAKE_MOTOR_INWARD_POWER);
 //        LEDstate = "Intaking";
     }
 
     public void out(){
-        IntakeM.setPower(.3);
+        IntakeM.setPower(BotPositions.INTAKE_MOTOR_OUTWARD_POWER);
     }
 
     public void stop() {

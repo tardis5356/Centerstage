@@ -24,11 +24,6 @@ import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.LiftToPositionComman
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.LEDs;
 
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Gripper;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.GripperComs.CloseLeftGripper;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.GripperComs.CloseRightGripper;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.GripperComs.OpenRightGripper;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.GripperComs.OpenLeftGripper;
-
 
 
 @TeleOp(name="VR_Gen1_Debug")
@@ -59,10 +54,6 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
     //Gripper and coms
     private Gripper gripper;
-    private CloseRightGripper closeRightGripper;
-    private OpenRightGripper openRightGripper;
-    private CloseLeftGripper closeLeftGripper;
-    private OpenLeftGripper openLeftGripper;
 
 
 
@@ -90,10 +81,6 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         //init gripper stuff
         gripper = new Gripper(hardwareMap);
-        closeRightGripper = new CloseRightGripper(gripper);
-        openRightGripper = new OpenRightGripper(gripper);
-        closeLeftGripper = new CloseLeftGripper(gripper);
-        openLeftGripper = new OpenLeftGripper(gripper);
 
 
 
@@ -142,16 +129,16 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         //triggers to open and close gripper
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER))
-                .whenActive(closeRightGripper);
+                .whenActive(new InstantCommand(gripper::grabRight));
 
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))
-                .whenActive(closeLeftGripper);
+                .whenActive(new InstantCommand(gripper::grabLeft));
 
         new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
-                .whenActive(openRightGripper);
+                .whenActive(new InstantCommand(gripper::releaseRight));
 
         new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
-                .whenActive(openLeftGripper);
+                .whenActive(new InstantCommand(gripper::releaseLeft));
 
 
 
