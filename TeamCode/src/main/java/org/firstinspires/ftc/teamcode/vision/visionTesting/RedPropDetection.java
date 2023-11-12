@@ -34,8 +34,8 @@ public class RedPropDetection implements VisionProcessor {
     static final Scalar BLUE = new Scalar(0, 0, 255);
 
         static final Rect LEFT_RECTANGLE = new Rect( // 640 x 480 (X by Y)
-                new Point(55, 300), //anchor (upper left corner)
-                new Point(200, 150) //width, height
+                new Point(90, 0), //anchor (upper left corner)
+                new Point(200, 100) //width, height
         );
     static final Rect RIGHT_RECTANGLE = new Rect(
             new Point(250 , 140),
