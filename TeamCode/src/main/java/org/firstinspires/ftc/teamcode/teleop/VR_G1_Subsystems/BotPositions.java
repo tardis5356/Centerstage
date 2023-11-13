@@ -24,4 +24,13 @@ public class BotPositions {
     //lift pid variables
     public static double LIFT_p = 0, LIFT_i = 0, LIFT_d = 0, LIFT_ff = .22;
     public static int LIFT_TOLERANCE = 25;
+
+    //wrist positions
+    public static double LEFT_WRIST_ROLL_POSITION = .75, RIGHT_WRIST_ROLL_POSITION = .2, SQUARE_WRIST_ROLL_POSITION = .45, WRIST_INTAKE_PREP_TILT = 1, WRIST_INTAKE_TILT = .7, WRIST_OUTPUT_TILT = .2;
+
+    //arm positions
+    public static double LEFT_ARM_INTAKE_POSITION = .8, RIGHT_ARM_INTAKE_POSITION = .2, LEFT_ARM_INTAKE_PREP_POSITION = .65, RIGHT_ARM_INTAKE_PREP_POSITION = .35, LEFT_ARM_OUTPUT_POSITION = .3, RIGHT_ARM_OUTPUT_POSITION = .7;
+
+    //drone servo positions
+    public static double DRONE_SERVO_LATCHED_POSITION = .3, DRONE_SERVO_RELEASED_POSITION = .2;
 }

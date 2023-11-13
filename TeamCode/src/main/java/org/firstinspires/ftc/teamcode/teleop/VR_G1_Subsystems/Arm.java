@@ -17,18 +17,18 @@ public class Arm extends SubsystemBase {
     public void periodic(){}
 
     public void ArmToIntake(){
-        ArmLeft.setPosition(.8);
-        ArmRight.setPosition(.2);
+        ArmLeft.setPosition(BotPositions.LEFT_ARM_INTAKE_POSITION);
+        ArmRight.setPosition(BotPositions.RIGHT_ARM_INTAKE_POSITION);
     }
 
     public void ArmToIntakePrep(){
-        ArmLeft.setPosition(.65);
-        ArmRight.setPosition(.35);
+        ArmLeft.setPosition(BotPositions.LEFT_ARM_INTAKE_PREP_POSITION);
+        ArmRight.setPosition(BotPositions.RIGHT_ARM_INTAKE_PREP_POSITION);
     }
 
     public void ArmToOutPut(){
-        ArmLeft.setPosition(.3);
-        ArmRight.setPosition(.7);
+        ArmLeft.setPosition(BotPositions.LEFT_ARM_OUTPUT_POSITION);
+        ArmRight.setPosition(BotPositions.RIGHT_ARM_OUTPUT_POSITION);
     }
 
 }
