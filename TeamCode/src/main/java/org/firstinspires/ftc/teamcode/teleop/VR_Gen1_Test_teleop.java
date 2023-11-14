@@ -33,7 +33,7 @@ import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.LEDs;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Gripper;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Wrist;
 
-@Disabled
+//@Disabled
 @TeleOp(name="VR_Gen1_Debug")
 public class VR_Gen1_Test_teleop extends CommandOpMode {
     //gamepads
@@ -214,16 +214,16 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         //lr is left right
         //rotation is rotation of the robot when the center of rotation is still
         FB = gamepad1.left_stick_y;
-        LR = gamepad1.left_stick_x;
-        Rotation = gamepad1.right_stick_x;
+        LR = -gamepad1.left_stick_x;
+        Rotation = -gamepad1.right_stick_x;
 
         //map motor power to vars (tb tested)
         //depending on the wheel, forward back, left right, and rotation's power may be different
         //think, if fb is positive, thus the bot should move forward, will the motor drive the bot forward if its power is positive.
-        mFL.setPower(FB-LR-Rotation);
-        mFR.setPower(FB+LR+Rotation);
-        mBL.setPower(FB+LR-Rotation);
-        mBR.setPower(FB-LR+Rotation);
+        mFL.setPower(FB+LR+Rotation);
+        mFR.setPower(FB-LR-Rotation);
+        mBL.setPower(FB-LR+Rotation);
+        mBR.setPower(FB+LR-Rotation);
 
         if (gamepad1.a && gametime.seconds() > 90){
             sLA.setPosition(BotPositions.DRONE_SERVO_RELEASED_POSITION);
