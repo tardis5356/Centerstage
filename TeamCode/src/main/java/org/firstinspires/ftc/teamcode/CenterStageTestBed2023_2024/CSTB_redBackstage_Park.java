@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024;
 
-import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redBackstage_StartToBackstage;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redBackstage_ToDecisionPoint;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
@@ -40,7 +40,7 @@ public class CSTB_redBackstage_Auto extends CommandOpMode {
         telemetry.update();
         schedule(new SequentialCommandGroup(
 
-                new CSTB_FollowTrajectoryCommand(drive, redBackstage_StartToBackstage)
+                new CSTB_FollowTrajectoryCommand(drive, redBackstage_ToDecisionPoint)
         ));
 
     }
