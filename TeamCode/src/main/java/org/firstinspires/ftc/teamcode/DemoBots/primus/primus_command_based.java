@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -11,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.DemoBots.primus.commands.BotToIntake;
 import org.firstinspires.ftc.teamcode.DemoBots.primus.Primus_subsystems.Gripper;
 import org.firstinspires.ftc.teamcode.DemoBots.primus.commands.CloseGripper;
-
+@Disabled
 @TeleOp (name="Primus_Command_Based")
 public class primus_command_based extends CommandOpMode{
     private GamepadEx driver;

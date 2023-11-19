@@ -32,7 +32,7 @@ import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.LEDs;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Gripper;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Wrist;
 
-//@Disabled
+
 @TeleOp(name="VR_Gen1_Debug")
 public class VR_Gen1_Test_teleop extends CommandOpMode {
     //gamepads
