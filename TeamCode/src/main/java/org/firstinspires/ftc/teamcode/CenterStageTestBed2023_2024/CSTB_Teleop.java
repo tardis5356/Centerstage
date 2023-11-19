@@ -6,7 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name="CSTB_Teleop")
 
-public class CSTB_Teleop extends Base_CSTB{
+public class
+CSTB_Teleop extends Base_CSTB{
 
 
     @Override
@@ -20,8 +21,8 @@ public class CSTB_Teleop extends Base_CSTB{
 
         while(opModeIsActive()){
 
-            double gP1sLy = -gamepad1.left_stick_y;
-            double gP1sLx = gamepad1.left_stick_x;
+            double gP1sLy = gamepad1.left_stick_y;
+            double gP1sLx = -gamepad1.left_stick_x;
             double gP1sRx = gamepad1.right_stick_x;
 
             CSTB.CSTBDrive(gP1sLy,gP1sLx,-gP1sRx);

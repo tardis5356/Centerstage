@@ -5,11 +5,18 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WristAndArmComs.ManipToIntake;
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WristAndArmComs.ManipToOutput;
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Arm;
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.BotPositions;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeComs.IntakeIn;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeComs.IntakeOut;
@@ -24,8 +31,9 @@ import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.LiftToPositionComman
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.LEDs;
 
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Gripper;
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Wrist;
 
-
+//@Disabled
 @TeleOp(name="VR_Gen1_Debug")
 public class VR_Gen1_Test_teleop extends CommandOpMode {
     //gamepads
@@ -34,6 +42,12 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
     //drivetrain motors and variables
     private DcMotorEx mFL, mFR, mBL, mBR;
     double FB, LR, Rotation;
+
+    //drone launcher servo
+    private Servo sLA;
+
+    //keep track of time to ensure that e-game specific items dont trigger
+    ElapsedTime gametime = new ElapsedTime();
 
     //intake and intake commands
     private Intake intake;
@@ -54,6 +68,14 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
     //Gripper and coms
     private Gripper gripper;
+
+    //wrist and coms
+    private Wrist wrist;
+
+    //arm and coms
+    private Arm arm;
+    private ManipToIntake manipToIntake;
+    private ManipToOutput manipToOutput;
 
 
 
@@ -82,6 +104,14 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         //init gripper stuff
         gripper = new Gripper(hardwareMap);
 
+        //init wrist stuff
+        wrist = new Wrist(hardwareMap);
+
+        //init arm stuff
+        arm = new Arm(hardwareMap);
+        manipToIntake = new ManipToIntake(wrist, arm, gripper);
+        manipToOutput = new ManipToOutput(wrist, arm, gripper);
+
 
 
         //button map intake commands
@@ -93,10 +123,10 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
 
         //button map winch commands
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP) && gametime.seconds() > 90)
                 .whenActive(deployWinch);
 
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN) && gametime.seconds() > 90)
                 .whenActive(pullUpBot);
 
 
@@ -129,17 +159,32 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         //triggers to open and close gripper
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER))
-                .whenActive(new InstantCommand(gripper::grabRight));
+                .toggleWhenActive(new InstantCommand(gripper::grabRight), new InstantCommand(gripper::releaseRight));
 
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))
+                .toggleWhenActive(new InstantCommand(gripper::grabLeft), new InstantCommand(gripper::releaseLeft));
+
+        new Trigger(() -> leds.checkLeftPixel() == true)
                 .whenActive(new InstantCommand(gripper::grabLeft));
 
+        new Trigger(()-> leds.checkRightPixel() == true)
+                .whenActive(new InstantCommand(gripper::grabRight));
+
+        //triggers to roll wrist
         new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
-                .whenActive(new InstantCommand(gripper::releaseRight));
+                .whenActive(new InstantCommand(wrist::rotateRight));
 
         new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
-                .whenActive(new InstantCommand(gripper::releaseLeft));
+                .whenActive(new InstantCommand(wrist::rotateLeft));
 
+        new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_UP))
+                .whenActive(new InstantCommand(wrist::rotateSquare));
+
+        //triggers to input and output
+        new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_LEFT))
+                .whenActive(manipToIntake);
+        new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_RIGHT))
+                .whenActive(manipToOutput);
 
 
 
@@ -151,6 +196,9 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         //this motor physically runs opposite. For convenience, reverse direction.
         mBR.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        //init the drone servo
+        sLA = hardwareMap.get(Servo.class,"sLA");
     }
     @Override
     // This is pretty much your while OpMode is active loop
@@ -166,16 +214,23 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         //lr is left right
         //rotation is rotation of the robot when the center of rotation is still
         FB = gamepad1.left_stick_y;
-        LR = gamepad1.left_stick_x;
-        Rotation = gamepad1.right_stick_x;
+        LR = -gamepad1.left_stick_x;
+        Rotation = -gamepad1.right_stick_x;
 
         //map motor power to vars (tb tested)
         //depending on the wheel, forward back, left right, and rotation's power may be different
         //think, if fb is positive, thus the bot should move forward, will the motor drive the bot forward if its power is positive.
-        mFL.setPower(FB-LR-Rotation);
-        mFR.setPower(FB+LR+Rotation);
-        mBL.setPower(FB+LR-Rotation);
-        mBR.setPower(FB-LR+Rotation);
+        mFL.setPower(FB+LR+Rotation);
+        mFR.setPower(FB-LR-Rotation);
+        mBL.setPower(FB-LR+Rotation);
+        mBR.setPower(FB+LR-Rotation);
+
+        if (gamepad1.a && gametime.seconds() > 90){
+            sLA.setPosition(BotPositions.DRONE_SERVO_RELEASED_POSITION);
+        }
+        else {
+            sLA.setPosition(BotPositions.DRONE_SERVO_LATCHED_POSITION);
+        }
 
         //telemetry stoof
         telemetry.addData("LeftStickY", FB);

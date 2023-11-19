@@ -19,28 +19,28 @@ public class Wrist extends SubsystemBase {
     public void periodic(){}
 
     public void WristToIntakePrep(){
-        ServRotate.setPosition(.45);
-        ServTilt.setPosition(1);
+        ServRotate.setPosition(BotPositions.SQUARE_WRIST_ROLL_POSITION);
+        ServTilt.setPosition(BotPositions.WRIST_INTAKE_PREP_TILT);
     }
 
     public void TiltToIntake(){
-        ServTilt.setPosition(.7);
+        ServTilt.setPosition(BotPositions.WRIST_INTAKE_TILT);
     }
 
     public void TiltToOutput(){
-        ServTilt.setPosition(.2);
+        ServTilt.setPosition(BotPositions.WRIST_OUTPUT_TILT);
     }
 
     public void rotateLeft(){
-        ServRotate.setPosition(.75);
+        ServRotate.setPosition(BotPositions.LEFT_WRIST_ROLL_POSITION);
     }
 
     public void rotateRight(){
-        ServRotate.setPosition(.2);
+        ServRotate.setPosition(BotPositions.RIGHT_WRIST_ROLL_POSITION);
     }
 
     public void rotateSquare(){
-        ServRotate.setPosition(.45);
+        ServRotate.setPosition(BotPositions.SQUARE_WRIST_ROLL_POSITION);
     }
 
 

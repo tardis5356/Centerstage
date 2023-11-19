@@ -23,9 +23,9 @@ public abstract class Base_CSTB extends LinearOpMode {
         mBL = hardwareMap.get(DcMotor.class,  "mBL");
 
 //        mFL.setDirection(DcMotor.Direction.REVERSE);
-        mBL.setDirection(DcMotor.Direction.REVERSE);
+//        mBL.setDirection(DcMotor.Direction.REVERSE);
         mBR.setDirection(DcMotor.Direction.REVERSE);
-        mFR.setDirection(DcMotor.Direction.REVERSE);
+//        mFR.setDirection(DcMotor.Direction.REVERSE);
 
     }
 }

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.DemoBots.megatron.Base_Mega;
-//@Disabled
+@Disabled
 @TeleOp(name="Mega_BotC")
 public class Megatron_Tele extends Base_Mega {
 
