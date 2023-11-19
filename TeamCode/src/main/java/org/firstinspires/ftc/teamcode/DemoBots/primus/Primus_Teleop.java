@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.DemoBots.primus;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-//@Disabled
+@Disabled
 @TeleOp(name = "Primus_TeleOp", group = "Linear Opmode")
 public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
 
@@ -120,15 +121,15 @@ public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
 
             if (rightTrigger2 != 0) {
                 //sL.setPosition(0.3);
-                sR.setPosition(0.3);
+                sR.setPosition(0.6);
             } else {
-                sR.setPosition(0.8); //0.3
+                sR.setPosition(0.25); //0.3
             }
             if (leftTrigger2 != 0) {
-                sL.setPosition(0.7);
+                sL.setPosition(0.35);
                 //sR.setPosition(0.3);
             } else {
-                sL.setPosition(0.3); //0.3
+                sL.setPosition(0.8); //0.3
             }
 
 
