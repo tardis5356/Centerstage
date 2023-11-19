@@ -9,28 +9,28 @@ import com.acmerobotics.dashboard.config.Config;
 //and whenever you want to use the variable, use the instance name .variable name that you assign.
 public class BotPositions {
     //winch powers and positions
-    public static double WINCH_MOTOR_POWER = .8, WINCH_SERVO_DEPLOYED_POSITION = .2, WINCH_SERVO_RETRACTED_POSITION = .6;
+    public static double WINCH_MOTOR_POWER = .8, WINCH_SERVO_DEPLOYED = .2, WINCH_SERVO_RETRACTED = .6;
 
     //brace positions
-    public static double LEFT_BRACE_POSITION = .8, RIGHT_BRACE_POSITION = .8;
+    public static double LEFT_BRACE_EXTENDED = .8, RIGHT_BRACE_EXTENDED = .8;
 
     //intake powers and positions
     public static double INTAKE_MOTOR_INWARD_POWER = -.8, INTAKE_MOTOR_OUTWARD_POWER = .3;
     //the stationary intake power is 0, what did you think it'd be?
 
     //gripper positions
-    public static double LEFT_GRIPPER_CLOSED_POSITION = .9, LEFT_GRIPPER_OPEN_POSITION = .3, RIGHT_GRIPPER_CLOSED_POSITION = .2, RIGHT_GRIPPER_OPEN_POSITION = .8;
+    public static double GRIPPER_LEFT_CLOSED = .9, GRIPPER_LEFT_OPEN = .3, GRIPPER_RIGHT_CLOSED = .2, GRIPPER_RIGHT_OPEN = .8;
 
     //lift pid variables
     public static double LIFT_p = 0, LIFT_i = 0, LIFT_d = 0, LIFT_ff = .22;
     public static int LIFT_TOLERANCE = 25;
 
     //wrist positions
-    public static double LEFT_WRIST_ROLL_POSITION = .75, RIGHT_WRIST_ROLL_POSITION = .2, SQUARE_WRIST_ROLL_POSITION = .45, WRIST_INTAKE_PREP_TILT = 1, WRIST_INTAKE_TILT = .7, WRIST_OUTPUT_TILT = .2;
+    public static double WRIST_LEFT_ROLL = .75, WRIST_RIGHT_ROLL = .2, WRIST_ROLL_CENTERED = .45, WRIST_TILT_TRANSITION = 1, WRIST_TILT_INTAKE = .7, WRIST_TILT_DEPOSIT = .2;
 
     //arm positions
-    public static double LEFT_ARM_INTAKE_POSITION = .8, RIGHT_ARM_INTAKE_POSITION = .2, LEFT_ARM_INTAKE_PREP_POSITION = .65, RIGHT_ARM_INTAKE_PREP_POSITION = .35, LEFT_ARM_OUTPUT_POSITION = .3, RIGHT_ARM_OUTPUT_POSITION = .7;
+    public static double ARM_LEFT_INTAKE = .8, ARM_RIGHT_INTAKE = .2, ARM_LEFT_TRANSITION_POSITION = .65, ARM_RIGHT_TRANSITION_POSITION = .35, ARM_LEFT_DEPOSIT = .3, ARM_RIGHT_DEPOSIT = .7;
 
     //drone servo positions
-    public static double DRONE_SERVO_LATCHED_POSITION = .3, DRONE_SERVO_RELEASED_POSITION = .2;
+    public static double DRONE_LATCHED = .3, DRONE_UNLATCHED = .2;
 }

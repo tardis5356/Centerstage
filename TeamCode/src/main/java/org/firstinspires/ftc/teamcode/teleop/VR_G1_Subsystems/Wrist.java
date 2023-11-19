@@ -7,40 +7,40 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Wrist extends SubsystemBase {
 
     //Create Servo objects
-    private Servo ServRotate, ServTilt;
+    private Servo sGripperRoll, sGripperPitch;
 
     //Map Servos to physical parts
     public Wrist (HardwareMap hardwareMap){
-        ServRotate = hardwareMap.get(Servo.class, "sWGR");
-        ServTilt = hardwareMap.get(Servo.class,"sWGP");
+        sGripperRoll = hardwareMap.get(Servo.class, "sWGR"); // ROLL is side to side rotation (servo on the gripper)
+        sGripperPitch = hardwareMap.get(Servo.class,"sWGP"); // TILT is up and down rotation (servo with the chain)
     }
 
     @Override
     public void periodic(){}
 
-    public void WristToIntakePrep(){
-        ServRotate.setPosition(BotPositions.SQUARE_WRIST_ROLL_POSITION);
-        ServTilt.setPosition(BotPositions.WRIST_INTAKE_PREP_TILT);
+    public void toTransition(){
+        sGripperRoll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
+        sGripperPitch.setPosition(BotPositions.WRIST_TILT_TRANSITION);
     }
 
-    public void TiltToIntake(){
-        ServTilt.setPosition(BotPositions.WRIST_INTAKE_TILT);
+    public void tiltToIntake(){
+        sGripperPitch.setPosition(BotPositions.WRIST_TILT_INTAKE);
     }
 
-    public void TiltToOutput(){
-        ServTilt.setPosition(BotPositions.WRIST_OUTPUT_TILT);
+    public void tiltToDeposit(){
+        sGripperPitch.setPosition(BotPositions.WRIST_TILT_DEPOSIT);
     }
 
-    public void rotateLeft(){
-        ServRotate.setPosition(BotPositions.LEFT_WRIST_ROLL_POSITION);
+    public void rollToLeft(){
+        sGripperRoll.setPosition(BotPositions.WRIST_LEFT_ROLL);
     }
 
-    public void rotateRight(){
-        ServRotate.setPosition(BotPositions.RIGHT_WRIST_ROLL_POSITION);
+    public void rollToRight(){
+        sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_ROLL);
     }
 
-    public void rotateSquare(){
-        ServRotate.setPosition(BotPositions.SQUARE_WRIST_ROLL_POSITION);
+    public void rollToCentered(){
+        sGripperRoll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
     }
 
 

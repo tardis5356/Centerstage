@@ -12,14 +12,14 @@ public class ManipToIntake extends SequentialCommandGroup {
 
     public ManipToIntake (Wrist wrist, Arm arm, Gripper gripper){
         addCommands(
-            new InstantCommand(wrist::WristToIntakePrep),
+            new InstantCommand(wrist::toTransition),
             new InstantCommand(gripper::releaseRight),
             new InstantCommand(gripper::releaseLeft),
             new WaitCommand(1000),
-            new InstantCommand(arm::ArmToIntakePrep),
-            new InstantCommand(wrist::TiltToIntake),
+            new InstantCommand(arm::toTransition),
+            new InstantCommand(wrist::tiltToIntake),
             new WaitCommand(500),
-            new InstantCommand(arm::ArmToIntake)
+            new InstantCommand(arm::toIntake)
         );
 
 

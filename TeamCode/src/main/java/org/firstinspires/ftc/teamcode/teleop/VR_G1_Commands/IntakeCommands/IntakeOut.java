@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeComs;
+package org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeCommands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
