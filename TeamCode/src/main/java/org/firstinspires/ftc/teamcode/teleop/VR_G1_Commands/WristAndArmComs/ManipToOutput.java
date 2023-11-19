@@ -15,11 +15,11 @@ public class ManipToOutput extends SequentialCommandGroup {
                 new InstantCommand(gripper::grabRight),
                 new InstantCommand(gripper::grabLeft),
                 new WaitCommand(500),
-                new InstantCommand(arm::ArmToIntakePrep),
-                new InstantCommand(wrist::WristToIntakePrep),
+                new InstantCommand(arm::toTransition),
+                new InstantCommand(wrist::toTransition),
                 new WaitCommand(500),
-                new InstantCommand(arm::ArmToOutPut),
-                new InstantCommand(wrist::TiltToOutput)
+                new InstantCommand(arm::toDeposit),
+                new InstantCommand(wrist::tiltToDeposit)
         );
     }
 

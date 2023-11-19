@@ -5,30 +5,30 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Arm extends SubsystemBase {
-    private Servo ArmLeft, ArmRight;
+    private Servo sArmLeft, sArmRight;
 
     public Arm(HardwareMap hardwareMap){
-        ArmLeft = hardwareMap.get(Servo.class, "sAL");
-        ArmRight = hardwareMap.get(Servo.class, "sAR");
+        sArmLeft = hardwareMap.get(Servo.class, "sAL");
+        sArmRight = hardwareMap.get(Servo.class, "sAR");
     }
 
     @Override
 
     public void periodic(){}
 
-    public void ArmToIntake(){
-        ArmLeft.setPosition(BotPositions.LEFT_ARM_INTAKE_POSITION);
-        ArmRight.setPosition(BotPositions.RIGHT_ARM_INTAKE_POSITION);
+    public void toIntake(){
+        sArmLeft.setPosition(BotPositions.ARM_LEFT_INTAKE);
+        sArmRight.setPosition(BotPositions.ARM_RIGHT_INTAKE);
     }
 
-    public void ArmToIntakePrep(){
-        ArmLeft.setPosition(BotPositions.LEFT_ARM_INTAKE_PREP_POSITION);
-        ArmRight.setPosition(BotPositions.RIGHT_ARM_INTAKE_PREP_POSITION);
+    public void toTransition(){
+        sArmLeft.setPosition(BotPositions.ARM_LEFT_TRANSITION_POSITION);
+        sArmRight.setPosition(BotPositions.ARM_RIGHT_TRANSITION_POSITION);
     }
 
-    public void ArmToOutPut(){
-        ArmLeft.setPosition(BotPositions.LEFT_ARM_OUTPUT_POSITION);
-        ArmRight.setPosition(BotPositions.RIGHT_ARM_OUTPUT_POSITION);
+    public void toDeposit(){
+        sArmLeft.setPosition(BotPositions.ARM_LEFT_DEPOSIT);
+        sArmRight.setPosition(BotPositions.ARM_RIGHT_DEPOSIT);
     }
 
 }

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -20,18 +19,18 @@ public class Gripper extends SubsystemBase{
     public void periodic(){}
 
     public void releaseLeft(){
-        sGL.setPosition(BotPositions.LEFT_GRIPPER_OPEN_POSITION);
+        sGL.setPosition(BotPositions.GRIPPER_LEFT_OPEN);
     }
 
     public void releaseRight(){
-        sGR.setPosition(BotPositions.RIGHT_GRIPPER_OPEN_POSITION);
+        sGR.setPosition(BotPositions.GRIPPER_RIGHT_OPEN);
     }
 
     public void grabLeft(){
-        sGL.setPosition(BotPositions.LEFT_GRIPPER_CLOSED_POSITION);
+        sGL.setPosition(BotPositions.GRIPPER_LEFT_CLOSED);
     }
 
     public void grabRight(){
-        sGR.setPosition(BotPositions.RIGHT_GRIPPER_CLOSED_POSITION);
+        sGR.setPosition(BotPositions.GRIPPER_RIGHT_CLOSED);
     }
 }

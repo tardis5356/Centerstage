@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -18,12 +17,12 @@ import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WristAndArmComs.Mani
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Arm;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.BotPositions;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Intake;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeComs.IntakeIn;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeComs.IntakeOut;
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeCommands.IntakeIn;
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeCommands.IntakeOut;
 
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Winch;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WinchComs.DeployWinch;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WinchComs.PullUpBot;
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WinchCommands.DeployWinch;
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WinchCommands.PullUpBot;
 
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Lift;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.LiftToPositionCommand;
@@ -33,7 +32,7 @@ import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.LEDs;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Gripper;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Wrist;
 
-//@Disabled
+
 @TeleOp(name="VR_Gen1_Debug")
 public class VR_Gen1_Test_teleop extends CommandOpMode {
     //gamepads
@@ -44,7 +43,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
     double FB, LR, Rotation;
 
     //drone launcher servo
-    private Servo sLA;
+    private Servo sDroneLauncher;
 
     //keep track of time to ensure that e-game specific items dont trigger
     ElapsedTime gametime = new ElapsedTime();
@@ -123,10 +122,10 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
 
         //button map winch commands
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP) && gametime.seconds() > 90)
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))// && gametime.seconds() > 90)
                 .whenActive(deployWinch);
 
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN) && gametime.seconds() > 90)
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))// && gametime.seconds() > 90)
                 .whenActive(pullUpBot);
 
 
@@ -172,13 +171,13 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         //triggers to roll wrist
         new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
-                .whenActive(new InstantCommand(wrist::rotateRight));
+                .whenActive(new InstantCommand(wrist::rollToRight));
 
         new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
-                .whenActive(new InstantCommand(wrist::rotateLeft));
+                .whenActive(new InstantCommand(wrist::rollToLeft));
 
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_UP))
-                .whenActive(new InstantCommand(wrist::rotateSquare));
+                .whenActive(new InstantCommand(wrist::rollToCentered));
 
         //triggers to input and output
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_LEFT))
@@ -198,7 +197,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         mBR.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //init the drone servo
-        sLA = hardwareMap.get(Servo.class,"sLA");
+        sDroneLauncher = hardwareMap.get(Servo.class,"sDL");
     }
     @Override
     // This is pretty much your while OpMode is active loop
@@ -226,10 +225,10 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         mBR.setPower(FB+LR-Rotation);
 
         if (gamepad1.a && gametime.seconds() > 90){
-            sLA.setPosition(BotPositions.DRONE_SERVO_RELEASED_POSITION);
+            sDroneLauncher.setPosition(BotPositions.DRONE_UNLATCHED);
         }
         else {
-            sLA.setPosition(BotPositions.DRONE_SERVO_LATCHED_POSITION);
+            sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED);
         }
 
         //telemetry stoof

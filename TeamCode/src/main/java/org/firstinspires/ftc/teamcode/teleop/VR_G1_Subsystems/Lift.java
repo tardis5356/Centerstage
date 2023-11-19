@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -47,6 +48,9 @@ public class Lift extends SubsystemBase {
         mLR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mLR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         mLL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        mLR.setDirection(DcMotorSimple.Direction.REVERSE);
+        mLL.setDirection(DcMotorSimple.Direction.REVERSE);
 
         target = -10; // lift should start fully retracted
     }

@@ -42,7 +42,7 @@ public class LEDs extends SubsystemBase {
     public LEDs(HardwareMap hardwareMap){
         colorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
         colorRight = hardwareMap.get(ColorSensor.class, "colorRight");
-        blinkin = hardwareMap.get(RevBlinkinLedDriver.class, "LEDa");
+        blinkin = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
     }
 
     @Override
@@ -155,7 +155,12 @@ public class LEDs extends SubsystemBase {
     }
 
     public void setNoPixelsColor1(RevBlinkinLedDriver.BlinkinPattern C1){
-        blinkin.setPattern(C1);
+        try {
+            blinkin.setPattern(C1);
+        }
+        catch (Exception e){
+
+        }
     }
 
     public void setNoPixelsColor2(RevBlinkinLedDriver.BlinkinPattern C2){
