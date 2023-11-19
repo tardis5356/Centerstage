@@ -7,11 +7,11 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Intake;
 
 public class IntakeOut extends SequentialCommandGroup {
-    public IntakeOut(Intake IntakeM){
+    public IntakeOut(Intake intake) {
         addCommands(
-                new InstantCommand(IntakeM :: out),
+                new InstantCommand(intake::out),
                 new WaitCommand(1500),
-                new InstantCommand(IntakeM :: stop)
+                new InstantCommand(intake::stop)
         );
     }
 }
