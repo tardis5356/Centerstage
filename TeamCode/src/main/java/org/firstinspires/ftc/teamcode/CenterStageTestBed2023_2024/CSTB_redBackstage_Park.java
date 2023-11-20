@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024;
 
-import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redBackstage_StartToBackstage;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redBackstage_ToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redBackstage_ToParkedPos;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
@@ -8,10 +9,10 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class CSTB_redBackstage_Park {
+//public class CSTB_redBackstage_Park {
 
     @Autonomous(group = "drive", name = "CSTB red backstage PARK")
-public class CSTB_redBackstage_Auto extends CommandOpMode {
+public class CSTB_redBackstage_Park extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
     private CSTB_SampleMecanumDrive drive;
@@ -33,16 +34,23 @@ public class CSTB_redBackstage_Auto extends CommandOpMode {
 
         telemetry.setMsTransmissionInterval(50);
 
+        while (!isStarted() && !isStopRequested()) {
+
+            telemetry.addLine("waitForStart");
+            telemetry.update();
+            sleep(20);
+        }
+
 
 
 
 
         telemetry.update();
-        schedule(new SequentialCommandGroup(
+        schedule(//new SequentialCommandGroup(
 
-                new CSTB_FollowTrajectoryCommand(drive, redBackstage_StartToBackstage)
-        ));
+                new CSTB_FollowTrajectoryCommand(drive, redBackstage_ToParkedPos)
+        ); //);
 
     }
 }
-}
+
