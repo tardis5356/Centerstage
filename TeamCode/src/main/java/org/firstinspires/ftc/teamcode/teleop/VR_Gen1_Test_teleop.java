@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -77,6 +78,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
     private ManipToIntake manipToIntake;
     private ManipToOutput manipToOutput;
 
+    private DcMotorEx mW;
 
 
     @Override
@@ -112,6 +114,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         manipToIntake = new ManipToIntake(wrist, arm, gripper);
         manipToOutput = new ManipToOutput(wrist, arm, gripper);
 
+        mW = hardwareMap.get(DcMotorEx.class, "mW");
 
 
         //button map intake commands
@@ -155,6 +158,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
                 .whenActive(new InstantCommand(()->{
                     leds.changeColor(leds.White);
                 }));
+
 
 
         //triggers to open and close gripper
@@ -232,6 +236,9 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         else {
             sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED);
         }
+
+        if (gamepad1.dpad_left)
+            mW.setPower(-BotPositions.WINCH_MOTOR_POWER);
 
         //telemetry stoof
         telemetry.addData("LeftStickY", FB);
