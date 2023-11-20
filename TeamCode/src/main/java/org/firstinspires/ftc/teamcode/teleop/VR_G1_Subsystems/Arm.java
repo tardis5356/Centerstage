@@ -1,15 +1,23 @@
 package org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Arm extends SubsystemBase {
     private Servo sArmLeft, sArmRight;
 
+    private DistanceSensor colorArm;
+
     public Arm(HardwareMap hardwareMap){
         sArmLeft = hardwareMap.get(Servo.class, "sAL");
         sArmRight = hardwareMap.get(Servo.class, "sAR");
+
+        colorArm = hardwareMap.get(DistanceSensor.class, "colorArm");
     }
 
     @Override
@@ -31,4 +39,10 @@ public class Arm extends SubsystemBase {
         sArmRight.setPosition(BotPositions.ARM_RIGHT_DEPOSIT);
     }
 
+    public boolean inIntake() {
+        if (colorArm.getDistance(DistanceUnit.CM) <= 15)
+            return true;
+        else
+            return false;
+    }
 }

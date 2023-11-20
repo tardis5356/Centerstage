@@ -4,7 +4,9 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeCommands.IntakeOut;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Arm;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Gripper;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Intake;
@@ -23,19 +25,20 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                 new InstantCommand(wrist::toTransition),
                                 new InstantCommand(gripper::releaseRight),
                                 new InstantCommand(gripper::releaseLeft),
-                                new WaitCommand(1000),
-                                new InstantCommand(arm::toIntake),
-                                new WaitCommand(500),
-                                new InstantCommand(wrist::tiltToIntake)
+                                new InstantCommand(arm::toTransition),
+                                new WaitUntilCommand(arm::inIntake),
+                                new InstantCommand(wrist::tiltToIntake),
+                                new InstantCommand(arm::toIntake)
                         )
                 );
                 break;
             case "deposit":
                 addCommands(
+                        new IntakeOut(intake),
                         new SequentialCommandGroup(
-                                new InstantCommand(arm::toDeposit),
+                                new InstantCommand(arm::toTransition),
                                 new InstantCommand(wrist::toTransition),
-                                new WaitCommand(1000),
+                                new WaitUntilCommand(()->arm.inIntake() == false),
                                 new InstantCommand(wrist::tiltToDeposit)
                         )
                 );

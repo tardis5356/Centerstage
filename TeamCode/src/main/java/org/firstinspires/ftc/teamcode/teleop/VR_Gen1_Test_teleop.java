@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.RobotToStateCommand;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WristAndArmComs.ManipToIntake;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WristAndArmComs.ManipToOutput;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Arm;
@@ -179,11 +180,12 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_UP))
                 .whenActive(new InstantCommand(wrist::rollToCentered));
 
-        //triggers to input and output
+        //triggers to move bot subsystems to intake and deposit
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_LEFT))
-                .whenActive(manipToIntake);
+                .whenActive(new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake"));
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_RIGHT))
-                .whenActive(manipToOutput);
+//                .whenActive(manipToOutput);
+                .whenActive(new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"));
 
 
 

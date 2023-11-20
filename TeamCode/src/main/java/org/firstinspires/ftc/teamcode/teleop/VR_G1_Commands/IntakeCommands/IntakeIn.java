@@ -8,12 +8,12 @@ import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Intake;
 import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.LEDs;
 
 public class IntakeIn extends SequentialCommandGroup {
-    public IntakeIn(Intake intake, LEDs led) {
+    public IntakeIn(Intake intake, LEDs leds) {
         addCommands(
                 new InstantCommand(intake::in),
                 new InstantCommand(intake::stop),
                 new InstantCommand(() -> {
-                    led.setLEDstate("Intaking");
+                    leds.setLEDstate("Intaking");
                 })
         );
     }

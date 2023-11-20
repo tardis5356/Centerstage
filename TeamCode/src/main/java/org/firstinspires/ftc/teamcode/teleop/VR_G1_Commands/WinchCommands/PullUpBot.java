@@ -11,6 +11,7 @@ public class PullUpBot extends SequentialCommandGroup {
     public PullUpBot (Winch winch) {
         addCommands(
             new InstantCommand(winch::retractScissor),
+            new InstantCommand(winch::extendBraces),
             new WaitCommand(1500),
             new InstantCommand(winch::liftRobot)
         );
