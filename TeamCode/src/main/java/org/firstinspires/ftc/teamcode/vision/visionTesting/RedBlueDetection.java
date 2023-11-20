@@ -19,6 +19,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 
+//***********THIS ONE DOESN'T REALLY WORK****************
+
 import java.util.concurrent.TimeUnit;
 //
 /*

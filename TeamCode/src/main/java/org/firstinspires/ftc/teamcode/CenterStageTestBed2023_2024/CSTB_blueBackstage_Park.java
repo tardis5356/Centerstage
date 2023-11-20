@@ -8,10 +8,10 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class CSTB_blueBackstage_Park {
+//public class CSTB_blueBackstage_Park {
 
     @Autonomous(group = "drive", name = "CSTB blue backstage PARK")
-public class CSTB_redBackstage_Auto extends CommandOpMode {
+public class CSTB_blueBackstage_Park extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
     private CSTB_SampleMecanumDrive drive;
@@ -33,16 +33,19 @@ public class CSTB_redBackstage_Auto extends CommandOpMode {
 
         telemetry.setMsTransmissionInterval(50);
 
+        while (!isStarted() && !isStopRequested()) {
 
+            telemetry.addLine("waitForStart");
+            telemetry.update();
+            sleep(20);
 
+            telemetry.update();
+            schedule(new SequentialCommandGroup(
 
+                    new CSTB_FollowTrajectoryCommand(drive, blueBackstage_ToDecisionPoint)
+            ));
 
-        telemetry.update();
-        schedule(new SequentialCommandGroup(
-
-                new CSTB_FollowTrajectoryCommand(drive, blueBackstage_ToDecisionPoint)
-        ));
-
+        }
     }
-}
-}
+    }
+

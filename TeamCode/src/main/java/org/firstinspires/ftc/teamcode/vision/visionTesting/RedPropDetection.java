@@ -32,14 +32,15 @@ public class RedPropDetection implements VisionProcessor {
     String outStr = "left"; //Set a default value in case vision does not work
 
     static final Scalar BLUE = new Scalar(0, 0, 255);
+    static final Scalar GREEN = new Scalar (0,255,0);
 
         static final Rect LEFT_RECTANGLE = new Rect( // 640 x 480 (X by Y)
-                new Point(90, 0), //anchor (upper left corner)
-                new Point(200, 100) //width, height
+                new Point(0, 0), //anchor (upper left corner)
+                new Point(200, 300) //width, height
         );
     static final Rect RIGHT_RECTANGLE = new Rect(
-            new Point(250 , 140),
-            new Point(50, 100)
+            new Point(410 , 0),
+            new Point(620, 300)
     );
 
     @Override
@@ -125,8 +126,8 @@ public class RedPropDetection implements VisionProcessor {
 //                                  you use the "frame" mat for all of your pipelines, such as April Tags*/
         Imgproc.rectangle(
                 frame, // Buffer to draw on
-                new Point(LEFT_RECTANGLE.x,LEFT_RECTANGLE.y), // First point which defines the rectangle
-                new Point(LEFT_RECTANGLE.width, LEFT_RECTANGLE.height), // Second point which defines the rectangle
+                 new Point(LEFT_RECTANGLE.x, LEFT_RECTANGLE.y), // First point which defines the rectangle
+                 new Point(LEFT_RECTANGLE.x + LEFT_RECTANGLE.width, LEFT_RECTANGLE.y + LEFT_RECTANGLE.height), // Second point which defines the rectangle
                 BLUE, // The color the rectangle is drawn in
                 2); // Thickness of the rectangle lines
 
@@ -143,12 +144,12 @@ public class RedPropDetection implements VisionProcessor {
          * Draw a rectangle showing sample region 3 on the screen.
          * Simply a visual aid. Serves no functional purpose.
          */
-//        Imgproc.rectangle(
-//                frame, // Buffer to draw on
-//                new Point(RIGHT_RECTANGLE.x, RIGHT_RECTANGLE.y), // First point which defines the rectangle
-//                new Point(RIGHT_RECTANGLE.width, RIGHT_RECTANGLE.height), // Second point which defines the rectangle
-//                BLUE, // The color the rectangle is drawn in
-//                2); // Thickness of the rectangle lines
+        Imgproc.rectangle(
+                frame, // Buffer to draw on
+                new Point(RIGHT_RECTANGLE.x, RIGHT_RECTANGLE.y), // First point which defines the rectangle
+                new Point(RIGHT_RECTANGLE.x + RIGHT_RECTANGLE.width, RIGHT_RECTANGLE.y + RIGHT_RECTANGLE.height), // Second point which defines the rectangle
+                GREEN, // The color the rectangle is drawn in
+                2); // Thickness of the rectangle lines
 
 //        Imgproc.rectangle(
 //                frame, // Buffer to draw on
