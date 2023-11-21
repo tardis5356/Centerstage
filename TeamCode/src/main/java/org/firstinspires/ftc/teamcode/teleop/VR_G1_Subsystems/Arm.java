@@ -11,13 +11,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Arm extends SubsystemBase {
     private Servo sArmLeft, sArmRight;
 
-    private DistanceSensor colorArm;
+    private ColorSensor colorArm;
 
     public Arm(HardwareMap hardwareMap){
         sArmLeft = hardwareMap.get(Servo.class, "sAL");
         sArmRight = hardwareMap.get(Servo.class, "sAR");
 
-        colorArm = hardwareMap.get(DistanceSensor.class, "colorArm");
+        colorArm = hardwareMap.get(ColorSensor.class, "colorArm");
+        colorArm.enableLed(false);
     }
 
     @Override
@@ -40,7 +41,7 @@ public class Arm extends SubsystemBase {
     }
 
     public boolean inIntake() {
-        if (colorArm.getDistance(DistanceUnit.CM) <= 15)
+        if (((DistanceSensor) colorArm).getDistance(DistanceUnit.CM) <= 15)
             return true;
         else
             return false;
