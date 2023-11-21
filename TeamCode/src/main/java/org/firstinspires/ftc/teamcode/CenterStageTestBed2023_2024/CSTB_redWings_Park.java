@@ -104,7 +104,7 @@ public class CSTB_redWings_Park extends CommandOpMode {
         ////////////////////////////////////DONE DEFINING PARK TRAJECTORIES///////////////////////////////////////
 
         if (runtime.seconds() > 28) {
-            if (!parking) {
+            if (redPropThreshold) {
                 CommandScheduler.getInstance().cancelAll();
                 switch () {
                     case 1:
