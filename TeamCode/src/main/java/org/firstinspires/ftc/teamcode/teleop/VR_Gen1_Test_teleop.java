@@ -130,7 +130,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
                 .whenActive(deployWinch);
 
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))// && gametime.seconds() > 90)
-                .whenActive(pullUpBot);
+                .whileActiveContinuous(pullUpBot);
 
 
         //map buttons to lift positions
