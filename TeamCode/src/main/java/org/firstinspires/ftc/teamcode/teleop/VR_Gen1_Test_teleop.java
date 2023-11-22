@@ -201,6 +201,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         //this motor physically runs opposite. For convenience, reverse direction.
         mBR.setDirection(DcMotorSimple.Direction.REVERSE);
+        mFR.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //init the drone servo
         sDroneLauncher = hardwareMap.get(Servo.class,"sDL");
@@ -241,9 +242,15 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
             mW.setPower(-BotPositions.WINCH_MOTOR_POWER);
 
         //telemetry stoof
-        telemetry.addData("LeftStickY", FB);
-        telemetry.addData("LeftStickX", LR);
-        telemetry.addData("RightStickX", Rotation);
+//        telemetry.addData("LeftStickY", FB);
+//        telemetry.addData("LeftStickX", LR);
+//        telemetry.addData("RightStickX", Rotation);
+        telemetry.addData("arm distance", arm.getArmDistance());
+        telemetry.addData("intake left distance", intake.getIntakeLeftDistance());
+        telemetry.addData("intake right distance", intake.getIntakeRightDistance());
+        telemetry.addData("touchLift", lift.getLiftBase());
+        telemetry.addData("touchLift", lift.getLiftTargetPosition());
+
         telemetry.update();
 
     }

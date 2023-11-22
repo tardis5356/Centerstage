@@ -27,17 +27,17 @@ public class Arm extends SubsystemBase {
 
     public void toIntake(){
         sArmLeft.setPosition(BotPositions.ARM_LEFT_INTAKE);
-        sArmRight.setPosition(BotPositions.ARM_RIGHT_INTAKE);
+        sArmRight.setPosition(BotPositions.ARM_LEFT_INTAKE);
     }
 
     public void toTransition(){
         sArmLeft.setPosition(BotPositions.ARM_LEFT_TRANSITION_POSITION);
-        sArmRight.setPosition(BotPositions.ARM_RIGHT_TRANSITION_POSITION);
+        sArmRight.setPosition(BotPositions.ARM_LEFT_TRANSITION_POSITION);
     }
 
     public void toDeposit(){
         sArmLeft.setPosition(BotPositions.ARM_LEFT_DEPOSIT);
-        sArmRight.setPosition(BotPositions.ARM_RIGHT_DEPOSIT);
+        sArmRight.setPosition(BotPositions.ARM_LEFT_DEPOSIT);
     }
 
     public boolean inIntake() {
@@ -45,5 +45,9 @@ public class Arm extends SubsystemBase {
             return true;
         else
             return false;
+    }
+
+    public double getArmDistance(){
+        return ((DistanceSensor) colorArm).getDistance(DistanceUnit.CM);
     }
 }

@@ -22,12 +22,12 @@ public class RobotToStateCommand extends ParallelCommandGroup {
             case "intake":
                 addCommands(
                         new SequentialCommandGroup(
-                                new InstantCommand(wrist::toTransition),
-                                new InstantCommand(gripper::releaseRight),
-                                new InstantCommand(gripper::releaseLeft),
-                                new InstantCommand(arm::toTransition),
-                                new WaitUntilCommand(arm::inIntake),
-                                new InstantCommand(wrist::tiltToIntake),
+//                                new InstantCommand(wrist::toTransition),
+//                                new InstantCommand(gripper::releaseRight),
+//                                new InstantCommand(gripper::releaseLeft),
+//                                new InstantCommand(arm::toTransition)//,
+//                                new WaitUntilCommand(arm::inIntake),
+//                                new InstantCommand(wrist::tiltToIntake),
                                 new InstantCommand(arm::toIntake)
                         )
                 );
@@ -36,10 +36,10 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                 addCommands(
                         new IntakeOut(intake),
                         new SequentialCommandGroup(
-                                new InstantCommand(arm::toTransition),
-                                new InstantCommand(wrist::toTransition),
-                                new WaitUntilCommand(()->arm.inIntake() == false),
-                                new InstantCommand(wrist::tiltToDeposit)
+                                new InstantCommand(arm::toTransition)//,
+//                                new InstantCommand(wrist::toTransition),
+//                                new WaitUntilCommand(()->arm.inIntake() == false),
+//                                new InstantCommand(wrist::tiltToDeposit)
                         )
                 );
                 break;

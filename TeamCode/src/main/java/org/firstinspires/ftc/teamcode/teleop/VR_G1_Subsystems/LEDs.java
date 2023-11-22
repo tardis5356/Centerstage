@@ -125,7 +125,7 @@ public class LEDs extends SubsystemBase {
 
         // procedural code, if the variable is below a certain value, then the method returns that there is a pixel.
         // if not, then it returns there is no pixel
-        if (LeftDistance < 1) {
+        if (LeftDistance < 1.5) {
             return true;
         } else {
             return false;
@@ -139,7 +139,7 @@ public class LEDs extends SubsystemBase {
 
         double RightDistance = ((DistanceSensor) colorRight).getDistance(DistanceUnit.CM);
 
-        if (RightDistance < 1) {
+        if (RightDistance < 1.5) {
             return true;
         } else {
             return false;
