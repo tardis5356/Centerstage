@@ -31,7 +31,7 @@ public class CSTB_AutoTrajectories {
     public static TrajectorySequence blueBackstage_ToDecisionPoint;
     public static TrajectorySequence blueWings_ToDecisionPoint , blueWings_ToMiddlePark;
     public static TrajectorySequence redBackstage_ToDecisionPoint , redBackstage_ToParkedPos;
-    public static TrajectorySequence redWings_ToDecisionPoint , redWings_ToMiddlePark , redWings_ToLeftSpike , redWings_ToRightSpike;
+    public static TrajectorySequence redWings_ToDecisionPoint , redWings_ToMiddlePark , redWings_ToCenterSpike, redWings_ToLeftSpike , redWings_ToRightSpike;
 
     public static void generateTrajectories(CSTB_SampleMecanumDrive drive) {
 
@@ -77,30 +77,36 @@ public class CSTB_AutoTrajectories {
                 drive.trajectorySequenceBuilder(redWings_StartPos)
                         .lineTo(new Vector2d(40, 64.5), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
                                 CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
-                        .lineTo(new Vector2d(40, 12), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
+                        .lineTo(new Vector2d(40, 24), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
                                 CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
                         .build();
 
         redWings_ToLeftSpike = //shift and go forward to score center
+                drive.trajectorySequenceBuilder(redWings_ToDecisionPoint.end())
+                        .lineToLinearHeading(new Pose2d(40,26, Math.toRadians(225)))
+                        .lineTo(new Vector2d(42, 26), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
+                                CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
+                        .build();
+
+        redWings_ToCenterSpike = //shift and go forward to score center
                 drive.trajectorySequenceBuilder(redWings_StartPos)
-                        .lineTo(new Vector2d(40, 64.5), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
+                        .lineTo(new Vector2d(40, 12), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
                                 CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
-                        .lineTo(new Vector2d(48, 12), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
-                                CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
+                        .lineToLinearHeading(new Pose2d(40,12, Math.toRadians(0)))
                         .build();
 
         redWings_ToRightSpike = //shift and go forward to score center
                 drive.trajectorySequenceBuilder(redWings_StartPos)
-                        .lineTo(new Vector2d(40, 64.5), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
+                        .lineToLinearHeading(new Pose2d(40,26, Math.toRadians(0)))
+                        .lineTo(new Vector2d(38, 26), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
                                 CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
-                        .lineToLinearHeading(new Pose2d(40,12, Math.toRadians(180)))
                         .build();
 
         redWings_ToMiddlePark = //go to and spin to parking between backdrops
                 drive.trajectorySequenceBuilder(redWings_ToDecisionPoint.end())
-                        .lineToLinearHeading(new Pose2d( -42, 16, Math.toRadians(180)))
-                        //.lineTo(new Vector2d(-60, 10), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
-                                //CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
+                        .lineTo(new Vector2d(40, 10), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
+                        CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
+                        .lineToLinearHeading(new Pose2d( -42, 16, Math.toRadians(0)))
                         .build();
 
 
