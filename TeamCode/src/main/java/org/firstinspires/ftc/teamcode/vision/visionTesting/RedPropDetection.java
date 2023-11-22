@@ -23,7 +23,7 @@ public class RedPropDetection implements VisionProcessor {
     Mat lowMatBlue = new Mat();
     Mat finalMatBlue = new Mat();
     double redThreshold = 0.2;
-    double blueThreshold = 0.2;
+    double blueThreshold = 0.000010;
     double averagedLeftBoxRed;
     double averagedRightBoxRed;
     double averagedLeftBoxBlue;
@@ -32,14 +32,14 @@ public class RedPropDetection implements VisionProcessor {
     String outStr = "left"; //Set a default value in case vision does not work
 
     static final Scalar BLUE = new Scalar(0, 0, 255);
-    static final Scalar GREEN = new Scalar (0,255,0);
+    static final Scalar GREEN = new Scalar(0, 255, 0);
 
-        static final Rect LEFT_RECTANGLE = new Rect( // 640 x 480 (X by Y)
-                new Point(0, 0), //anchor (upper left corner)
-                new Point(200, 300) //width, height
-        );
+    static final Rect LEFT_RECTANGLE = new Rect( // 640 x 480 (X by Y)
+            new Point(0, 0), //anchor (upper left corner)
+            new Point(200, 300) //width, height
+    );
     static final Rect RIGHT_RECTANGLE = new Rect(
-            new Point(410 , 0),
+            new Point(410, 0),
             new Point(620, 300)
     );
 
@@ -78,7 +78,7 @@ public class RedPropDetection implements VisionProcessor {
         double leftBoxRed = Core.sumElems(finalMatRed.submat(LEFT_RECTANGLE)).val[0];
         double rightBoxRed = Core.sumElems(finalMatRed.submat(RIGHT_RECTANGLE)).val[0];
 
-        averagedLeftBoxRed =  leftBoxRed / LEFT_RECTANGLE.area() / 255;
+        averagedLeftBoxRed = leftBoxRed / LEFT_RECTANGLE.area() / 255;
         averagedRightBoxRed = rightBoxRed / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
 
 //        //BLUE!!
@@ -126,8 +126,8 @@ public class RedPropDetection implements VisionProcessor {
 //                                  you use the "frame" mat for all of your pipelines, such as April Tags*/
         Imgproc.rectangle(
                 frame, // Buffer to draw on
-                 new Point(LEFT_RECTANGLE.x, LEFT_RECTANGLE.y), // First point which defines the rectangle
-                 new Point(LEFT_RECTANGLE.x + LEFT_RECTANGLE.width, LEFT_RECTANGLE.y + LEFT_RECTANGLE.height), // Second point which defines the rectangle
+                new Point(LEFT_RECTANGLE.x, LEFT_RECTANGLE.y), // First point which defines the rectangle
+                new Point(LEFT_RECTANGLE.x + LEFT_RECTANGLE.width, LEFT_RECTANGLE.y + LEFT_RECTANGLE.height), // Second point which defines the rectangle
                 BLUE, // The color the rectangle is drawn in
                 2); // Thickness of the rectangle lines
 
@@ -173,17 +173,20 @@ public class RedPropDetection implements VisionProcessor {
         return outStr;
     }
 
-        public double getAveragedLeftBoxRed() {  //Returns postion of the prop in a String
-            return averagedLeftBoxRed;
-        }
-            public double getAveragedRightBoxRed() {  //Returns postion of the prop in a String
-                return averagedRightBoxRed;
-            }
-                public double getAveragedLeftBoxBlue() {  //Returns postion of the prop in a String
-                    return averagedLeftBoxBlue;
-                }
-                public double getAveragedRightBoxBlue() {  //Returns postion of the prop in a String
-                    return averagedRightBoxBlue;
-                }
+    public double getAveragedLeftBoxRed() {  //Returns postion of the prop in a String
+        return averagedLeftBoxRed;
     }
+
+    public double getAveragedRightBoxRed() {  //Returns postion of the prop in a String
+        return averagedRightBoxRed;
+    }
+
+    public double getAveragedLeftBoxBlue() {  //Returns postion of the prop in a String
+        return averagedLeftBoxBlue;
+    }
+
+    public double getAveragedRightBoxBlue() {  //Returns postion of the prop in a String
+        return averagedRightBoxBlue;
+    }
+}
 
