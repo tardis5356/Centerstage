@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -168,11 +170,17 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))
                 .toggleWhenActive(new InstantCommand(gripper::grabLeft), new InstantCommand(gripper::releaseLeft));
 
-        new Trigger(() -> leds.checkLeftPixel() == true)
-                .whenActive(new InstantCommand(gripper::grabLeft));
-
-        new Trigger(()-> leds.checkRightPixel() == true)
-                .whenActive(new InstantCommand(gripper::grabRight));
+//        new Trigger(() -> leds.checkLeftPixel() == true)
+//                .whenActive(new SequentialCommandGroup(
+//                        new WaitCommand(750),
+//                        new InstantCommand(gripper::grabLeft)
+//                        ));
+//
+//        new Trigger(()-> leds.checkRightPixel() == true)
+//                .whenActive(new SequentialCommandGroup(
+//                        new WaitCommand(750),
+//                        new InstantCommand(gripper::grabRight)
+//                ));
 
         //triggers to roll wrist
         new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
@@ -212,7 +220,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         super.run();
 
         //lift always runs with manual control tied to gamepads unless stated otherwise
-        lift.manualControl(-gamepad2.left_stick_y, -gamepad2.right_stick_y);
+        lift.manualControl(gamepad2.left_stick_y, gamepad2.right_stick_y);
 
 
         //map drive vars to inputs
@@ -231,7 +239,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         mBL.setPower(FB-LR+Rotation);
         mBR.setPower(FB+LR-Rotation);
 
-        if (gamepad1.a && gametime.seconds() > 90){
+        if (gamepad1.a){ //&& gametime.seconds() > 90){
             sDroneLauncher.setPosition(BotPositions.DRONE_UNLATCHED);
         }
         else {
@@ -245,11 +253,16 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 //        telemetry.addData("LeftStickY", FB);
 //        telemetry.addData("LeftStickX", LR);
 //        telemetry.addData("RightStickX", Rotation);
+
+        telemetry.addData("LeftStickY", gamepad2.left_stick_y);
         telemetry.addData("arm distance", arm.getArmDistance());
         telemetry.addData("intake left distance", intake.getIntakeLeftDistance());
         telemetry.addData("intake right distance", intake.getIntakeRightDistance());
         telemetry.addData("touchLift", lift.getLiftBase());
         telemetry.addData("touchLift", lift.getLiftTargetPosition());
+        telemetry.addData("inIntake", arm.inIntake());
+        telemetry.addData("inIntake", lift.manualActive);
+        telemetry.addData("liftPower", lift.getLiftPower());
 
         telemetry.update();
 

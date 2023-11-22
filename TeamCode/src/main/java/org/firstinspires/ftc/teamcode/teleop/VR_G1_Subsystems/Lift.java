@@ -100,7 +100,7 @@ public class Lift extends SubsystemBase {
                 power = pid + ff; // if lift is not supposed to be fully retracted, motor power is feedforward (counteract gravity) + value from pid controller
 
             if (liftTarget == -10 && !liftBase.isPressed())
-                power = -0.1; // if lift is supposed to be retracted but the lift base touch sensor is not pressed, motors should lower
+                power = 0.1; // if lift is supposed to be retracted but the lift base touch sensor is not pressed, motors should lower
             if (liftTarget == -10 && liftBase.isPressed())
                 power = 0; // if lift is supposed to be retracted and lift base touch sensor is pressed, motors should be stopped
 

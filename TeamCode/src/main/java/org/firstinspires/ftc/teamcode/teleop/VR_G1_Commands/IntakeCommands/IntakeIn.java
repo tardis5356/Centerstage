@@ -13,7 +13,7 @@ public class IntakeIn extends SequentialCommandGroup {
     public IntakeIn(Intake intake, LEDs leds) {
         addCommands(
                 new InstantCommand(intake::in),
-                new WaitCommand(1500),
+                new WaitCommand(3000),
                 new InstantCommand(intake::stop),
                 new InstantCommand(() -> {
                     leds.setLEDstate("Intaking");

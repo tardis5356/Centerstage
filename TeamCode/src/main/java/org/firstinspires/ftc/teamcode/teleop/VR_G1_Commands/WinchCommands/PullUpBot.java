@@ -12,7 +12,7 @@ public class PullUpBot extends SequentialCommandGroup {
         addCommands(
             new InstantCommand(winch::retractScissor),
             new InstantCommand(winch::extendBraces),
-            new WaitCommand(1500),
+            //new WaitCommand(1500),
             new InstantCommand(winch::liftRobot)
         );
     }
