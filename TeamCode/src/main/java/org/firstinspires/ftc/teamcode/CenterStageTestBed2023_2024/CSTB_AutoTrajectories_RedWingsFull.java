@@ -13,7 +13,7 @@ public class CSTB_AutoTrajectories_RedWingsFull {
     public static final Pose2d redBackstage_ToBackdrop = new Pose2d(-63, -63, Math.toRadians(270));
 
     //RED WINGS
-    public static final Pose2d redWings_StartPos = new Pose2d(36, 64.5, Math.toRadians(270));
+    public static final Pose2d redWings_StartPos = new Pose2d(-36, 64.5, Math.toRadians(270));
     public static final Pose2d redWings_PostPurplePos = new Pose2d(40, 16, Math.toRadians(270));
     public static final Pose2d redWings_ParkedPos = new Pose2d(-63, -63, Math.toRadians(270));
 
@@ -35,7 +35,7 @@ public class CSTB_AutoTrajectories_RedWingsFull {
         redBackstage_ToParkedPos =
                 drive.trajectorySequenceBuilder(redBackstage_StartPos)
                         .setReversed(true)
-                        .lineTo(new Vector2d(-50, 64.5), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
+                        .lineTo(new Vector2d(-36, 12), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
                                 CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
                         .setReversed(false)
                         .build();
@@ -45,7 +45,7 @@ public class CSTB_AutoTrajectories_RedWingsFull {
         redWings_ToDecisionPoint = //go forward to score center
                 drive.trajectorySequenceBuilder(redWings_StartPos)
                         //.splineToConstantHeading(new Vector2d(-45,13), Math.toRadians(270))
-                        .lineToLinearHeading(new Pose2d(-40, 12, Math.toRadians(270)))
+                        .lineToLinearHeading(new Pose2d(-30, 10, Math.toRadians(270)))
                         .build();
 
         redWings_ToLeftSpike = //go forward to score center
@@ -55,7 +55,7 @@ public class CSTB_AutoTrajectories_RedWingsFull {
 
         redWings_ToCenterSpike = //go forward to score center
                 drive.trajectorySequenceBuilder(redWings_ToDecisionPoint.end())
-                        .splineToConstantHeading(new Vector2d(-40, 12.01), Math.toRadians(270))
+                        .splineToConstantHeading(new Vector2d(-36, 12.01), Math.toRadians(270))
                         .build();
 
         redWings_ToRightSpike = //go forward to score center
