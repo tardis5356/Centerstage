@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 

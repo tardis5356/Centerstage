@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands;
+package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Lift;
+import org.firstinspires.ftc.teamcode.subsystems.Lift;
 
 
 public class LiftToPositionCommand extends CommandBase {

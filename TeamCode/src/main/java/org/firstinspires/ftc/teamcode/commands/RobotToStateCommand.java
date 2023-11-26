@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands;
+package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
@@ -6,15 +6,13 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeCommands.IntakeIn;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeCommands.IntakeOut;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Arm;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Gripper;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Intake;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.LEDs;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Lift;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Winch;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Wrist;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Gripper;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.LEDs;
+import org.firstinspires.ftc.teamcode.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.subsystems.Winch;
+import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 
 public class RobotToStateCommand extends ParallelCommandGroup {
 
@@ -40,7 +38,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                 break;
             case "deposit":
                 addCommands(
-                        new IntakeIn(intake, leds),
+                        new IntakeInCommand(intake, leds),
                         new SequentialCommandGroup(
                                 new WaitUntilCommand(()->arm.inIntake() == true),
                                 new InstantCommand(arm::toGrab),

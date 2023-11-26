@@ -1,14 +1,13 @@
-package org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WinchCommands;
+package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Winch;
+import org.firstinspires.ftc.teamcode.subsystems.Winch;
 
-public class PullUpBot extends SequentialCommandGroup {
+public class WinchPullUpCommand extends SequentialCommandGroup {
 
-    public PullUpBot (Winch winch) {
+    public WinchPullUpCommand(Winch winch) {
         addCommands(
             new InstantCommand(winch::retractScissor),
             new InstantCommand(winch::extendBraces),

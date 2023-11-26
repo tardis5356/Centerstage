@@ -2,42 +2,37 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.RobotToStateCommand;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WristAndArmComs.ManipToIntake;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WristAndArmComs.ManipToOutput;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Arm;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.BotPositions;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Intake;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeCommands.IntakeIn;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeCommands.IntakeOut;
+import org.firstinspires.ftc.teamcode.commands.RobotToStateCommand;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.BotPositions;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.commands.IntakeInCommand;
+import org.firstinspires.ftc.teamcode.commands.IntakeOutCommand;
 
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Winch;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WinchCommands.DeployWinch;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.WinchCommands.PullUpBot;
+import org.firstinspires.ftc.teamcode.subsystems.Winch;
+import org.firstinspires.ftc.teamcode.commands.WinchDeployCommand;
+import org.firstinspires.ftc.teamcode.commands.WinchPullUpCommand;
 
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Lift;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.LiftToPositionCommand;
+import org.firstinspires.ftc.teamcode.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.commands.LiftToPositionCommand;
 
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.LEDs;
+import org.firstinspires.ftc.teamcode.subsystems.LEDs;
 
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Gripper;
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Wrist;
+import org.firstinspires.ftc.teamcode.subsystems.Gripper;
+import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 
 
-@TeleOp(name="VR_Gen1_Debug")
+@TeleOp(name = "VR_Gen1_Debug")
 public class VR_Gen1_Test_teleop extends CommandOpMode {
     //gamepads
     private GamepadEx driver1, driver2;
@@ -54,13 +49,13 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
     //intake and intake commands
     private Intake intake;
-    private IntakeIn intakeIn;
-    private IntakeOut intakeOut;
+    private IntakeInCommand intakeInCommand;
+    private IntakeOutCommand intakeOutCommand;
 
     //winch and winch commands
     private Winch winch;
-    private DeployWinch deployWinch;
-    private PullUpBot pullUpBot;
+    private WinchDeployCommand winchDeployCommand;
+    private WinchPullUpCommand winchPullUpCommand;
 
     //lift and lift coms
     private Lift lift;
@@ -77,15 +72,11 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
     //arm and coms
     private Arm arm;
-    private ManipToIntake manipToIntake;
-    private ManipToOutput manipToOutput;
 
     private DcMotorEx mW;
 
-
     @Override
-    public void initialize(){
-
+    public void initialize() {
         //init controllers
         driver1 = new GamepadEx(gamepad1);
         driver2 = new GamepadEx(gamepad2);
@@ -93,13 +84,13 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         //init intake stuff and LEDs
         intake = new Intake(hardwareMap);
         leds = new LEDs(hardwareMap);
-        intakeIn = new IntakeIn(intake, leds);
-        intakeOut = new IntakeOut(intake);
+        intakeInCommand = new IntakeInCommand(intake, leds);
+        intakeOutCommand = new IntakeOutCommand(intake);
 
         //init winch stuff
         winch = new Winch(hardwareMap);
-        deployWinch = new DeployWinch(winch);
-        pullUpBot = new PullUpBot(winch);
+        winchDeployCommand = new WinchDeployCommand(winch);
+        winchPullUpCommand = new WinchPullUpCommand(winch);
 
         //init lift stuff
         lift = new Lift(hardwareMap);
@@ -113,26 +104,24 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         //init arm stuff
         arm = new Arm(hardwareMap);
-        manipToIntake = new ManipToIntake(wrist, arm, gripper);
-        manipToOutput = new ManipToOutput(wrist, arm, gripper);
 
         mW = hardwareMap.get(DcMotorEx.class, "mW");
 
 
         //button map intake commands
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER))
-                .whenActive(intakeIn);
+                .whenActive(intakeInCommand);
 
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.LEFT_BUMPER))
-                .whenActive(intakeOut);
+                .whenActive(intakeOutCommand);
 
 
         //button map winch commands
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))// && gametime.seconds() > 90)
-                .whenActive(deployWinch);
+                .whenActive(winchDeployCommand);
 
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))// && gametime.seconds() > 90)
-                .whileActiveContinuous(pullUpBot);
+                .whileActiveContinuous(winchPullUpCommand);
 
 
         //map buttons to lift positions
@@ -142,25 +131,24 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         //triggers to change the led color to signal to human player what pixels are needed
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.A))
-                .whenActive(new InstantCommand(()->{
+                .whenActive(new InstantCommand(() -> {
                     leds.changeColor(leds.Green);
                 }));
 
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.X))
-                .whenActive(new InstantCommand(()->{
+                .whenActive(new InstantCommand(() -> {
                     leds.changeColor(leds.Purple);
                 }));
 
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.Y))
-                .whenActive(new InstantCommand(()->{
+                .whenActive(new InstantCommand(() -> {
                     leds.changeColor(leds.Yellow);
                 }));
 
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.B))
-                .whenActive(new InstantCommand(()->{
+                .whenActive(new InstantCommand(() -> {
                     leds.changeColor(leds.White);
                 }));
-
 
 
         //triggers to open and close gripper
@@ -200,7 +188,6 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
                 .whenActive(new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"));
 
 
-
         //init and set up drive motors
         mFL = hardwareMap.get(DcMotorEx.class, "mFL");
         mFR = hardwareMap.get(DcMotorEx.class, "mFR");
@@ -212,8 +199,9 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         mFR.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //init the drone servo
-        sDroneLauncher = hardwareMap.get(Servo.class,"sDL");
+        sDroneLauncher = hardwareMap.get(Servo.class, "sDL");
     }
+
     @Override
     // This is pretty much your while OpMode is active loop
     public void run() {
@@ -234,15 +222,14 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         //map motor power to vars (tb tested)
         //depending on the wheel, forward back, left right, and rotation's power may be different
         //think, if fb is positive, thus the bot should move forward, will the motor drive the bot forward if its power is positive.
-        mFL.setPower(FB+LR+Rotation);
-        mFR.setPower(FB-LR-Rotation);
-        mBL.setPower(FB-LR+Rotation);
-        mBR.setPower(FB+LR-Rotation);
+        mFL.setPower(FB + LR + Rotation);
+        mFR.setPower(FB - LR - Rotation);
+        mBL.setPower(FB - LR + Rotation);
+        mBR.setPower(FB + LR - Rotation);
 
-        if (gamepad1.a){ //&& gametime.seconds() > 90){
+        if (gamepad1.a) { //&& gametime.seconds() > 90){
             sDroneLauncher.setPosition(BotPositions.DRONE_UNLATCHED);
-        }
-        else {
+        } else {
             sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED);
         }
 
