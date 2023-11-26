@@ -46,7 +46,8 @@ public class CSTB_AutoTrajectories_RedWingsFull {
                 //redWings
                 redWings_ToDecisionPoint = //go forward to score center
                         drive.trajectorySequenceBuilder(redWings_StartPos)
-                                .splineToConstantHeading(new Vector2d(-45,13), Math.toRadians(270))
+                                //.splineToConstantHeading(new Vector2d(-45,13), Math.toRadians(270))
+                                .lineToLinearHeading(new Pose2d(-40,12, Math.toRadians(270)))
                                 .build();
 
                 redWings_ToLeftSpike = //go forward to score center
@@ -67,6 +68,7 @@ public class CSTB_AutoTrajectories_RedWingsFull {
                 redWings_ToMiddlePark = //go to and spin to parking between backdrops
                         drive.trajectorySequenceBuilder(redWings_ToDecisionPoint.end())
                                 .splineToConstantHeading(new Vector2d( -42, 16), Math.toRadians(270))
-                                .build();
-            }
-        }}}
+                                .build();}
+        }
+    }
+}

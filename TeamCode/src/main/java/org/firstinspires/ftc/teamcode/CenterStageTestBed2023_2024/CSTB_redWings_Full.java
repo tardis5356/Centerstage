@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 //public class CSTB_redWings_Full {
 
 
-@Autonomous(group = "drive", name = "CSTB red wings Full")
+@Autonomous(group = "drive", name = "CSTB red wings FULL")
 public class CSTB_redWings_Full extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
@@ -98,6 +98,7 @@ public class CSTB_redWings_Full extends CommandOpMode {
                 redWings_parkTrajectory = redWings_ToLeftSpike;
                 telemetry.addLine("park trajectory 1");
                 break;
+            default:
             case "center":
                 redWings_parkTrajectory = redWings_ToCenterSpike;
                 telemetry.addLine("park trajectory 2");
