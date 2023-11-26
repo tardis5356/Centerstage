@@ -96,15 +96,15 @@ public class CSTB_redWings_Full extends CommandOpMode {
         switch (redPropThreshold.getPropPosition()) {
             case "left":
                 redWings_parkTrajectory = redWings_ToLeftSpike;
-                telemetry.addLine("park traj 1");
+                telemetry.addLine("park trajectory 1");
                 break;
             case "center":
                 redWings_parkTrajectory = redWings_ToCenterSpike;
-                telemetry.addLine("park traj 2");
+                telemetry.addLine("park trajectory 2");
                 break;
             case "right":
                 redWings_parkTrajectory = redWings_ToRightSpike;
-                telemetry.addLine("park traj 3");
+                telemetry.addLine("park trajectory 3");
                 break;
         }
 

@@ -7,16 +7,6 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 public class CSTB_AutoTrajectories_RedWingsFull {
 
-    //BLUE BACKSTAGE
-    public static final Pose2d blueBackstage_StartPos = new Pose2d(-8, 64.5, Math.toRadians(90));
-    public static final Pose2d blueBackstage_WaypointParkPos = new Pose2d(-61.5, 13.5, Math.toRadians(180));
-    public static final Pose2d blueBackstage_ParkedPos = new Pose2d(-63, 63, Math.toRadians(220));
-
-    //BLUE WINGS
-    public static final Pose2d blueWings_StartPos = new Pose2d(36, -64.5, Math.toRadians(90));
-    public static final Pose2d blueWings_dropPurple = new Pose2d(-61.5, 13.5, Math.toRadians(270));
-    public static final Pose2d blueWings_ParkedPos = new Pose2d(-63, 63, Math.toRadians(270));
-
     //RED BACKSTAGE
     public static final Pose2d redBackstage_StartPos = new Pose2d(-8, 64.5, Math.toRadians(270));
     public static final Pose2d redBackstage_ParkedPos = new Pose2d(-61.5, 64.5, Math.toRadians(270));
