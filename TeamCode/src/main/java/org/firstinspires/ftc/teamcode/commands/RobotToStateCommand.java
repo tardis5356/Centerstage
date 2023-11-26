@@ -55,12 +55,15 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                         )
                 );
                 break;
-            case "grab_pixel":
-                currentState = "grab_pixel";
+            case "grab_pixels":
+                currentState = "grab_pixels";
                 addCommands(
                         new SequentialCommandGroup(
                                 // ensure arm is already in intake
                                 new WaitUntilCommand(() -> arm.inIntakeEntering()),
+
+//                                new IntakeInCommand(intake, leds),
+                                new InstantCommand(intake::in),
 
                                 // send arm to grabbing position
                                 new InstantCommand(arm::toGrab),
@@ -73,7 +76,9 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                 new InstantCommand(gripper::grabRight),
 
                                 // wait 1 second for grippers to grab
-                                new WaitCommand(1000),
+                                new WaitCommand(750),
+
+                                new IntakeOutCommand(intake),
 
                                 // move arm & wrist to transition position
                                 new InstantCommand(arm::toTransition),

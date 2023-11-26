@@ -39,6 +39,10 @@ public class Winch extends SubsystemBase {
         sBraceL.setPosition(BotPositions.LEFT_BRACE_EXTENDED);
         sBraceR.setPosition(BotPositions.RIGHT_BRACE_EXTENDED);
     }
+    public void overextendBraces() {
+        sBraceL.setPosition(BotPositions.LEFT_BRACE_OVEREXTENDED);
+        sBraceR.setPosition(BotPositions.RIGHT_BRACE_OVEREXTENDED);
+    }
 
     //retracts the scissor lift
     public void retractScissor() {
@@ -48,5 +52,8 @@ public class Winch extends SubsystemBase {
     //actually lifts the bot. pls work
     public void liftRobot() {
         mWinch.setPower(BotPositions.WINCH_MOTOR_POWER);
+    }
+    public void stopWinch() {
+        mWinch.setPower(0);
     }
 }

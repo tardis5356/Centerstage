@@ -12,7 +12,7 @@ public class Intake extends SubsystemBase {
     private DcMotorEx mIntake;
     private ColorSensor colorLeft, colorRight;
 
-    public Intake(HardwareMap hardwareMap){
+    public Intake(HardwareMap hardwareMap) {
         mIntake = hardwareMap.get(DcMotorEx.class, "mI");
 
         colorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
@@ -20,14 +20,15 @@ public class Intake extends SubsystemBase {
     }
 
     @Override
-    public void periodic(){}
+    public void periodic() {
+    }
 
     public void in() {
         mIntake.setPower(BotPositions.INTAKE_MOTOR_INWARD_POWER);
 //        LEDstate = "Intaking";
     }
 
-    public void out(){
+    public void out() {
         mIntake.setPower(BotPositions.INTAKE_MOTOR_OUTWARD_POWER);
     }
 
@@ -35,11 +36,11 @@ public class Intake extends SubsystemBase {
         mIntake.setPower(0);
     }
 
-    public double getIntakeLeftDistance(){
+    public double getIntakeLeftDistance() {
         return ((DistanceSensor) colorLeft).getDistance(DistanceUnit.CM);
     }
 
-    public double getIntakeRightDistance(){
+    public double getIntakeRightDistance() {
         return ((DistanceSensor) colorRight).getDistance(DistanceUnit.CM);
     }
 

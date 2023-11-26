@@ -162,7 +162,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
                 .whenActive(intakeInCommand);
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
-                .whenActive(intakeOutCommand);
+                .whenActive(intakeInCommand);
 
         // map position commands
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) || driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))
@@ -174,10 +174,14 @@ public class Gen1_TeleOp extends CommandOpMode {
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))
                 .whenActive(winchDeployCommand);
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))
-                .whileActiveContinuous(winchPullUpCommand);
+                .toggleWhenActive(winchPullUpCommand, new InstantCommand(winch::stopWinch));
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_RIGHT))
-                .whileActiveContinuous(() -> mW.setPower(-BotPositions.WINCH_MOTOR_POWER));
+                .toggleWhenActive(() -> mW.setPower(-BotPositions.WINCH_MOTOR_POWER), () -> mW.setPower(0));
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
+                .toggleWhenActive(new InstantCommand(winch::extendBraces), new InstantCommand(winch::overextendBraces));
+
+        // ORIGINALLY new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.BACK))
                 .toggleWhenActive((() -> sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED)), () -> sDroneLauncher.setPosition(BotPositions.DRONE_UNLATCHED));
 
         //map buttons to lift positions
@@ -247,8 +251,9 @@ public class Gen1_TeleOp extends CommandOpMode {
         // automatically grab pixels
         new Trigger(() -> leds.checkLeftPixel() && leds.checkRightPixel())
                 .whenActive(new SequentialCommandGroup(
-                        new WaitCommand(500),
+                        new WaitCommand(750),
                         robotGrabPixelsCommand,
+//                        new WaitCommand(2000),
                         intakeOutCommand
                 ));
 
