@@ -1,18 +1,17 @@
 package org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024;
 
-import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redWings_CenterSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redWings_DecisionPointToCenterSpike;
-import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redWings_LeftSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redWings_RightSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redWings_StartPositionToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redWings_DecisionPointToLeftSpike;
-import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redWings_DecisionPointToMiddlePark;
-import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redWings_DecisionPointToRightSpike;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories_RedWingsFull.redWings_ToCenterSpike;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories_RedWingsFull.redWings_ToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories_RedWingsFull.redWings_ToLeftSpike;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories_RedWingsFull.redWings_ToMiddlePark;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories_RedWingsFull.redWings_ToRightSpike;
 
 import android.util.Size;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -27,18 +26,19 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 import java.util.concurrent.TimeUnit;
 
-//public class CSTB_redWings_Park {
+//public class CSTB_redWings_Full {
 
-@Autonomous(group = "drive", name = "CSTB red wings PARK")
-public class CSTB_redWings_Park extends CommandOpMode {
+
+@Autonomous(group = "drive", name = "CSTB red wings FULL")
+public class CSTB_redWings_Full extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
     private CSTB_SampleMecanumDrive drive;
     private VisionPortal portal;
     private RedPropDetection redPropThreshold;
     //    private Lift lift;
-    TrajectorySequence redWings_DecisionPointToSpike, redWings_ToDecisionPointTrajectory, redWings_SpikeToDecisionPoint;
-    FtcDashboard dashboard = FtcDashboard.getInstance();
+    private TrajectorySequence pixelTrajectoryRight, pixelTrajectoryMiddle, pixelTrajectoryLeft, redWings_parkTrajectory;
+    private FtcDashboard dashboard = FtcDashboard.getInstance();
 
     @Override
     public void initialize() {
@@ -82,31 +82,30 @@ public class CSTB_redWings_Park extends CommandOpMode {
         drive = new CSTB_SampleMecanumDrive(hardwareMap);
 
 
-        drive.setPoseEstimate(CSTB_AutoTrajectories.redWings_StartPos);
-        CSTB_AutoTrajectories.generateTrajectories(drive);
+        drive.setPoseEstimate(CSTB_AutoTrajectories_RedWingsFull.redWings_StartPos);
+        CSTB_AutoTrajectories_RedWingsFull.generateTrajectories(drive);
 
-        //gripper.close();
+
+//gripper.close();
 ////////////////////////////DEFINING PARK TRAJECTORIES//////////////////////////////
 
-        ////////////////////////////////////DONE DEFINING PARK TRAJECTORIES///////////////////////////////////////
+
+////////////////////////////////////DONE DEFINING PARK TRAJECTORIES///////////////////////////////////////
 
 
         switch (redPropThreshold.getPropPosition()) {
             case "left":
-                redWings_DecisionPointToSpike = redWings_DecisionPointToLeftSpike;
-                redWings_SpikeToDecisionPoint = redWings_LeftSpikeToDecisionPoint;
-                telemetry.addLine("park traj 1");
+                redWings_parkTrajectory = redWings_ToLeftSpike;
+                telemetry.addLine("park trajectory 1");
                 break;
             default:
             case "center":
-                redWings_DecisionPointToSpike = redWings_DecisionPointToCenterSpike;
-                redWings_SpikeToDecisionPoint = redWings_CenterSpikeToDecisionPoint;
-                telemetry.addLine("park traj 2");
+                redWings_parkTrajectory = redWings_ToCenterSpike;
+                telemetry.addLine("park trajectory 2");
                 break;
             case "right":
-                redWings_DecisionPointToSpike = redWings_DecisionPointToRightSpike;
-                redWings_SpikeToDecisionPoint = redWings_RightSpikeToDecisionPoint;
-                telemetry.addLine("park traj 3");
+                redWings_parkTrajectory = redWings_ToRightSpike;
+                telemetry.addLine("park trajectory 3");
                 break;
         }
 
@@ -122,15 +121,12 @@ public class CSTB_redWings_Park extends CommandOpMode {
 
         telemetry.update();
         schedule(new SequentialCommandGroup(
-
-                new CSTB_FollowTrajectoryCommand(drive, redWings_StartPositionToDecisionPoint),
-                new CSTB_FollowTrajectoryCommand(drive, redWings_DecisionPointToSpike),
-                new WaitCommand(1000),
-                new CSTB_FollowTrajectoryCommand(drive, redWings_SpikeToDecisionPoint),
-                new CSTB_FollowTrajectoryCommand(drive, redWings_DecisionPointToMiddlePark)
+                new CSTB_FollowTrajectoryCommand(drive, redWings_ToDecisionPoint),
+                new CSTB_FollowTrajectoryCommand(drive, redWings_parkTrajectory),
+                new WaitCommand(500),
+                new CSTB_FollowTrajectoryCommand(drive, redWings_ToMiddlePark)
 
         ));
 
     }
 }
-

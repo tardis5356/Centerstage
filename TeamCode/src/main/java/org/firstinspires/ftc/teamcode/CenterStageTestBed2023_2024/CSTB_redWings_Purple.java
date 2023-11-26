@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024;
 
-import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redWings_ToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redWings_ToMiddlePark;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redWings_StartPositionToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.CenterStageTestBed2023_2024.CSTB_AutoTrajectories.redWings_DecisionPointToMiddlePark;
 
 import android.util.Size;
 
@@ -81,8 +81,8 @@ public class CSTB_redWings_Purple extends CommandOpMode {
         telemetry.update();
         schedule( new SequentialCommandGroup(
 
-                new CSTB_FollowTrajectoryCommand(drive, redWings_ToDecisionPoint),
-                new CSTB_FollowTrajectoryCommand(drive, redWings_ToMiddlePark)
+                new CSTB_FollowTrajectoryCommand(drive, redWings_StartPositionToDecisionPoint),
+                new CSTB_FollowTrajectoryCommand(drive, redWings_DecisionPointToMiddlePark)
         ));
 
         while(!isStopRequested() && !opModeIsActive()){
