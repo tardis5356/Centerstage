@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 
@@ -22,17 +22,17 @@ public class BotPositions {
     public static double GRIPPER_LEFT_CLOSED = 0.79, GRIPPER_LEFT_OPEN = 0.4, GRIPPER_RIGHT_CLOSED = 0.22, GRIPPER_RIGHT_OPEN = 0.6;
 
     //lift pid variables
-    public static double LIFT_p = 0, LIFT_i = 0, LIFT_d = 0, LIFT_ff = 0.22;
+    public static double LIFT_p = 0, LIFT_i = 0, LIFT_d = 0, LIFT_ff = -.22;
     public static int LIFT_TOLERANCE = 25;
 
     //wrist positions
-    public static double WRIST_LEFT_ROLL = 0.72, WRIST_RIGHT_ROLL = 0.27, WRIST_ROLL_CENTERED = 0.49, WRIST_TILT_TRANSITION = 0.785, WRIST_TILT_INTAKE = 0.77, WRIST_TILT_DEPOSIT = 0.665;
+    public static double WRIST_LEFT_ROLL = 0.72, WRIST_RIGHT_ROLL = 0.27, WRIST_ROLL_CENTERED = 0.49, WRIST_TILT_TRANSITION = 0.79, WRIST_TILT_INTAKE = 0.767, WRIST_TILT_DEPOSIT = 0.665;
     //for tilt, 0.09 = 30º
 //    0.115 = 30º
 
     //arm positions
-    public static double ARM_LEFT_INTAKE = 0.8, ARM_RIGHT_INTAKE = 0.2, ARM_LEFT_TRANSITION_POSITION = 0.65, ARM_RIGHT_TRANSITION_POSITION = 0.35, ARM_LEFT_DEPOSIT = 0.3, ARM_RIGHT_DEPOSIT = 0.7;
+    public static double ARM_INTAKE = 0.13, ARM_TRANSITION_POSITION = 0.2,  ARM_DEPOSIT = 0.67, ARM_GRAB_PIXELS = .06;
 
     //drone servo positions
-    public static double DRONE_LATCHED = 0.3, DRONE_UNLATCHED = 0.2;
+    public static double DRONE_LATCHED = 0.33, DRONE_UNLATCHED = 0.27;
 }

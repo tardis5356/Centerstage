@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -23,25 +23,40 @@ public class Arm extends SubsystemBase {
 
     @Override
 
-    public void periodic(){}
+    public void periodic(){
+        colorArm.enableLed(false);
+    }
 
     public void toIntake(){
-        sArmLeft.setPosition(BotPositions.ARM_LEFT_INTAKE);
-        sArmRight.setPosition(BotPositions.ARM_LEFT_INTAKE);
+        sArmLeft.setPosition(BotPositions.ARM_INTAKE);
+        sArmRight.setPosition(BotPositions.ARM_INTAKE);
+    }
+
+    public void toGrab(){
+        sArmLeft.setPosition(BotPositions.ARM_GRAB_PIXELS);
+        sArmLeft.setPosition(BotPositions.ARM_GRAB_PIXELS);
     }
 
     public void toTransition(){
-        sArmLeft.setPosition(BotPositions.ARM_LEFT_TRANSITION_POSITION);
-        sArmRight.setPosition(BotPositions.ARM_LEFT_TRANSITION_POSITION);
+        sArmLeft.setPosition(BotPositions.ARM_TRANSITION_POSITION);
+        sArmRight.setPosition(BotPositions.ARM_TRANSITION_POSITION);
     }
 
     public void toDeposit(){
-        sArmLeft.setPosition(BotPositions.ARM_LEFT_DEPOSIT);
-        sArmRight.setPosition(BotPositions.ARM_LEFT_DEPOSIT);
+        sArmLeft.setPosition(BotPositions.ARM_DEPOSIT);
+        sArmRight.setPosition(BotPositions.ARM_DEPOSIT);
     }
 
-    public boolean inIntake() {
-        if (((DistanceSensor) colorArm).getDistance(DistanceUnit.CM) <= 15)
+    // original intaking position was 13cm
+
+    public boolean inIntakeExiting() {
+        if (((DistanceSensor) colorArm).getDistance(DistanceUnit.CM) <= 10)
+            return true;
+        else
+            return false;
+    }
+    public boolean inIntakeEntering() {
+        if (((DistanceSensor) colorArm).getDistance(DistanceUnit.CM) <= 18)
             return true;
         else
             return false;

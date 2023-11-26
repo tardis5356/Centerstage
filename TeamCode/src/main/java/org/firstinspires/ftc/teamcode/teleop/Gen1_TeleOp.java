@@ -2,38 +2,37 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-//import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.commands.RobotToStateCommand;
-import org.firstinspires.ftc.teamcode.subsystems.Arm;
-import org.firstinspires.ftc.teamcode.subsystems.BotPositions;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.commands.IntakeInCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeOutCommand;
-
-import org.firstinspires.ftc.teamcode.subsystems.Winch;
+import org.firstinspires.ftc.teamcode.commands.LiftToPositionCommand;
+import org.firstinspires.ftc.teamcode.commands.RobotToStateCommand;
 import org.firstinspires.ftc.teamcode.commands.WinchDeployCommand;
 import org.firstinspires.ftc.teamcode.commands.WinchPullUpCommand;
-
-import org.firstinspires.ftc.teamcode.subsystems.Lift;
-import org.firstinspires.ftc.teamcode.commands.LiftToPositionCommand;
-
-import org.firstinspires.ftc.teamcode.subsystems.LEDs;
-
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.BotPositions;
 import org.firstinspires.ftc.teamcode.subsystems.Gripper;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.LEDs;
+import org.firstinspires.ftc.teamcode.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.subsystems.Winch;
 import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 
 
-@TeleOp(name = "VR_Gen1_Debug")
-public class VR_Gen1_Test_teleop extends CommandOpMode {
+@TeleOp(name = "Gen1 TeleOp")
+public class Gen1_TeleOp extends CommandOpMode {
     //gamepads
     private GamepadEx driver1, driver2;
 
@@ -46,6 +45,12 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
     //keep track of time to ensure that e-game specific items dont trigger
     ElapsedTime gametime = new ElapsedTime();
+
+    // speed multiplier (granny mode)
+    double FAST_SPEED_MULTIPLIER = 1.0;
+    double SLOW_SPEED_MULTIPLIER = 0.5;
+    double CURRENT_SPEED_MULTIPLIER = FAST_SPEED_MULTIPLIER;
+
 
     //intake and intake commands
     private Intake intake;
@@ -60,6 +65,8 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
     //lift and lift coms
     private Lift lift;
     private LiftToPositionCommand liftToIntakePositionCommand;
+
+    private RobotToStateCommand robotToDepositCommand, robotToIntakeCommand, robotGrabPixelsCommand;
 
     //LEDs and coms
     private LEDs leds;
@@ -107,29 +114,79 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         mW = hardwareMap.get(DcMotorEx.class, "mW");
 
+        robotToDepositCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit");
+        robotToIntakeCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake");
+        robotGrabPixelsCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "grab_pixels");
+/*
+
+    Driver
+        Trigger Left - intake in.
+        Bumper Left - intake position.
+
+        Trigger Right -  intake out.
+        Bumper Right - deposit position.
+
+        DPAD Up - deploy winch (HOLD).
+        DPAD Right - unwind winch.
+        DPAD Down - pull up robot.
+        DPAD Left - deploy drone (HOLD).
+
+        Y - toggle both grippers.
+        A - square to backdrop
+        B - fast
+        X - slow
+
+        Start - reinit imu
+
+    Manipulator
+        Trigger Left - intake in.
+        Bumper Left - intake position.
+
+        Trigger Right -  intake out.
+        Bumper Right - deposit position.
+
+        DPAD Up -
+        DPAD Right - tilt intake right.
+        DPAD Down -
+        DPAD Left - tilt intake left.
+
+        Y - toggle both grippers.
+        A -
+        B - toggle right gripper.
+        X - toggle left gripper.
+
+ */
+
 
         //button map intake commands
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER))
+        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
                 .whenActive(intakeInCommand);
-
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.LEFT_BUMPER))
+        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
                 .whenActive(intakeOutCommand);
 
+        // map position commands
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) || driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))
+                .whenActive(robotToIntakeCommand);
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) || driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER))
+                .whenActive(robotToDepositCommand);
 
         //button map winch commands
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))// && gametime.seconds() > 90)
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))
                 .whenActive(winchDeployCommand);
-
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))// && gametime.seconds() > 90)
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))
                 .whileActiveContinuous(winchPullUpCommand);
-
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_RIGHT))
+                .whileActiveContinuous(() -> mW.setPower(-BotPositions.WINCH_MOTOR_POWER));
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
+                .toggleWhenActive((() -> sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED)), () -> sDroneLauncher.setPosition(BotPositions.DRONE_UNLATCHED));
 
         //map buttons to lift positions
-        new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_DOWN))
-                .whenActive(liftToIntakePositionCommand);
+//        new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_DOWN))
+//                .whenActive(liftToIntakePositionCommand);
 
 
         //triggers to change the led color to signal to human player what pixels are needed
+        /*
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.A))
                 .whenActive(new InstantCommand(() -> {
                     leds.changeColor(leds.Green);
@@ -148,15 +205,32 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.B))
                 .whenActive(new InstantCommand(() -> {
                     leds.changeColor(leds.White);
-                }));
+                }));*/
 
 
         //triggers to open and close gripper
-        new Trigger(() -> driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER))
-                .toggleWhenActive(new InstantCommand(gripper::grabRight), new InstantCommand(gripper::releaseRight));
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.Y) || driver2.getButton(GamepadKeys.Button.Y))
+                .toggleWhenActive(
+                        new ParallelCommandGroup(
+                                new InstantCommand(gripper::grabRight),
+                                new InstantCommand(gripper::grabLeft)
+                        ),
+                        new ParallelCommandGroup(
+                                new InstantCommand(gripper::releaseRight),
+                                new InstantCommand(gripper::releaseLeft)
+                        )
+                );
 
-        new Trigger(() -> driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))
+        new Trigger(() -> driver2.getButton(GamepadKeys.Button.B))
+                .toggleWhenActive(new InstantCommand(gripper::grabRight), new InstantCommand(gripper::releaseRight));
+        new Trigger(() -> driver2.getButton(GamepadKeys.Button.X))
                 .toggleWhenActive(new InstantCommand(gripper::grabLeft), new InstantCommand(gripper::releaseLeft));
+
+        // Speed controls
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.B))
+                .whenActive(() -> CURRENT_SPEED_MULTIPLIER = FAST_SPEED_MULTIPLIER);
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.X))
+                .whenActive(() -> CURRENT_SPEED_MULTIPLIER = SLOW_SPEED_MULTIPLIER);
 
 //        new Trigger(() -> leds.checkLeftPixel() == true)
 //                .whenActive(new SequentialCommandGroup(
@@ -170,22 +244,21 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 //                        new InstantCommand(gripper::grabRight)
 //                ));
 
+        // automatically grab pixels
+        new Trigger(() -> leds.checkLeftPixel() && leds.checkRightPixel())
+                .whenActive(new SequentialCommandGroup(
+                        new WaitCommand(500),
+                        robotGrabPixelsCommand,
+                        intakeOutCommand
+                ));
+
         //triggers to roll wrist
-        new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
+        new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_RIGHT))
                 .whenActive(new InstantCommand(wrist::rollToRight));
-
-        new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
+        new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_LEFT))
                 .whenActive(new InstantCommand(wrist::rollToLeft));
-
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_UP))
                 .whenActive(new InstantCommand(wrist::rollToCentered));
-
-        //triggers to move bot subsystems to intake and deposit
-        new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_LEFT))
-                .whenActive(new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake"));
-        new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_RIGHT))
-//                .whenActive(manipToOutput);
-                .whenActive(new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"));
 
 
         //init and set up drive motors
@@ -227,14 +300,14 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
         mBL.setPower(FB - LR + Rotation);
         mBR.setPower(FB + LR - Rotation);
 
-        if (gamepad1.a) { //&& gametime.seconds() > 90){
-            sDroneLauncher.setPosition(BotPositions.DRONE_UNLATCHED);
-        } else {
-            sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED);
-        }
+//        if (gamepad1.a) { //&& gametime.seconds() > 90){
+//            sDroneLauncher.setPosition(BotPositions.DRONE_UNLATCHED);
+//        } else {
+//            sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED);
+//        }
 
-        if (gamepad1.dpad_left)
-            mW.setPower(-BotPositions.WINCH_MOTOR_POWER);
+//        if (gamepad1.dpad_left)
+//            mW.setPower(-BotPositions.WINCH_MOTOR_POWER);
 
         //telemetry stoof
 //        telemetry.addData("LeftStickY", FB);

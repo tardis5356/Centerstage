@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.teleop.VR_G1_Commands.IntakeCommands;
+package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 
-public class IntakeOut extends SequentialCommandGroup {
-    public IntakeOut(Intake intake) {
+public class IntakeOutCommand extends SequentialCommandGroup {
+    public IntakeOutCommand(Intake intake) {
         addCommands(
                 new InstantCommand(intake::out),
                 new WaitCommand(1500),

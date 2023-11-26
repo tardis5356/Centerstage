@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode.teleop.VR_G1_Subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.acmerobotics.dashboard.config.Config;
@@ -100,7 +99,7 @@ public class Lift extends SubsystemBase {
                 power = pid + ff; // if lift is not supposed to be fully retracted, motor power is feedforward (counteract gravity) + value from pid controller
 
             if (liftTarget == -10 && !liftBase.isPressed())
-                power = -0.1; // if lift is supposed to be retracted but the lift base touch sensor is not pressed, motors should lower
+                power = 0.1; // if lift is supposed to be retracted but the lift base touch sensor is not pressed, motors should lower
             if (liftTarget == -10 && liftBase.isPressed())
                 power = 0; // if lift is supposed to be retracted and lift base touch sensor is pressed, motors should be stopped
 
