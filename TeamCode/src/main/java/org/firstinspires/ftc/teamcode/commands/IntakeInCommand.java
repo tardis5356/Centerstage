@@ -14,9 +14,9 @@ public class IntakeInCommand extends SequentialCommandGroup {
                 new InstantCommand(intake::in),
                 new WaitCommand(3000),
                 new InstantCommand(intake::stop),
-                new InstantCommand(() -> {
-                    leds.setLEDstate("Intaking");
-                })
+                new InstantCommand(() ->
+                        leds.setLEDstate("Intaking")
+                )
         );
     }
 }

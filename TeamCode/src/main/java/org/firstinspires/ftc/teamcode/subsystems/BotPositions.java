@@ -12,7 +12,7 @@ public class BotPositions {
     public static double WINCH_MOTOR_POWER = 0.8, WINCH_SERVO_DEPLOYED = 0.35, WINCH_SERVO_RETRACTED = 0.6;
 
     //brace positions
-    public static double LEFT_BRACE_EXTENDED = 0.79, RIGHT_BRACE_EXTENDED = 0.7;
+    public static double LEFT_BRACE_EXTENDED = 0.77, RIGHT_BRACE_EXTENDED = 0.7, LEFT_BRACE_OVEREXTENDED = 1, RIGHT_BRACE_OVEREXTENDED = 0.45;
 
     //intake powers and positions
     public static double INTAKE_MOTOR_INWARD_POWER = 1, INTAKE_MOTOR_OUTWARD_POWER = -.8;
@@ -26,7 +26,7 @@ public class BotPositions {
     public static int LIFT_TOLERANCE = 25;
 
     //wrist positions
-    public static double WRIST_LEFT_ROLL = 0.72, WRIST_RIGHT_ROLL = 0.27, WRIST_ROLL_CENTERED = 0.49, WRIST_TILT_TRANSITION = 0.79, WRIST_TILT_INTAKE = 0.767, WRIST_TILT_DEPOSIT = 0.665;
+    public static double WRIST_LEFT_ROLL = 0.72, WRIST_RIGHT_ROLL = 0.27, WRIST_ROLL_CENTERED = 0.49, WRIST_TILT_TRANSITION = 0.79, WRIST_TILT_INTAKE = 0.768, WRIST_TILT_DEPOSIT = 0.665;
     //for tilt, 0.09 = 30º
 //    0.115 = 30º
 
