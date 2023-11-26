@@ -47,8 +47,16 @@ public class Arm extends SubsystemBase {
         sArmRight.setPosition(BotPositions.ARM_DEPOSIT);
     }
 
-    public boolean inIntake() {
-        if (((DistanceSensor) colorArm).getDistance(DistanceUnit.CM) <= 13)
+    // original intaking position was 13cm
+
+    public boolean inIntakeExiting() {
+        if (((DistanceSensor) colorArm).getDistance(DistanceUnit.CM) <= 10)
+            return true;
+        else
+            return false;
+    }
+    public boolean inIntakeEntering() {
+        if (((DistanceSensor) colorArm).getDistance(DistanceUnit.CM) <= 18)
             return true;
         else
             return false;
