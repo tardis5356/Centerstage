@@ -26,7 +26,7 @@ public class CSTB_AutoTrajectories {
     public static final Pose2d redWings_StartPos = new Pose2d(36, 64.5, Math.toRadians(270));
     public static final Pose2d redWings_PostPurplePos = new Pose2d(40, 16, Math.toRadians(270));
     public static final Pose2d redWings_ParkedPos = new Pose2d(-63, -63, Math.toRadians(270));
-    public static final Pose2d redWings_DecisionPointPos = new Pose2d(40,24, Math.toRadians(270));
+    public static final Pose2d redWings_DecisionPointPos = new Pose2d(40,10, Math.toRadians(270));
 
 
     public static TrajectorySequence blueBackstage_ToDecisionPoint;
@@ -88,7 +88,7 @@ public class CSTB_AutoTrajectories {
                         .build();
 
         redWings_LeftSpikeToDecisionPoint =  //Shift to decision point
-                drive.trajectorySequenceBuilder(redWings_StartPositionToDecisionPoint.end())
+                drive.trajectorySequenceBuilder(redWings_DecisionPointToLeftSpike.end())
                         .lineTo(new Vector2d(42, 26), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
                                 CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
                         .build();
@@ -96,23 +96,22 @@ public class CSTB_AutoTrajectories {
 
         redWings_DecisionPointToCenterSpike = //shift and go forward to score center
                 drive.trajectorySequenceBuilder(redWings_DecisionPointPos)
-                        .lineTo(new Vector2d(40, 23), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
-                                CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
+                        .lineToLinearHeading(new Pose2d(40,18, Math.toRadians(270)))
                         .build();
 
         redWings_CenterSpikeToDecisionPoint =  //Shift to decision point
-                drive.trajectorySequenceBuilder(redWings_StartPositionToDecisionPoint.end())
-                        .lineToLinearHeading(new Pose2d(40,12, Math.toRadians(0)))
+                drive.trajectorySequenceBuilder(redWings_DecisionPointToCenterSpike.end())
+                        .lineToLinearHeading(redWings_DecisionPointPos)
                         .build();
 
         redWings_DecisionPointToRightSpike = //shift and go forward to score center
                 drive.trajectorySequenceBuilder(redWings_DecisionPointPos)
-                        .lineToLinearHeading(new Pose2d(40,26, Math.toRadians(0)))
+                        .lineToLinearHeading(new Pose2d(40,25, Math.toRadians(0)))
                         .build();
 
         redWings_RightSpikeToDecisionPoint =  //Shift to decision point
-                drive.trajectorySequenceBuilder(redWings_StartPositionToDecisionPoint.end())
-                        .lineToLinearHeading(new Pose2d(40, 10, Math.toRadians(270)))
+                drive.trajectorySequenceBuilder(redWings_DecisionPointToRightSpike.end())
+                        .lineToLinearHeading(redWings_DecisionPointPos)
                         .build();
 
 
