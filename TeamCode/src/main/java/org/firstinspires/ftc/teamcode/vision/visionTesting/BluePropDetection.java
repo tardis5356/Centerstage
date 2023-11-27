@@ -12,7 +12,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-public class RedPropDetection implements VisionProcessor {
+public class BluePropDetection implements VisionProcessor {
 
     Mat testMatRed = new Mat();
     Mat highMatRed = new Mat();
@@ -105,9 +105,9 @@ public class RedPropDetection implements VisionProcessor {
         averagedRightBoxBlue = rightBoxBlue / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
 
 
-        if (averagedLeftBoxRed > redThreshold) {        //Must Tune Red Threshold
+        if (averagedLeftBoxBlue > blueThreshold) {        //Must Tune Red Threshold
             outStr = "left";
-        } else if (averagedRightBoxRed > redThreshold) {
+        } else if (averagedRightBoxBlue > blueThreshold) {
             outStr = "right";
         } else {
             outStr = "center";

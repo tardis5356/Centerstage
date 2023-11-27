@@ -14,8 +14,8 @@ public class CSTB_AutoTrajectories {
 
    //BLUE WINGS
     public static final Pose2d blueWings_StartPos = new Pose2d(36, -64.5, Math.toRadians(90));
-    public static final Pose2d blueWings_dropPurple = new Pose2d(-61.5, 13.5, Math.toRadians(270));
-    public static final Pose2d blueWings_ParkedPos = new Pose2d(-63, 63, Math.toRadians(270));
+    public static final Pose2d blueWings_dropPurple = new Pose2d(-61.5, 13.5, Math.toRadians(90));
+    public static final Pose2d blueWings_DecisionPointPos = new Pose2d(40, -16, Math.toRadians(90));
 
    //RED BACKSTAGE
     public static final Pose2d redBackstage_StartPos = new Pose2d(-8, 64.5, Math.toRadians(270));
@@ -30,7 +30,7 @@ public class CSTB_AutoTrajectories {
 
 
     public static TrajectorySequence blueBackstage_ToDecisionPoint;
-    public static TrajectorySequence blueWings_ToDecisionPoint , blueWings_ToMiddlePark;
+    public static TrajectorySequence blueWings_StartPositionToDecisionPoint, blueWings_DecisionPointToMiddlePark, blueWings_DecisionPointToCenterSpike, blueWings_DecisionPointToLeftSpike, blueWings_DecisionPointToRightSpike, blueWings_LeftSpikeToDecisionPoint, blueWings_RightSpikeToDecisionPoint, blueWings_CenterSpikeToDecisionPoint ;
     public static TrajectorySequence redBackstage_ToDecisionPoint , redBackstage_ToParkedPos;
     public static TrajectorySequence redWings_StartPositionToDecisionPoint, redWings_DecisionPointToMiddlePark, redWings_DecisionPointToCenterSpike, redWings_DecisionPointToLeftSpike, redWings_DecisionPointToRightSpike, redWings_LeftSpikeToDecisionPoint, redWings_RightSpikeToDecisionPoint, redWings_CenterSpikeToDecisionPoint ;
 
@@ -45,22 +45,51 @@ public class CSTB_AutoTrajectories {
                         .build();
 
         //bluewings
-        blueWings_ToDecisionPoint =
+        blueWings_StartPositionToDecisionPoint = //shift and go forward to score center
                 drive.trajectorySequenceBuilder(blueWings_StartPos)
                         .lineTo(new Vector2d(40, -64.5), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
                                 CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
-                        .lineTo(new Vector2d(40, -8 ), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
+                        .lineTo(blueWings_DecisionPointPos.vec(), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
                                 CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
                         .build();
 
-        blueWings_ToMiddlePark = //go to and spin to parking between backdrops
-                drive.trajectorySequenceBuilder(blueWings_ToDecisionPoint.end())
-                        .lineToLinearHeading(new Pose2d( -42, -16, Math.toRadians(0)))
-                        //.lineTo(new Vector2d(-60, 10), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
-                        //CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
+        blueWings_DecisionPointToLeftSpike = //shift and go forward to score center
+                drive.trajectorySequenceBuilder(blueWings_DecisionPointPos)
+                        .lineToLinearHeading(new Pose2d(40,-26, Math.toRadians(45)))
                         .build();
-        
-        //blueWings_dropPurple =
+
+        blueWings_LeftSpikeToDecisionPoint =  //Shift to decision point
+                drive.trajectorySequenceBuilder(blueWings_DecisionPointToLeftSpike.end())
+                        .lineTo(new Vector2d(42, -26), CSTB_SampleMecanumDrive.getVelocityConstraint(86, CSTB_DriveConstants.MAX_ANG_VEL, CSTB_DriveConstants.TRACK_WIDTH),
+                                CSTB_SampleMecanumDrive.getAccelerationConstraint(CSTB_DriveConstants.MAX_ACCEL))
+                        .build();
+
+
+        blueWings_DecisionPointToCenterSpike = //shift and go forward to score center
+                drive.trajectorySequenceBuilder(blueWings_DecisionPointPos)
+                        .lineToLinearHeading(new Pose2d(40,-18, Math.toRadians(90)))
+                        .build();
+
+        blueWings_CenterSpikeToDecisionPoint =  //Shift to decision point
+                drive.trajectorySequenceBuilder(blueWings_DecisionPointToCenterSpike.end())
+                        .lineToLinearHeading(blueWings_DecisionPointPos)
+                        .build();
+
+        blueWings_DecisionPointToRightSpike = //shift and go forward to score center
+                drive.trajectorySequenceBuilder(blueWings_DecisionPointPos)
+                        .lineToLinearHeading(new Pose2d(40,-25, Math.toRadians(180)))
+                        .build();
+
+        blueWings_RightSpikeToDecisionPoint =  //Shift to decision point
+                drive.trajectorySequenceBuilder(blueWings_DecisionPointToRightSpike.end())
+                        .lineToLinearHeading(blueWings_DecisionPointPos)
+                        .build();
+
+
+        blueWings_DecisionPointToMiddlePark = //go to and spin to parking between backdrops
+                drive.trajectorySequenceBuilder(blueWings_StartPositionToDecisionPoint.end())
+                        .lineToLinearHeading(new Pose2d( -42, -16, Math.toRadians(0)))
+                        .build();
 
 
         // 🟥🟥🟥 red auto commands 🟥🟥🟥

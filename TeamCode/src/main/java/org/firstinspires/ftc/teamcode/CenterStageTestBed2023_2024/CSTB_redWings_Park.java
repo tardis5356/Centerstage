@@ -22,6 +22,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.vision.visionTesting.BluePropDetection;
 import org.firstinspires.ftc.teamcode.vision.visionTesting.RedPropDetection;
 import org.firstinspires.ftc.vision.VisionPortal;
 
