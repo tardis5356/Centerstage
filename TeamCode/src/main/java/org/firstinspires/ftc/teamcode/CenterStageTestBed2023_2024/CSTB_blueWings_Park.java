@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 //public class CSTB_redWings_Park {
 
-@Autonomous(group = "drive", name = "CSTB red wings PARK")
+@Autonomous(group = "drive", name = "CSTB blue wings PARK")
 public class CSTB_blueWings_Park extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 

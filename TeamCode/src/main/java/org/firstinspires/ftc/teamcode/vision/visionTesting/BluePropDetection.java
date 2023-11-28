@@ -23,7 +23,7 @@ public class BluePropDetection implements VisionProcessor {
     Mat lowMatBlue = new Mat();
     Mat finalMatBlue = new Mat();
     double redThreshold = 0.09;
-    double blueThreshold = 0.0010;
+    double blueThreshold = 0.08;
     double averagedLeftBoxRed;
     double averagedRightBoxRed;
     double averagedLeftBoxBlue;
@@ -82,8 +82,8 @@ public class BluePropDetection implements VisionProcessor {
         averagedRightBoxRed = rightBoxRed / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
 
 //        //BLUE!!
-        Scalar lowHSVBlueLower = new Scalar(115, 100, 27);  //Beginning of Color Wheel
-        Scalar lowHSVBlueUpper = new Scalar(130, 255, 255);
+        Scalar lowHSVBlueLower = new Scalar(105, 100, 20);  //Beginning of Color Wheel
+        Scalar lowHSVBlueUpper = new Scalar(135, 255, 255);
 
 //        Scalar blueHSVBLueLower = new Scalar(40, 100, 20); //Wraps around Color Wheel
 //        Scalar highHSVBlueUpper = new Scalar(55, 255, 255);
