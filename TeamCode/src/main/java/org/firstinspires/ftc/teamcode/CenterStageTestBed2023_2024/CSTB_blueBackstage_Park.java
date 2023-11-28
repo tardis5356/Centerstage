@@ -143,7 +143,7 @@ public class CSTB_blueBackstage_Park extends CommandOpMode {
                 new CSTB_FollowTrajectoryCommand(drive, blueBackstage_StartPositionToDecisionPoint),
                 new CSTB_FollowTrajectoryCommand(drive, blueBackstage_DecisionPointToSpike),
                 new WaitCommand(1000),
-                new CSTB_FollowTrajectoryCommand(drive, blueBackstage_SpikeToDecisionPoint),
+//                new CSTB_FollowTrajectoryCommand(drive, blueBackstage_SpikeToDecisionPoint),
                 new CSTB_FollowTrajectoryCommand(drive, blueBackstage_DecisionPointToMiddlePark)
 
         ));
