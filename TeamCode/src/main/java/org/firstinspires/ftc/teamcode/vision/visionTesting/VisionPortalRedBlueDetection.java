@@ -18,19 +18,21 @@ import java.util.concurrent.TimeUnit;
 public class VisionPortalRedBlueDetection extends LinearOpMode {
 
     private VisionPortal portal;
-    private RedPropDetection redPropThreshold;
+//    private RedPropDetection redPropThreshold;
+    private BluePropDetection bluePropThreshold;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        redPropThreshold = new RedPropDetection();
+//        redPropThreshold = new RedPropDetection();
+        bluePropThreshold = new BluePropDetection();
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
-//                .addProcessor(redPropThreshold)
                 .setCameraResolution(new Size(640, 480))
 //                .setStreamFormat(VisionPortal.StreamFormat.YUY2)
 //                .enableLiveView(true)
 //                .setCamera()
-                .addProcessor(redPropThreshold)
+//                .addProcessor(redPropThreshold)
+                .addProcessor(bluePropThreshold)
                 .build();
 
 
@@ -67,18 +69,19 @@ public class VisionPortalRedBlueDetection extends LinearOpMode {
 //            if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
 //                exposureControl.setMode(ExposureControl.Mode.Manual);
 //                sleep(50);
-            telemetry.addData("Exposure Time", exposureControl.getExposure(TimeUnit.MILLISECONDS));
-            telemetry.addData("Exposure Min", exposureControl.getMinExposure(TimeUnit.MILLISECONDS));
-            telemetry.addData("Exposure Max", exposureControl.getMaxExposure(TimeUnit.MILLISECONDS));
-            telemetry.addData("Exposure?", wasExposureSet);
-            telemetry.addData("Gain", gainControl.getGain());
-            telemetry.addData("Gain Min", gainControl.getMinGain());
-            telemetry.addData("Gain Max", gainControl.getMaxGain());
-            telemetry.addData("Prop Position", redPropThreshold.getPropPosition());
-            telemetry.addData("Averaged Left Box Red", "%.4f", redPropThreshold.getAveragedLeftBoxRed());
-            telemetry.addData("Averaged Right Box Red", "%.4f", redPropThreshold.getAveragedRightBoxRed());
-            telemetry.addData("Averaged Left Box Blue", "%.6f", redPropThreshold.getAveragedLeftBoxBlue());
-            telemetry.addData("Averaged Right Box Blue", "%.6f", redPropThreshold.getAveragedRightBoxBlue());
+//            telemetry.addData("Exposure Time", exposureControl.getExposure(TimeUnit.MILLISECONDS));
+//            telemetry.addData("Exposure Min", exposureControl.getMinExposure(TimeUnit.MILLISECONDS));
+//            telemetry.addData("Exposure Max", exposureControl.getMaxExposure(TimeUnit.MILLISECONDS));
+//            telemetry.addData("Exposure?", wasExposureSet);
+//            telemetry.addData("Gain", gainControl.getGain());
+//            telemetry.addData("Gain Min", gainControl.getMinGain());
+//            telemetry.addData("Gain Max", gainControl.getMaxGain());
+//            telemetry.addData("Prop Position if red", redPropThreshold.getPropPosition());
+            telemetry.addData("Prop Position if blue", bluePropThreshold.getPropPosition());
+//            telemetry.addData("Averaged Left Box Red", "%.4f", redPropThreshold.getAveragedLeftBoxRed());
+//            telemetry.addData("Averaged Right Box Red", "%.4f", redPropThreshold.getAveragedRightBoxRed());
+            telemetry.addData("Averaged Left Box Blue", "%.6f", bluePropThreshold.getAveragedLeftBoxBlue());
+            telemetry.addData("Averaged Right Box Blue", "%.6f", bluePropThreshold.getAveragedRightBoxBlue());
             telemetry.update();
         }
 
