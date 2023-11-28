@@ -43,6 +43,8 @@ public class Gen1_TeleOp extends CommandOpMode {
     //drone launcher servo
     private Servo sDroneLauncher;
 
+    private Servo wristRoll;
+
     //keep track of time to ensure that e-game specific items dont trigger
     ElapsedTime gametime = new ElapsedTime();
 
@@ -162,7 +164,14 @@ public class Gen1_TeleOp extends CommandOpMode {
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
                 .whenActive(intakeInCommand);
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
-                .whenActive(intakeInCommand);
+                .whenActive(
+                        new SequentialCommandGroup(
+                                new InstantCommand(intake::out),
+                                new WaitCommand(1500),
+                                new InstantCommand(intake::stop)
+                        )
+                );
+
 
         // map position commands
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) || driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))
@@ -260,8 +269,10 @@ public class Gen1_TeleOp extends CommandOpMode {
         //triggers to roll wrist
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_RIGHT))
                 .whenActive(new InstantCommand(wrist::rollToRight));
+
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_LEFT))
                 .whenActive(new InstantCommand(wrist::rollToLeft));
+
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_UP))
                 .whenActive(new InstantCommand(wrist::rollToCentered));
 
@@ -271,6 +282,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         mFR = hardwareMap.get(DcMotorEx.class, "mFR");
         mBL = hardwareMap.get(DcMotorEx.class, "mBL");
         mBR = hardwareMap.get(DcMotorEx.class, "mBR");
+        wristRoll = hardwareMap.get(Servo.class, "sWGR");
 
         //this motor physically runs opposite. For convenience, reverse direction.
         mBR.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -288,6 +300,15 @@ public class Gen1_TeleOp extends CommandOpMode {
         //lift always runs with manual control tied to gamepads unless stated otherwise
         lift.manualControl(gamepad2.left_stick_y, gamepad2.right_stick_y);
 
+//        if (gamepad2.dpad_left){
+//            wristRoll.setPosition(BotPositions.WRIST_LEFT_ROLL);
+//        }
+//        else if(gamepad2.dpad_right){
+//            wristRoll.setPosition(BotPositions.WRIST_RIGHT_ROLL);
+//        }
+//        else if(gamepad2.dpad_up){
+//            wristRoll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
+//        }
 
         //map drive vars to inputs
         //fb is forward backward movement
