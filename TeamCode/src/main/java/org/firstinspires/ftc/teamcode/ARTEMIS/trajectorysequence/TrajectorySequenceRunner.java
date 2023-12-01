@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.sequencesegment
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.sequencesegment.WaitSegment;
 import org.firstinspires.ftc.teamcode.ARTEMIS.util.DashboardUtil;
 import org.firstinspires.ftc.teamcode.ARTEMIS.util.LogFiles;
-import org.firstinspires.ftc.teamcode.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.ARTEMIS.drive.DriveConstants;
 
 import java.util.ArrayList;
 import java.util.Collections;
