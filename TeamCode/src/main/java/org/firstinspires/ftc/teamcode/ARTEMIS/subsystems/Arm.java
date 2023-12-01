@@ -62,6 +62,13 @@ public class Arm extends SubsystemBase {
             return false;
     }
 
+    public boolean fullIntake() {
+        if (((DistanceSensor) colorArm).getDistance(DistanceUnit.CM) <= 10)
+            return true;
+        else
+            return false;
+    }
+
     public double getArmDistance(){
         return ((DistanceSensor) colorArm).getDistance(DistanceUnit.CM);
     }
