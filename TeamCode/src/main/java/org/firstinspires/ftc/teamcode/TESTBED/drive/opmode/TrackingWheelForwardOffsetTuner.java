@@ -37,7 +37,7 @@ import org.firstinspires.ftc.teamcode.TESTBED.drive.StandardTrackingWheelLocaliz
  */
 @Disabled
 @Config
-@Autonomous(group="drive")
+@Autonomous(group="drive", name="TrackingWheelForwardOffsetTuner_CSTB")
 public class TrackingWheelForwardOffsetTuner extends LinearOpMode {
     public static double ANGLE = 180; // deg
     public static int NUM_TRIALS = 5;

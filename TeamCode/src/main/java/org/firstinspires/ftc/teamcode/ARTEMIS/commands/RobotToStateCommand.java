@@ -26,7 +26,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                         new SequentialCommandGroup(
                                 // send lift to fully retracted, wait for it to reach that position (via isFinished)
                                 new LiftToPositionCommand(lift, -10, 25),
-
+                                new InstantCommand(intake::stop),
                                 // make sure arm isn't already in intake
                                 new WaitUntilCommand(() -> !arm.inIntakeEntering()),
 

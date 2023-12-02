@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  * 100% accurate) method of detecting the skystone when lined up with
  * the sample regions over the first 3 stones.
  */
-@Autonomous
+@Autonomous(name="RedBlueDetection_CSTB")
 public class RedBlueDetection extends LinearOpMode {
     OpenCvCamera webcam;
     SkystoneDeterminationPipeline pipeline;

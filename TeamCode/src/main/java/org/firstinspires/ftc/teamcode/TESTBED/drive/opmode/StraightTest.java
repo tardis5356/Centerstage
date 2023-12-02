@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.TESTBED.drive.SampleMecanumDrive;
  */
 @Disabled
 @Config
-@Autonomous(group = "drive")
+@Autonomous(group = "drive", name="StraightTest_CSTB")
 public class StraightTest extends LinearOpMode {
     public static double DISTANCE = 60; // in
 

@@ -64,7 +64,7 @@ import org.firstinspires.ftc.teamcode.TESTBED.drive.StandardTrackingWheelLocaliz
  */
 @Disabled
 @Config
-@TeleOp(group = "drive")
+@TeleOp(group = "drive", name="TrackingWheelLateralDistanceTuner_CSTB")
 public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
     public static int NUM_TURNS = 10;
 

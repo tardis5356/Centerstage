@@ -50,7 +50,7 @@ import java.util.Objects;
  */
 @Disabled
 @Config
-@Autonomous(group = "drive")
+@Autonomous(group = "drive", name="ManualFeedforwardTuner_CSTB")
 public class ManualFeedforwardTuner extends LinearOpMode {
     public static double DISTANCE = 72; // in
 

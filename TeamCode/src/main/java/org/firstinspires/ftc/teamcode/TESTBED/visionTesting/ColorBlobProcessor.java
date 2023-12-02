@@ -16,7 +16,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-@TeleOp(name = "ColorBlobProcessor", group = "TeleOp")
+@TeleOp(name = "ColorBlobProcessor_CSTB", group = "TeleOp")
 public class ColorBlobProcessor extends LinearOpMode {
     private OpenCvCamera camera;
     private Scalar lowerRed = new Scalar(0, 0, 100);

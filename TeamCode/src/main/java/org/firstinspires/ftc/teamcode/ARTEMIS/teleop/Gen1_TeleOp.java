@@ -174,9 +174,11 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         // map position commands
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) || driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))
-                .whenActive(robotToIntakeCommand);
+                .whenActive(robotToIntakeCommand)
+                .cancelWhenActive(robotToDepositCommand);
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) || driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER))
-                .whenActive(robotToDepositCommand);
+                .whenActive(robotToDepositCommand)
+                .cancelWhenActive(robotToIntakeCommand);
 
         //button map winch commands
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))

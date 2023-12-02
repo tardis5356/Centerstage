@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.TESTBED.trajectorysequence.sequencesegment
 import org.firstinspires.ftc.teamcode.TESTBED.trajectorysequence.sequencesegment.WaitSegment;
 import org.firstinspires.ftc.teamcode.TESTBED.util.DashboardUtil;
 import org.firstinspires.ftc.teamcode.TESTBED.util.LogFiles;
-import org.firstinspires.ftc.teamcode.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.ARTEMIS.drive.DriveConstants;
 
 import java.util.ArrayList;
 import java.util.Collections;
