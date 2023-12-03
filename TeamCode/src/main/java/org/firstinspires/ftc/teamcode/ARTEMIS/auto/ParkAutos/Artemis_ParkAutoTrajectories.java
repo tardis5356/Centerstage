@@ -14,20 +14,21 @@ public class Artemis_ParkAutoTrajectories {
 
     //BLUE BACKSTAGE
     public static final Pose2d blueBackstage_StartPos = new Pose2d(-8.5, -64.5, Math.toRadians(90));
-    public static final Pose2d blueBackstage_CornerPark = new Pose2d(-42, -60.5, Math.toRadians(90));
+    public static final Pose2d blueBackstage_CornerPark = new Pose2d(-52, -64.5, Math.toRadians(90));
 
     //BLUE WINGS
     public static final Pose2d blueWings_StartPos = new Pose2d(36.5, -64.5, Math.toRadians(90));
-    public static final Pose2d blueWings_DecisionPointPos = new Pose2d(40.5, -8, Math.toRadians(90));
+    public static final Pose2d blueWings_DecisionPointPos = new Pose2d(40.5, -15, Math.toRadians(90));
+    public static final Pose2d blueWings_BackIntoParkPos = new Pose2d(40.5, -15, Math.toRadians(0));
 
     //RED BACKSTAGE
     public static final Pose2d redBackstage_StartPos = new Pose2d(-8.5, 64.5, Math.toRadians(270));
-    public static final Pose2d redBackstage_CornerPark = new Pose2d(-42, 60.5, Math.toRadians(270));
+    public static final Pose2d redBackstage_CornerPark = new Pose2d(-52, 64.5, Math.toRadians(270));
 
     //RED WINGS
     public static final Pose2d redWings_StartPos = new Pose2d(36.5, 64.5, Math.toRadians(270));
-    public static final Pose2d redWings_DecisionPointPos = new Pose2d(40.5, 8, Math.toRadians(270));
-
+    public static final Pose2d redWings_DecisionPointPos = new Pose2d(40.5, 16, Math.toRadians(270));
+    public static final Pose2d redWings_BackIntoParkPos = new Pose2d(40.5, 16, Math.toRadians(0));
 
     public static TrajectorySequence blueBackstage_StartPositionToCornerPark ;
     public static TrajectorySequence blueWings_StartPositionToDecisionPoint , blueWings_DecisionPointToCenterPark;
@@ -51,19 +52,20 @@ public class Artemis_ParkAutoTrajectories {
                 drive.trajectorySequenceBuilder(blueWings_StartPos)
                         .lineTo(new Vector2d(40.5, -64.5), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                        .lineToLinearHeading(new Pose2d(40.51, -15, Math.toRadians(0)))
                         .lineTo(blueWings_DecisionPointPos.vec(), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                         .build();
         blueWings_DecisionPointToCenterPark = //shift and go forward to score center
-                drive.trajectorySequenceBuilder(blueWings_StartPos)
-                        .lineToLinearHeading(new Pose2d(-60.5, -4, Math.toRadians(0)))
+                drive.trajectorySequenceBuilder(blueWings_BackIntoParkPos)
+                        .lineToLinearHeading(new Pose2d(-48, -17, Math.toRadians(0)))
                         .build();
 
         // 🟥🟥🟥 red auto commands 🟥🟥🟥
         //backstage
         redBackstage_StartPositionToCornerPark = //shift and go forward to score center
                 drive.trajectorySequenceBuilder(redBackstage_StartPos)
-                        .lineTo(new Vector2d(-12.5, -64.5), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        .lineTo(new Vector2d(-12.5, 64.5), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                         .lineTo(redBackstage_CornerPark.vec(), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -74,11 +76,12 @@ public class Artemis_ParkAutoTrajectories {
                 drive.trajectorySequenceBuilder(redWings_StartPos)
                         .lineTo(new Vector2d(40.5, 64.5), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                        .lineToLinearHeading(new Pose2d(40.51, 16, Math.toRadians(0)))
                         .lineTo(redWings_DecisionPointPos.vec(), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                         .build();
         redWings_DecisionPointToCenterPark = //shift and go forward to score center
-                drive.trajectorySequenceBuilder(redWings_StartPos)
-                        .lineToLinearHeading(new Pose2d(-60.5, 4, Math.toRadians(0)))
+                drive.trajectorySequenceBuilder(redWings_BackIntoParkPos)
+                        .lineToLinearHeading(new Pose2d(-48, 18, Math.toRadians(0)))
                         .build();
 }}
