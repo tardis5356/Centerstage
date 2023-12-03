@@ -115,6 +115,34 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                         )
                 );
                 break;
+            case "dropPurple":
+                currentState = "dropPurple";
+                addCommands(
+                        new IntakeInCommand(intake, leds),
+                        new SequentialCommandGroup(
+                                // set arm to transition position (should already be there)
+                                new InstantCommand(arm::toTransition),
+                                new InstantCommand(wrist::toTransition),
+
+                                // ensure arm isn't in intake anymore
+                                new WaitUntilCommand(() -> !arm.inIntakeExiting()),
+
+                                // wait for one second
+//                                new WaitCommand(1000),
+
+                                // send arm && lift to deposit
+                                // TODO: tune lift pid
+                                new InstantCommand(arm::toDropPurple),
+                                new LiftToPositionCommand(lift, 100, 25),
+
+                                // wait for .5 seconds for arm to move
+                                new WaitCommand(100),
+
+                                // tilt wrist to deposit
+                                new InstantCommand(wrist::tiltToDropPurplePixel)
+                        )
+                );
+                break;
         }
     }
 }

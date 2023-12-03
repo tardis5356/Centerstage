@@ -47,6 +47,11 @@ public class Arm extends SubsystemBase {
         sArmRight.setPosition(BotPositions.ARM_DEPOSIT);
     }
 
+    public void toDropPurple(){
+        sArmLeft.setPosition(BotPositions.ARM_DROP_PURPLE);
+        sArmRight.setPosition(BotPositions.ARM_DROP_PURPLE);
+    }
+
     // original intaking position was 13cm
 
     public boolean inIntakeExiting() {

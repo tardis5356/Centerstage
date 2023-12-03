@@ -31,6 +31,10 @@ public class Wrist extends SubsystemBase {
         sGripperPitch.setPosition(BotPositions.WRIST_TILT_DEPOSIT);
     }
 
+    public void tiltToDropPurplePixel(){
+        sGripperPitch.setPosition(BotPositions.WRIST_TILT_DROP_PURPLE);
+    }
+
     public void rollToLeft(){
         sGripperRoll.setPosition(BotPositions.WRIST_LEFT_ROLL);
     }
