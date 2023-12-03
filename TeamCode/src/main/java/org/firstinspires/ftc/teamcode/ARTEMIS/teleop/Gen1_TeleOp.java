@@ -240,6 +240,10 @@ public class Gen1_TeleOp extends CommandOpMode {
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.X))
                 .toggleWhenActive(new InstantCommand(gripper::grabLeft), new InstantCommand(gripper::releaseLeft));
 
+        // square to backdrop
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.A))
+                .whenActive(() -> lift.squareToBackdrop());
+
         // Speed controls
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.B))
                 .whenActive(() -> CURRENT_SPEED_MULTIPLIER = FAST_SPEED_MULTIPLIER);

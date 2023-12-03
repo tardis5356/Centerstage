@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.subsystems;
 
+import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.DISTANCE_FROM_BACKDROP;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.controller.PIDController;
@@ -9,12 +12,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 @Config
 public class Lift extends SubsystemBase {
     private PIDController controller;
     private DcMotorEx mLR, mLL;
+    private DcMotorEx mFL, mFR, mBL, mBR;
 
     private TouchSensor liftBase;
+
+    private DistanceSensor distanceBackRight, distanceBackLeft;
 
     public static double p = BotPositions.LIFT_p, i = BotPositions.LIFT_i, d = BotPositions.LIFT_d;
     public static double ff = BotPositions.LIFT_ff;
@@ -33,6 +41,10 @@ public class Lift extends SubsystemBase {
 
     public int liftOffset = 0;
 
+    // exp hub i2c
+    //      0 right distance
+    //      1 left distance
+
     public Lift(HardwareMap hardwareMap) {
         mLR = hardwareMap.get(DcMotorEx.class, "mLR");
         mLL = hardwareMap.get(DcMotorEx.class, "mLL");
@@ -40,6 +52,13 @@ public class Lift extends SubsystemBase {
         controller = new PIDController(p, i, d);
 
         liftBase = hardwareMap.get(TouchSensor.class, "touchLift");
+        distanceBackRight = hardwareMap.get(DistanceSensor.class, "distanceBackRight");
+        distanceBackLeft = hardwareMap.get(DistanceSensor.class, "distanceBackLeft");
+
+        mFL = hardwareMap.get(DcMotorEx.class, "mFL");
+        mFR = hardwareMap.get(DcMotorEx.class, "mFR");
+        mBL = hardwareMap.get(DcMotorEx.class, "mBL");
+        mBR = hardwareMap.get(DcMotorEx.class, "mBR");
 
         mLR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         mLL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -119,8 +138,61 @@ public class Lift extends SubsystemBase {
         }
     }
 
+    public double scaleBetween(double inputMin, double inputMax, double scaledMin, double scaledMax, double inputInput) {
+        return (inputInput - inputMin)/(inputMax - inputMin) * (scaledMax - scaledMin) + scaledMin;
+    }
+
+    public void squareToBackdrop(){
+        double distRight = distanceBackRight.getDistance(DistanceUnit.CM);
+        double distLeft = distanceBackLeft.getDistance(DistanceUnit.CM);
+
+        double rightError = DISTANCE_FROM_BACKDROP - distRight; // positive = far away, negative = too close
+        double leftError = DISTANCE_FROM_BACKDROP - distLeft;
+        double error = distRight-distLeft;
+
+        // if error is positive, right is further away than left
+        // if error is negative, left is further away than right
+        // target position is DISTANCE_FROM_BACKDROP
+
+        double MAX_POWER = 0.5, MIN_POWER = 0.2;
+
+        double leftPower = 0, rightPower = 0;
+
+        double rightPowerScaled = scaleBetween(0, 40, MIN_POWER, MAX_POWER, rightError);
+        double leftPowerScaled = scaleBetween(0, 40, MIN_POWER, MAX_POWER, leftError);
+
+        if(leftError > 40) {
+            leftPower = -0.5;
+        } else if(leftError >= 2) {
+            leftPower = leftPowerScaled;
+        } else if (leftError <= -2){
+            leftPower = -leftPowerScaled;
+        }
+
+        if(rightError > 40) {
+            rightPower = -0.5;
+        } else if(rightError >= 2) {
+            rightPower = rightPowerScaled;
+        } else if (rightError <= -2){
+            rightPower = -rightPowerScaled;
+        }
+
+
+        mFL.setPower(leftPower);
+        mBL.setPower(leftPower);
+        mFR.setPower(rightPower);
+        mBR.setPower(rightPower);
+    }
+
     public boolean getLiftBase() {
         return liftBase.isPressed();
+    }
+
+    public double getDistanceBackRight() {
+        return distanceBackRight.getDistance(DistanceUnit.CM);
+    }
+    public double getDistanceBackLeft() {
+        return distanceBackLeft.getDistance(DistanceUnit.CM);
     }
 
     public int getLiftBaseResets() {
