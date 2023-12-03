@@ -43,6 +43,12 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url = 'https://www.matthewo.tech/maven/'
+    }
+}
+
 dependencies {
     implementation project(':FtcRobotController')
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
@@ -52,10 +58,4 @@ dependencies {
     implementation 'org.ftclib.ftclib:vision:2.0.1' // vision
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7'
     implementation 'org.team11260:fast-load:0.1.1'
-}
-
-repositories {
-    maven {
-        url = 'https://www.matthewo.tech/maven/'
-    }
 }
