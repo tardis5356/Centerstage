@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySeque
 
 public class Artemis_ParkAutoTrajectories {
 
+
     //BLUE BACKSTAGE
     public static final Pose2d blueBackstage_StartPos = new Pose2d(-8.5, -64.5, Math.toRadians(90));
     public static final Pose2d blueBackstage_CornerPark = new Pose2d(-52, -64.5, Math.toRadians(90));
