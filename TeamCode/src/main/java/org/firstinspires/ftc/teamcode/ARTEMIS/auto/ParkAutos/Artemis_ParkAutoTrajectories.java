@@ -14,7 +14,7 @@ public class Artemis_ParkAutoTrajectories {
 
     //BLUE BACKSTAGE
     public static final Pose2d blueBackstage_StartPos = new Pose2d(-8.5, -64.5, Math.toRadians(90));
-    public static final Pose2d blueBackstage_CornerPark = new Pose2d(-60.5, -8, Math.toRadians(90));
+    public static final Pose2d blueBackstage_CornerPark = new Pose2d(-42, -60.5, Math.toRadians(90));
 
     //BLUE WINGS
     public static final Pose2d blueWings_StartPos = new Pose2d(36.5, -64.5, Math.toRadians(90));
@@ -22,7 +22,7 @@ public class Artemis_ParkAutoTrajectories {
 
     //RED BACKSTAGE
     public static final Pose2d redBackstage_StartPos = new Pose2d(-8.5, 64.5, Math.toRadians(270));
-    public static final Pose2d redBackstage_CornerPark = new Pose2d(-60.5, 8, Math.toRadians(270));
+    public static final Pose2d redBackstage_CornerPark = new Pose2d(-42, 60.5, Math.toRadians(270));
 
     //RED WINGS
     public static final Pose2d redWings_StartPos = new Pose2d(36.5, 64.5, Math.toRadians(270));
