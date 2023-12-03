@@ -69,7 +69,7 @@ public class CSTB_redWings_Purple extends CommandOpMode {
         drive = new CSTB_SampleMecanumDrive(hardwareMap);
 
 
-        drive.setPoseEstimate(CSTB_AutoTrajectories.redWings_StartPos);
+        drive.setPoseEstimate(CSTB_AutoTrajectories.CSTB_redWings_StartPos);
         CSTB_AutoTrajectories.generateTrajectories(drive);
 
         //gripper.close();
@@ -79,8 +79,8 @@ public class CSTB_redWings_Purple extends CommandOpMode {
         telemetry.update();
         schedule( new SequentialCommandGroup(
 
-                new CSTB_FollowTrajectoryCommand(drive, CSTB_AutoTrajectories.redWings_StartPositionToDecisionPoint),
-                new CSTB_FollowTrajectoryCommand(drive, CSTB_AutoTrajectories.redWings_DecisionPointToMiddlePark)
+                new CSTB_FollowTrajectoryCommand(drive, CSTB_AutoTrajectories.CSTB_redWings_StartPositionToDecisionPoint),
+                new CSTB_FollowTrajectoryCommand(drive, CSTB_AutoTrajectories.CSTB_redWings_DecisionPointToMiddlePark)
         ));
 
         while(!isStopRequested() && !opModeIsActive()){

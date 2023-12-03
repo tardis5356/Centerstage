@@ -74,7 +74,7 @@ public class CSTB_redBackstage_Park extends CommandOpMode {
         drive = new CSTB_SampleMecanumDrive(hardwareMap);
 
 
-        drive.setPoseEstimate(CSTB_AutoTrajectories.redBackstage_StartPos);
+        drive.setPoseEstimate(CSTB_AutoTrajectories.CSTB_redBackstage_StartPos);
         CSTB_AutoTrajectories.generateTrajectories(drive);
 
         //gripper.close();
@@ -85,19 +85,19 @@ public class CSTB_redBackstage_Park extends CommandOpMode {
 
         switch (redPropThreshold.getPropPosition()) {
             case "left":
-                redBackstage_DecisionPointToSpike = CSTB_AutoTrajectories.redBackstage_DecisionPointToLeftSpike;
-                redBackstage_SpikeToDecisionPoint = CSTB_AutoTrajectories.redBackstage_LeftSpikeToDecisionPoint;
+                redBackstage_DecisionPointToSpike = CSTB_AutoTrajectories.CSTB_redBackstage_DecisionPointToLeftSpike;
+                redBackstage_SpikeToDecisionPoint = CSTB_AutoTrajectories.CSTB_redBackstage_LeftSpikeToDecisionPoint;
                 telemetry.addLine("park traj 1");
                 break;
             default:
             case "center":
-                redBackstage_DecisionPointToSpike = CSTB_AutoTrajectories.redBackstage_DecisionPointToCenterSpike;
-                redBackstage_SpikeToDecisionPoint = CSTB_AutoTrajectories.redBackstage_CenterSpikeToDecisionPoint;
+                redBackstage_DecisionPointToSpike = CSTB_AutoTrajectories.CSTB_redBackstage_DecisionPointToCenterSpike;
+                redBackstage_SpikeToDecisionPoint = CSTB_AutoTrajectories.CSTB_redBackstage_CenterSpikeToDecisionPoint;
                 telemetry.addLine("park traj 2");
                 break;
             case "right":
-                redBackstage_DecisionPointToSpike = CSTB_AutoTrajectories.redBackstage_DecisionPointToRightSpike;
-                redBackstage_SpikeToDecisionPoint = CSTB_AutoTrajectories.redBackstage_RightSpikeToDecisionPoint;
+                redBackstage_DecisionPointToSpike = CSTB_AutoTrajectories.CSTB_redBackstage_DecisionPointToRightSpike;
+                redBackstage_SpikeToDecisionPoint = CSTB_AutoTrajectories.CSTB_redBackstage_RightSpikeToDecisionPoint;
                 telemetry.addLine("park traj 3");
                 break;
         }
@@ -115,11 +115,11 @@ public class CSTB_redBackstage_Park extends CommandOpMode {
         telemetry.update();
         schedule(new SequentialCommandGroup(
 
-                new CSTB_FollowTrajectoryCommand(drive, CSTB_AutoTrajectories.redBackstage_StartPositionToDecisionPoint),
+                new CSTB_FollowTrajectoryCommand(drive, CSTB_AutoTrajectories.CSTB_redBackstage_StartPositionToDecisionPoint),
                 new CSTB_FollowTrajectoryCommand(drive, redBackstage_DecisionPointToSpike),
                 new WaitCommand(1000),
 //                new CSTB_FollowTrajectoryCommand(drive, redBackstage_SpikeToDecisionPoint),
-                new CSTB_FollowTrajectoryCommand(drive, CSTB_AutoTrajectories.redBackstage_DecisionPointToMiddlePark)
+                new CSTB_FollowTrajectoryCommand(drive, CSTB_AutoTrajectories.CSTB_redBackstage_DecisionPointToMiddlePark)
 
         ));
 
