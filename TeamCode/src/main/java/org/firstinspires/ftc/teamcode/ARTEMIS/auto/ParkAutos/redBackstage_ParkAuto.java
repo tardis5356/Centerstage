@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ARTEMIS.auto.FollowTrajectoryCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.TESTBED.auto.CSTB_AutoTrajectories;
 
 @Autonomous(group = "drive", name = "A RedBackstage PARK")
 public class redBackstage_ParkAuto extends CommandOpMode {
@@ -20,9 +21,13 @@ public class redBackstage_ParkAuto extends CommandOpMode {
 
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
+
     @Override
     public void initialize() {
 //        MultipleTelemetry telemetry2 = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        drive = new SampleMecanumDrive(hardwareMap);
+        drive.setPoseEstimate(Artemis_ParkAutoTrajectories.redBackstage_StartPos);
+        Artemis_ParkAutoTrajectories.generateTrajectories(drive);
 
         telemetry.setMsTransmissionInterval(50);
 

@@ -12,10 +12,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.teamcode.ARTEMIS.auto.FollowTrajectoryCommand;
+import org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos.Artemis_ParkAutoTrajectories;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.BluePropDetection;
@@ -24,7 +26,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import java.util.concurrent.TimeUnit;
 
 //public class CSTB_redWings_Park {
-@Disabled
+//@Disabled
 @Autonomous(group = "drive", name = "A BlueBackstage Purple+Park")
 public class blueBackstage_PurpleParkAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
@@ -39,6 +41,10 @@ public class blueBackstage_PurpleParkAuto extends CommandOpMode {
     @Override
     public void initialize() {
 //        MultipleTelemetry telemetry2 = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        drive = new SampleMecanumDrive(hardwareMap);
+        drive.setPoseEstimate(Artemis_ParkAutoTrajectories.blueBackstage_StartPos);
+        Artemis_ParkAutoTrajectories.generateTrajectories(drive);
 
         ////////‼️‼️⁉️⁉️CAMERA INITIALIZATION/DEFINING ⁉️⁉️⁉️
 //        public void runOpMode () throw InterruptedException {

@@ -25,6 +25,10 @@ public class redWings_ParkAuto extends CommandOpMode {
     public void initialize() {
 //        MultipleTelemetry telemetry2 = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
+        drive = new SampleMecanumDrive(hardwareMap);
+        drive.setPoseEstimate(Artemis_ParkAutoTrajectories.redWings_StartPos);
+        Artemis_ParkAutoTrajectories.generateTrajectories(drive);
+
         telemetry.setMsTransmissionInterval(50);
 
         while (!isStarted() && !isStopRequested()) {
