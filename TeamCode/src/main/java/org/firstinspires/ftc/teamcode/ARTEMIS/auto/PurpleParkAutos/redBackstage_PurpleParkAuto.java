@@ -127,7 +127,7 @@ public class redBackstage_PurpleParkAuto extends CommandOpMode {
         telemetry.update();
         schedule(new SequentialCommandGroup(
 
-                new FollowTrajectoryCommand(drive, redBackstage_StartPositionToDecisionPoint),
+//                new FollowTrajectoryCommand(drive, redBackstage_StartPositionToDecisionPoint),
                 new FollowTrajectoryCommand(drive, redBackstage_DecisionPointToSpike),
                 new WaitCommand(1000),
                 new FollowTrajectoryCommand(drive, redBackstage_SpikeToDecisionPoint),
