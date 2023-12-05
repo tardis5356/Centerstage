@@ -41,6 +41,8 @@ public class Lift extends SubsystemBase {
 
     public int liftOffset = 0;
 
+    double leftPower = 0, rightPower = 0;
+
     // exp hub i2c
     //      0 right distance
     //      1 left distance
@@ -154,9 +156,7 @@ public class Lift extends SubsystemBase {
         // if error is negative, left is further away than right
         // target position is DISTANCE_FROM_BACKDROP
 
-        double MAX_POWER = 0.5, MIN_POWER = 0.2;
-
-        double leftPower = 0, rightPower = 0;
+        double MAX_POWER = 0.75, MIN_POWER = 0.5;
 
         double rightPowerScaled = scaleBetween(0, 40, MIN_POWER, MAX_POWER, rightError);
         double leftPowerScaled = scaleBetween(0, 40, MIN_POWER, MAX_POWER, leftError);
@@ -193,6 +193,14 @@ public class Lift extends SubsystemBase {
     }
     public double getDistanceBackLeft() {
         return distanceBackLeft.getDistance(DistanceUnit.CM);
+    }
+
+    public double getLeftDrivePower() {
+        return leftPower;
+    }
+
+    public double getRightDrivePower() {
+        return rightPower;
     }
 
     public int getLiftBaseResets() {

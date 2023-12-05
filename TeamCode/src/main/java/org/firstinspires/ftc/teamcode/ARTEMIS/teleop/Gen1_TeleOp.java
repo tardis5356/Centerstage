@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -186,7 +187,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))
                 .toggleWhenActive(winchPullUpCommand, new InstantCommand(winch::stopWinch));
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_RIGHT))
-                .toggleWhenActive(() -> mW.setPower(-BotPositions.WINCH_MOTOR_POWER), () -> mW.setPower(0));
+                .toggleWhenActive(() -> mW.setPower(-BotPositions.WINCH_MOTOR_POWER), () -> mW.setPower(0)); //, () -> mW.setPower(BotPositions.WINCH_MOTOR_POWER)
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
                 .toggleWhenActive(new InstantCommand(winch::extendBraces), new InstantCommand(winch::overextendBraces));
 
@@ -293,6 +294,11 @@ public class Gen1_TeleOp extends CommandOpMode {
         mBR.setDirection(DcMotorSimple.Direction.REVERSE);
         mFR.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        mFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         //init the drone servo
         sDroneLauncher = hardwareMap.get(Servo.class, "sDL");
     }
@@ -355,6 +361,11 @@ public class Gen1_TeleOp extends CommandOpMode {
         telemetry.addData("inIntakeExiting", arm.inIntakeExiting());
         telemetry.addData("inIntake", lift.manualActive);
         telemetry.addData("liftPower", lift.getLiftPower());
+
+        telemetry.addData("distanceBackLeft", lift.getDistanceBackLeft());
+        telemetry.addData("distanceBackRight", lift.getDistanceBackRight());
+        telemetry.addData("drivePowerLeft", lift.getLeftDrivePower());
+        telemetry.addData("drivePowerRight", lift.getRightDrivePower());
 
         telemetry.update();
 
