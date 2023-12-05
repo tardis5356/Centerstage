@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit;
 public class VisionPortalRedBlueDetection extends LinearOpMode {
 
     private VisionPortal portal;
-//    private RedPropDetection redPropThreshold;
+    private RedPropDetection redPropThreshold;
     private BluePropDetection bluePropThreshold;
 
     @Override
     public void runOpMode() throws InterruptedException {
-//        redPropThreshold = new RedPropDetection();
+        redPropThreshold = new RedPropDetection();
         bluePropThreshold = new BluePropDetection();
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
@@ -29,7 +29,7 @@ public class VisionPortalRedBlueDetection extends LinearOpMode {
 //                .setStreamFormat(VisionPortal.StreamFormat.YUY2)
 //                .enableLiveView(true)
 //                .setCamera()
-//                .addProcessor(redPropThreshold)
+                .addProcessor(redPropThreshold)
                 .addProcessor(bluePropThreshold)
                 .build();
 
@@ -76,8 +76,8 @@ public class VisionPortalRedBlueDetection extends LinearOpMode {
 //            telemetry.addData("Gain Max", gainControl.getMaxGain());
 //            telemetry.addData("Prop Position if red", redPropThreshold.getPropPosition());
             telemetry.addData("Prop Position if blue", bluePropThreshold.getPropPosition());
-//            telemetry.addData("Averaged Left Box Red", "%.4f", redPropThreshold.getAveragedLeftBoxRed());
-//            telemetry.addData("Averaged Right Box Red", "%.4f", redPropThreshold.getAveragedRightBoxRed());
+            telemetry.addData("Averaged Left Box Red", "%.4f", redPropThreshold.getAveragedLeftBoxRed());
+            telemetry.addData("Averaged Right Box Red", "%.4f", redPropThreshold.getAveragedRightBoxRed());
             telemetry.addData("Averaged Left Box Blue", "%.6f", bluePropThreshold.getAveragedLeftBoxBlue());
             telemetry.addData("Averaged Right Box Blue", "%.6f", bluePropThreshold.getAveragedRightBoxBlue());
             telemetry.update();
