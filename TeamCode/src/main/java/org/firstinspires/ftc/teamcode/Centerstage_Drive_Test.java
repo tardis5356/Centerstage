@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @Disabled
 @TeleOp (name = "Centerstage_Drive_Test")
@@ -16,6 +17,7 @@ public class Centerstage_Drive_Test extends LinearOpMode {
     double Rotation;
 
     DcMotor mFL, mFR, mBL, mBR;
+    Servo Drone;
 
     @Override
     public void runOpMode() {
@@ -24,6 +26,7 @@ public class Centerstage_Drive_Test extends LinearOpMode {
         mFR = hardwareMap.get(DcMotorEx.class, "mFR");
         mBL = hardwareMap.get(DcMotorEx.class, "mBL");
         mBR = hardwareMap.get(DcMotorEx.class, "mBR");
+        Drone = hardwareMap.get(Servo.class, "Drone");
 
 
         mBR.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -41,7 +44,12 @@ public class Centerstage_Drive_Test extends LinearOpMode {
             mBL.setPower(FB-LR+Rotation);
             mBR.setPower(FB+LR-Rotation);
 
-
+            if (gamepad1.a){
+                Drone.setPosition(.2);
+            }
+            else{
+                Drone.setPosition(.1);
+            }
 
         }
 
