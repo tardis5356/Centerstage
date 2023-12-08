@@ -34,13 +34,13 @@ public class BluePropDetection implements VisionProcessor {
     static final Scalar BLUE = new Scalar(0, 0, 255);
     static final Scalar GREEN = new Scalar(0, 255, 0);
 
-    static final Rect LEFT_RECTANGLE = new Rect( // 640 x 480 (X by Y)
+    static final Rect RIGHT_RECTANGLE = new Rect( // 640 x 480 (X by Y)
             new Point(0, 100), //anchor (upper left corner)
-            new Point(200, 400) //width, height
+            new Point(200, 300) //width, height
     );
-    static final Rect RIGHT_RECTANGLE = new Rect(
+    static final Rect LEFT_RECTANGLE = new Rect(
             new Point(410, 100),
-            new Point(620, 400)
+            new Point(620, 300)
     );
 
     @Override
@@ -106,9 +106,9 @@ public class BluePropDetection implements VisionProcessor {
 
 
         if (averagedLeftBoxBlue > blueThreshold) {        //Must Tune Red Threshold
-            outStr = "right";
-        } else if (averagedRightBoxBlue > blueThreshold) {
             outStr = "left";
+        } else if (averagedRightBoxBlue > blueThreshold) {
+            outStr = "right";
         } else {
             outStr = "center";
 
