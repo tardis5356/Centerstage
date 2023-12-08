@@ -32,7 +32,7 @@ public class BotPositions {
 //    0.115 = 30º
 
     //arm positions
-    public static double ARM_INTAKE = 0.04, ARM_TRANSITION_POSITION = 0.12,  ARM_DEPOSIT = 0.79, ARM_DROP_PURPLE = 0.9, ARM_GRAB_PIXELS = .01;
+    public static double ARM_INTAKE = 0.025, ARM_TRANSITION_POSITION = 0.12,  ARM_DEPOSIT = 0.79, ARM_DROP_PURPLE = 0.9, ARM_GRAB_PIXELS = .01;
 
     //drone servo positions
     public static double DRONE_LATCHED = 0.33, DRONE_UNLATCHED = 0.27;
