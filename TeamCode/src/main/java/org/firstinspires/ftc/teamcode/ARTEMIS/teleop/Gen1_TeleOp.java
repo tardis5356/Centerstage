@@ -162,15 +162,18 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         //button map intake commands
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
+                .cancelWhenActive(intakeOutCommand)
                 .whenActive(intakeInCommand);
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
-                .whenActive(
-                        new SequentialCommandGroup(
-                                new InstantCommand(intake::out),
-                                new WaitCommand(1500),
-                                new InstantCommand(intake::stop)
-                        )
-                );
+                .cancelWhenActive(intakeInCommand)
+                .whenActive(intakeOutCommand);
+//                .whenActive(
+//                        new SequentialCommandGroup(
+//                                new InstantCommand(intake::out),
+//                                new WaitCommand(1500),
+//                                new InstantCommand(intake::stop)
+//                        )
+//                );
 
 
         // map position commands
@@ -266,9 +269,8 @@ public class Gen1_TeleOp extends CommandOpMode {
         // automatically grab pixels
         new Trigger(() -> leds.checkLeftPixel() && leds.checkRightPixel())
                 .whenActive(new SequentialCommandGroup(
-                        new WaitCommand(750),
+                        new WaitCommand(500),
                         robotGrabPixelsCommand,
-//                        new WaitCommand(2000),
                         intakeOutCommand
                 ));
 

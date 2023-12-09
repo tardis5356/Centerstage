@@ -36,7 +36,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                 new InstantCommand(gripper::releaseLeft),
 
                                 // wait 1 second for servos to move
-                                new WaitCommand(1000),
+                                new WaitCommand(500),
 
                                 // move arm to transition position
                                 new InstantCommand(arm::toTransition),
@@ -44,12 +44,13 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                 // wait for arm to reach transition position
                                 new WaitUntilCommand(() -> arm.inIntakeEntering()),
 //                                new WaitUntilCommand(() -> arm.fullIntake()),
+                                new WaitCommand(250),
 
                                 // send wrist to intake position
                                 new InstantCommand(wrist::tiltToIntake),
 
                                 // wait for wrist to catch up
-                                new WaitCommand(750),
+                                new WaitCommand(500),
 
                                 // send arm to intake position
                                 new InstantCommand(arm::toIntake)
@@ -70,14 +71,14 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                 new InstantCommand(arm::toGrab),
 
                                 // wait .75 seconds
-                                new WaitCommand(750),
+                                new WaitCommand(250),
 
                                 // grab with both grippers
                                 new InstantCommand(gripper::grabLeft),
                                 new InstantCommand(gripper::grabRight),
 
                                 // wait 1 second for grippers to grab
-                                new WaitCommand(750),
+                                new WaitCommand(250),
 
                                 new IntakeOutCommand(intake),
 
@@ -109,7 +110,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                 //new LiftToPositionCommand(lift, 100, 25),
 
                                 // wait for .5 seconds for arm to move
-                                new WaitCommand(500),
+                                new WaitCommand(750),
 
                                 // tilt wrist to deposit
                                 new InstantCommand(wrist::tiltToDeposit),

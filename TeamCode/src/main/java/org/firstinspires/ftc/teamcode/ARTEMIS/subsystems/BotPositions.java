@@ -22,7 +22,7 @@ public class BotPositions {
     public static double GRIPPER_LEFT_CLOSED = 0.79, GRIPPER_LEFT_OPEN = 0.38, GRIPPER_RIGHT_CLOSED = 0.22, GRIPPER_RIGHT_OPEN = 0.6;
 
     //lift pid variables
-    public static double LIFT_p = 0, LIFT_i = 0, LIFT_d = 0, LIFT_ff = -.04;
+    public static double LIFT_p = 0, LIFT_i = 0, LIFT_d = 0, LIFT_ff = -.07;
     public static int LIFT_TOLERANCE = 25;
     public static double DISTANCE_FROM_BACKDROP = 20, DISTANCE_FROM_BACKDROP_TOLERANCE;
 
@@ -32,7 +32,7 @@ public class BotPositions {
 //    0.115 = 30º
 
     //arm positions
-    public static double ARM_INTAKE = 0.025, ARM_TRANSITION_POSITION = 0.12,  ARM_DEPOSIT = 0.79, ARM_DROP_PURPLE = 0.9, ARM_GRAB_PIXELS = .01;
+    public static double ARM_INTAKE = 0.025, ARM_TRANSITION_POSITION = 0.12,  ARM_DEPOSIT = 0.79, ARM_DROP_PURPLE = 0.9, ARM_GRAB_PIXELS = .025;
 
     //drone servo positions
     public static double DRONE_LATCHED = 0.33, DRONE_UNLATCHED = 0.27;
