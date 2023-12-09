@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -19,6 +20,7 @@ public class LEDs extends SubsystemBase {
 
     double EvenOrOdd = 0;
 
+    Gamepad driver, manipulator;
 
     // setup colors
     public RevBlinkinLedDriver.BlinkinPattern
@@ -41,6 +43,7 @@ public class LEDs extends SubsystemBase {
         colorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
         colorRight = hardwareMap.get(ColorSensor.class, "colorRight");
         blinkin = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
+//        driver = ;
     }
 
     @Override

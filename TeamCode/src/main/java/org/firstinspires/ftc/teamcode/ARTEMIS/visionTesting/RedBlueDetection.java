@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -25,6 +26,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
  * the sample regions over the first 3 stones.
  */
 @Autonomous
+@Disabled
 public class RedBlueDetection extends LinearOpMode {
     OpenCvCamera webcam;
     SkystoneDeterminationPipeline pipeline;

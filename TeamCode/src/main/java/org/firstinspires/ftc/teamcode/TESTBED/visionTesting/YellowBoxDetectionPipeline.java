@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.TESTBED.visionTesting;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -11,6 +13,7 @@ import java.util.List;
 
 //for dashboard
 /*@Config*/
+@Disabled
 public class YellowBoxDetectionPipeline extends OpenCvPipeline {
 
     //backlog of frames to average out to reduce noise

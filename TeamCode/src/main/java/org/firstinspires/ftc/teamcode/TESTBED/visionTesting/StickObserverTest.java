@@ -3,10 +3,11 @@
 package org.firstinspires.ftc.teamcode.TESTBED.visionTesting;
 
         import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+        import com.qualcomm.robotcore.eventloop.opmode.Disabled;
         import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous(name = "StickObserverTest_CSTB")
-
+@Disabled
 public class StickObserverTest extends LinearOpMode {
 
     @Override

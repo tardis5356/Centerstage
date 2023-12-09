@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.TESTBED.visionTesting;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -17,6 +18,7 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 @TeleOp(name = "ColorBlobProcessor_CSTB", group = "TeleOp")
+@Disabled
 public class ColorBlobProcessor extends LinearOpMode {
     private OpenCvCamera camera;
     private Scalar lowerRed = new Scalar(0, 0, 100);

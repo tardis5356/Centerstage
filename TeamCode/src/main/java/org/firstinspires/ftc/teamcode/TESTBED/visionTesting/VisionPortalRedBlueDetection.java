@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.TESTBED.visionTesting;
 import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import java.util.concurrent.TimeUnit;
 
 @Autonomous(name = "Vision Test_CSTB")
+@Disabled
 public class VisionPortalRedBlueDetection extends LinearOpMode {
 
     private VisionPortal portal;

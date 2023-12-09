@@ -3,10 +3,11 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous(name = "StickObserverTest")
-
+@Disabled
 public class StickObserverTest extends LinearOpMode {
 
     @Override

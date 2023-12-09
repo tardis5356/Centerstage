@@ -31,7 +31,7 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Winch;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Wrist;
 
 
-@TeleOp(name = "Gen1 TeleOp")
+@TeleOp(name = "Gen1_TeleOp", group = "Gen1")
 public class Gen1_TeleOp extends CommandOpMode {
     //gamepads
     private GamepadEx driver1, driver2;
@@ -179,9 +179,11 @@ public class Gen1_TeleOp extends CommandOpMode {
         // map position commands
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) || driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))
                 .whenActive(robotToIntakeCommand)
+                .cancelWhenActive(robotGrabPixelsCommand)
                 .cancelWhenActive(robotToDepositCommand);
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) || driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER))
                 .whenActive(robotToDepositCommand)
+                .cancelWhenActive(robotGrabPixelsCommand)
                 .cancelWhenActive(robotToIntakeCommand);
 
         //button map winch commands
@@ -246,11 +248,12 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         // square to backdrop
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.A))
-                .whenActive(() -> lift.squareToBackdrop());
+                .whileActiveContinuous(() -> lift.squareToBackdrop());
 
         // Speed controls
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.B))
-                .whenActive(() -> CURRENT_SPEED_MULTIPLIER = FAST_SPEED_MULTIPLIER);
+                .whenActive(() -> CURRENT_SPEED_MULTIPLIER = FAST_SPEED_MULTIPLIER)
+                .whenActive(new InstantCommand());
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.X))
                 .whenActive(() -> CURRENT_SPEED_MULTIPLIER = SLOW_SPEED_MULTIPLIER);
 
@@ -271,7 +274,9 @@ public class Gen1_TeleOp extends CommandOpMode {
                 .whenActive(new SequentialCommandGroup(
                         new WaitCommand(500),
                         robotGrabPixelsCommand,
-                        intakeOutCommand
+                        new InstantCommand(intake::out),
+                        new WaitCommand(1000),
+                        new InstantCommand(intake::stop)
                 ));
 
         //triggers to roll wrist
@@ -331,13 +336,25 @@ public class Gen1_TeleOp extends CommandOpMode {
         LR = -gamepad1.left_stick_x;
         Rotation = -gamepad1.right_stick_x;
 
+        if(leds.checkLeftPixel() && !leds.checkRightPixel() && !gamepad1.isRumbling() || leds.checkRightPixel() && !leds.checkLeftPixel() && !gamepad1.isRumbling()){
+            gamepad1.rumbleBlips(1);
+            gamepad2.rumbleBlips(1);
+        }
+
+        if(leds.checkLeftPixel() && leds.checkRightPixel() && !gamepad1.isRumbling()){
+            gamepad1.rumbleBlips(2);
+            gamepad2.rumbleBlips(2);
+        }
+
         //map motor power to vars (tb tested)
         //depending on the wheel, forward back, left right, and rotation's power may be different
         //think, if fb is positive, thus the bot should move forward, will the motor drive the bot forward if its power is positive.
-        mFL.setPower(FB + LR + Rotation);
-        mFR.setPower(FB - LR - Rotation);
-        mBL.setPower(FB - LR + Rotation);
-        mBR.setPower(FB + LR - Rotation);
+        if(!gamepad1.a) {
+            mFL.setPower(FB + LR + Rotation);
+            mFR.setPower(FB - LR - Rotation);
+            mBL.setPower(FB - LR + Rotation);
+            mBR.setPower(FB + LR - Rotation);
+        }
 
 //        if (gamepad1.a) { //&& gametime.seconds() > 90){
 //            sDroneLauncher.setPosition(BotPositions.DRONE_UNLATCHED);
@@ -364,10 +381,19 @@ public class Gen1_TeleOp extends CommandOpMode {
         telemetry.addData("inIntake", lift.manualActive);
         telemetry.addData("liftPower", lift.getLiftPower());
 
+        telemetry.addData("lift target", lift.getLiftTargetPosition());
+        telemetry.addData("lift position", lift.getLiftPosition());
+        telemetry.addData("pid out", lift.getLiftPID());
+
         telemetry.addData("distanceBackLeft", lift.getDistanceBackLeft());
         telemetry.addData("distanceBackRight", lift.getDistanceBackRight());
         telemetry.addData("drivePowerLeft", lift.getLeftDrivePower());
         telemetry.addData("drivePowerRight", lift.getRightDrivePower());
+        telemetry.addData("drivePowerLeftValue", lift.getLeftDrivePowerValue());
+        telemetry.addData("drivePowerRightValue", lift.getRightDrivePowerValue());
+
+        telemetry.addData("leftError", lift.getLeftError());
+        telemetry.addData("rightError", lift.getRightError());
 
         telemetry.update();
 

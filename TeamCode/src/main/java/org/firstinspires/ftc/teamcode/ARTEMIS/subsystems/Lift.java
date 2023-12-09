@@ -36,12 +36,13 @@ public class Lift extends SubsystemBase {
     public double stickValue2 = 0;
     public double pid = 0;
     public boolean manualActive = false;
-    
+
     public int resets = 0;
 
     public int liftOffset = 0;
 
     double leftPower = 0, rightPower = 0;
+    double rightError = 0, leftError = 0,  error = 0;
 
     // exp hub i2c
     //      0 right distance
@@ -84,7 +85,7 @@ public class Lift extends SubsystemBase {
 //                resets++; // to test if the lift position is being reset
         }
     }
-    
+
     public void setTargetPosition(int targetPos) {
         target = targetPos; // set the target position
         manualActive = false; // lift is not being moved manually anymore
@@ -107,7 +108,7 @@ public class Lift extends SubsystemBase {
         if (stickValue2 < 0) stickValue2 = stick2 * 0.2; // when lowering, move at 20% speed
         else stickValue2 = stick2 * 0.6; // when raising, move at 40% speed
     }
-    
+
     public void liftPID_R2V2() {
         int liftPos = mLR.getCurrentPosition();
         int liftTarget = target; // + liftOffset;
@@ -141,40 +142,49 @@ public class Lift extends SubsystemBase {
     }
 
     public double scaleBetween(double inputMin, double inputMax, double scaledMin, double scaledMax, double inputInput) {
-        return (inputInput - inputMin)/(inputMax - inputMin) * (scaledMax - scaledMin) + scaledMin;
+        return (inputInput - inputMin) / (inputMax - inputMin) * (scaledMax - scaledMin) + scaledMin;
     }
 
-    public void squareToBackdrop(){
+    public void squareToBackdrop() {
         double distRight = distanceBackRight.getDistance(DistanceUnit.CM);
         double distLeft = distanceBackLeft.getDistance(DistanceUnit.CM);
 
-        double rightError = DISTANCE_FROM_BACKDROP - distRight; // positive = far away, negative = too close
-        double leftError = DISTANCE_FROM_BACKDROP - distLeft;
-        double error = distRight-distLeft;
+        rightError = distRight - DISTANCE_FROM_BACKDROP; // positive = far away, negative = too close
+        leftError = distLeft - DISTANCE_FROM_BACKDROP;
+        error = distRight - distLeft;
 
         // if error is positive, right is further away than left
         // if error is negative, left is further away than right
         // target position is DISTANCE_FROM_BACKDROP
 
-        double MAX_POWER = 0.75, MIN_POWER = 0.5;
+        double MAX_POWER = 1, MIN_POWER = 0;
 
         double rightPowerScaled = scaleBetween(0, 40, MIN_POWER, MAX_POWER, rightError);
         double leftPowerScaled = scaleBetween(0, 40, MIN_POWER, MAX_POWER, leftError);
 
-        if(leftError > 40) {
-            leftPower = -0.5;
-        } else if(leftError >= 2) {
-            leftPower = leftPowerScaled;
-        } else if (leftError <= -2){
-            leftPower = -leftPowerScaled;
+        double negRightPowerScaled = scaleBetween(-20, 0, -MAX_POWER, -MIN_POWER, rightError);
+        double negLeftPowerScaled = scaleBetween(-20, 0, -MAX_POWER, -MIN_POWER, leftError);
+
+        double turnMultiplier = Math.abs(error)/4;
+
+        if (leftError > 40) {
+            leftPower = MAX_POWER;
+        } else if (leftError >= 2) {
+            leftPower = leftPowerScaled * turnMultiplier;
+//            leftPower = 1;
+        } else if (leftError <= -2) {
+            leftPower = negLeftPowerScaled * turnMultiplier;
+//            leftPower = -1;
         }
 
-        if(rightError > 40) {
-            rightPower = -0.5;
-        } else if(rightError >= 2) {
-            rightPower = rightPowerScaled;
-        } else if (rightError <= -2){
-            rightPower = -rightPowerScaled;
+        if (rightError > 40) {
+            rightPower = MAX_POWER;
+        } else if (rightError >= 2) {
+            rightPower = rightPowerScaled * turnMultiplier;
+//            rightPower = 1;
+        } else if (rightError <= -2) {
+            rightPower = negRightPowerScaled * turnMultiplier;
+//            rightPower = -1;
         }
 
 
@@ -188,19 +198,36 @@ public class Lift extends SubsystemBase {
         return liftBase.isPressed();
     }
 
+    public double getLeftError(){
+        return leftError;
+    }
+
+    public double getRightError(){
+        return rightError;
+    }
+
     public double getDistanceBackRight() {
         return distanceBackRight.getDistance(DistanceUnit.CM);
     }
+
     public double getDistanceBackLeft() {
         return distanceBackLeft.getDistance(DistanceUnit.CM);
     }
 
-    public double getLeftDrivePower() {
+    public double getLeftDrivePowerValue() {
         return leftPower;
     }
 
-    public double getRightDrivePower() {
+    public double getRightDrivePowerValue() {
         return rightPower;
+    }
+
+    public double getLeftDrivePower() {
+        return mBL.getPower();
+    }
+
+    public double getRightDrivePower() {
+        return mBR.getPower();
     }
 
     public int getLiftBaseResets() {
@@ -226,7 +253,7 @@ public class Lift extends SubsystemBase {
     public double getLiftTargetPosition() {
         return target;
     }
-    
+
     public boolean atLimit() {
         return getLiftPosition() > 650 || getLiftPosition() < 5;
     }

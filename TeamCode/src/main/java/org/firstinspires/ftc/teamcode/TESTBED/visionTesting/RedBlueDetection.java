@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.TESTBED.visionTesting;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -29,6 +30,7 @@ import java.util.concurrent.TimeUnit;
  * the sample regions over the first 3 stones.
  */
 @Autonomous(name="RedBlueDetection_CSTB")
+@Disabled
 public class RedBlueDetection extends LinearOpMode {
     OpenCvCamera webcam;
     SkystoneDeterminationPipeline pipeline;

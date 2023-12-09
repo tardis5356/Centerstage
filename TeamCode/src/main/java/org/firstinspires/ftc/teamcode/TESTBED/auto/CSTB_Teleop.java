@@ -2,10 +2,11 @@ package org.firstinspires.ftc.teamcode.TESTBED.auto;
 
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name="CSTB_Teleop")
-
+@Disabled
 public class
 CSTB_Teleop extends Base_CSTB{
 

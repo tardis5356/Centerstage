@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -16,6 +17,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 @TeleOp(name = "ColorBlobProcessor", group = "TeleOp")
+@Disabled
 public class ColorBlobProcessor extends LinearOpMode {
     private OpenCvCamera camera;
     private Scalar lowerRed = new Scalar(0, 0, 100);
