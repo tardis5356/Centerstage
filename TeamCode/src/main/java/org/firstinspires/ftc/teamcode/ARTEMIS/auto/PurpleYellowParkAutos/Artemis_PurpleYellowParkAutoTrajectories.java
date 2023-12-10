@@ -63,7 +63,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
             redBackstage_DecisionPointToCenterSpike = //shift and go forward to score center
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointPos)
                             .forward(18)
-                            .back(8)
+                            .back(6)
                             .build();
 
             redBackstage_CenterSpikeToDecisionPoint =  //Shift to decision point
