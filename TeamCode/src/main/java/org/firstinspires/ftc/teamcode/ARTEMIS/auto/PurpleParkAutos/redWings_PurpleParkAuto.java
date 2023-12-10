@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_CenterSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_DecisionPointToCenterSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_DecisionPointToCornerPark;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_DecisionPointToLeftSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_DecisionPointToRightSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_LeftSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_RightSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_StartPos;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_StartPositionToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos.Artemis_ParkAutoTrajectories.redWings_DecisionPointToCenterPark;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redWings_CenterSpikeToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redWings_DecisionPointToCenterSpike;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redWings_DecisionPointToCornerPark;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redWings_DecisionPointToLeftSpike;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redWings_DecisionPointToRightSpike;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redWings_LeftSpikeToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redWings_RightSpikeToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redWings_StartPos;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redWings_StartPositionToDecisionPoint;
 
 import android.util.Size;
 
@@ -30,7 +31,6 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos.Artemis_ParkAutoTra
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.BluePropDetection;
 import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.RedPropDetection;
 import org.firstinspires.ftc.vision.VisionPortal;
 
@@ -38,15 +38,15 @@ import java.util.concurrent.TimeUnit;
 
 //public class CSTB_redWings_Park {
 //@Disabled
-@Autonomous(group = "drive", name = "A redBackstage Purple+Park")
-public class redBackstage_PurpleParkAuto extends CommandOpMode {
+@Autonomous(group = "drive", name = "A redWings Purple+Park")
+public class redWings_PurpleParkAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
     private SampleMecanumDrive drive;
     private VisionPortal portal;
     private RedPropDetection redPropThreshold;
     //    private Lift lift;
-    public static TrajectorySequence redBackstage_DecisionPointToSpike, redBackstage_SpikeToDecisionPoint;
+    public static TrajectorySequence redWings_DecisionPointToSpike, redWings_SpikeToDecisionPoint;
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
     @Override
@@ -54,7 +54,7 @@ public class redBackstage_PurpleParkAuto extends CommandOpMode {
 //        MultipleTelemetry telemetry2 = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         drive = new SampleMecanumDrive(hardwareMap);
-        drive.setPoseEstimate(Artemis_ParkAutoTrajectories.redBackstage_StartPos);
+        drive.setPoseEstimate(Artemis_ParkAutoTrajectories.redWings_StartPos);
         Artemis_ParkAutoTrajectories.generateTrajectories(drive);
 
         ////////‼️‼️⁉️⁉️CAMERA INITIALIZATION/DEFINING ⁉️⁉️⁉️
@@ -96,7 +96,7 @@ public class redBackstage_PurpleParkAuto extends CommandOpMode {
         Intake intake = new Intake(hardwareMap);
 
 
-        drive.setPoseEstimate(redBackstage_StartPos);
+        drive.setPoseEstimate(redWings_StartPos);
         Artemis_PurpleParkAutoTrajectories.generateTrajectories(drive);
 
         //gripper.close();
@@ -107,19 +107,19 @@ public class redBackstage_PurpleParkAuto extends CommandOpMode {
 
         switch (redPropThreshold.getPropPosition()) {
             case "left":
-                redBackstage_DecisionPointToSpike = redBackstage_DecisionPointToLeftSpike;
-                redBackstage_SpikeToDecisionPoint = redBackstage_LeftSpikeToDecisionPoint;
+                redWings_DecisionPointToSpike = redWings_DecisionPointToLeftSpike;
+                redWings_SpikeToDecisionPoint = redWings_LeftSpikeToDecisionPoint;
                 telemetry.addLine("park traj 1");
                 break;
             default:
             case "center":
-                redBackstage_DecisionPointToSpike = redBackstage_DecisionPointToCenterSpike;
-                redBackstage_SpikeToDecisionPoint = redBackstage_CenterSpikeToDecisionPoint;
+                redWings_DecisionPointToSpike = redWings_DecisionPointToCenterSpike;
+                redWings_SpikeToDecisionPoint = redWings_CenterSpikeToDecisionPoint;
                 telemetry.addLine("park traj 2");
                 break;
             case "right":
-                redBackstage_DecisionPointToSpike = redBackstage_DecisionPointToRightSpike;
-                redBackstage_SpikeToDecisionPoint = redBackstage_RightSpikeToDecisionPoint;
+                redWings_DecisionPointToSpike = redWings_DecisionPointToRightSpike;
+                redWings_SpikeToDecisionPoint = redWings_RightSpikeToDecisionPoint;
                 telemetry.addLine("park traj 3");
                 break;
         }
@@ -138,13 +138,13 @@ public class redBackstage_PurpleParkAuto extends CommandOpMode {
         telemetry.update();
         schedule(new SequentialCommandGroup(
 
-                new FollowTrajectoryCommand(drive, redBackstage_StartPositionToDecisionPoint),
-                new FollowTrajectoryCommand(drive, redBackstage_DecisionPointToSpike),
+                new FollowTrajectoryCommand(drive, redWings_StartPositionToDecisionPoint),
+                new FollowTrajectoryCommand(drive, redWings_DecisionPointToSpike),
                 new InstantCommand(intake::out),
                 new WaitCommand(700),
                 new InstantCommand(intake::stop),
-                new FollowTrajectoryCommand(drive, redBackstage_SpikeToDecisionPoint),
-                new FollowTrajectoryCommand(drive, redBackstage_DecisionPointToCornerPark)
+                new FollowTrajectoryCommand(drive, redWings_SpikeToDecisionPoint),
+                new FollowTrajectoryCommand(drive, redWings_DecisionPointToCenterPark)
 
         ));
 

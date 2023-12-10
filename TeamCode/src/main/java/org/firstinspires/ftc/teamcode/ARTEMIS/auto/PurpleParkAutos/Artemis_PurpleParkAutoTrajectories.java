@@ -21,15 +21,19 @@ public class Artemis_PurpleParkAutoTrajectories {
     public static final Pose2d blueWings_XXXXSpikeMarkPos = new Pose2d(-14.5, -31, Math.toRadians(90));
 
     //RED BACKSTAGE
-    public static final Pose2d redBackstage_StartPos = new Pose2d(-8.5, -64.5, Math.toRadians(270));
-    public static final Pose2d redBackstage_DecisionPointPos = new Pose2d(-12.5, -34, Math.toRadians(270));
-    public static final Pose2d redBackstage_XXXXSpikeMarkPos = new Pose2d(-14.5, -31, Math.toRadians(270));
+    public static final Pose2d redBackstage_StartPos = new Pose2d(-8.5, 64.5, Math.toRadians(270));
+    public static final Pose2d redBackstage_DecisionPointPos = new Pose2d(-12.5, 48, Math.toRadians(270));
+    public static final Pose2d redBackstage_XXXXSpikeMarkPos = new Pose2d(-14.5, 31, Math.toRadians(270));
+
+    //RED WINGS
+    public static final Pose2d redWings_StartPos = new Pose2d(36.5, 64.5, Math.toRadians(270));
+    public static final Pose2d redWings_DecisionPointPos = new Pose2d(40.5, 14, Math.toRadians(90));
+    public static final Pose2d redWings_XXXXSpikeMarkPos = new Pose2d(-14.5, 31, Math.toRadians(270));
 
     public static TrajectorySequence blueBackstage_StartPositionToDecisionPoint, blueBackstage_DecisionPointToCenterSpike, blueBackstage_DecisionPointToLeftSpike, blueBackstage_DecisionPointToRightSpike, blueBackstage_LeftSpikeToDecisionPoint, blueBackstage_RightSpikeToDecisionPoint, blueBackstage_CenterSpikeToDecisionPoint, blueBackstage_DecisionPointToCornerPark;
     public static TrajectorySequence blueWings_StartPositionToDecisionPoint, blueWings_DecisionPointToCenterSpike, blueWings_DecisionPointToLeftSpike, blueWings_DecisionPointToRightSpike, blueWings_LeftSpikeToDecisionPoint, blueWings_RightSpikeToDecisionPoint, blueWings_CenterSpikeToDecisionPoint, blueWings_DecisionPointToCornerPark;
-
     public static TrajectorySequence redBackstage_StartPositionToDecisionPoint, redBackstage_DecisionPointToCenterSpike, redBackstage_DecisionPointToLeftSpike, redBackstage_DecisionPointToRightSpike, redBackstage_LeftSpikeToDecisionPoint, redBackstage_RightSpikeToDecisionPoint, redBackstage_CenterSpikeToDecisionPoint, redBackstage_DecisionPointToCornerPark;
-
+    public static TrajectorySequence redWings_StartPositionToDecisionPoint, redWings_DecisionPointToCenterSpike, redWings_DecisionPointToLeftSpike, redWings_DecisionPointToRightSpike, redWings_LeftSpikeToDecisionPoint, redWings_RightSpikeToDecisionPoint, redWings_CenterSpikeToDecisionPoint, redWings_DecisionPointToCornerPark;
     public static void generateTrajectories(SampleMecanumDrive drive) {
 
         //blue backstage
@@ -152,7 +156,10 @@ public class Artemis_PurpleParkAutoTrajectories {
 
             redBackstage_DecisionPointToLeftSpike = //shift and go forward to score center
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointPos)
-                            .lineToLinearHeading(new Pose2d(-12.5, 30, Math.toRadians(180)))
+                            .forward(2)
+                            .turn(Math.toRadians(45))
+                            .forward(14)
+                            .back(4)
                             .build();
 
             redBackstage_LeftSpikeToDecisionPoint =  //Shift to decision point
@@ -162,7 +169,8 @@ public class Artemis_PurpleParkAutoTrajectories {
 
             redBackstage_DecisionPointToCenterSpike = //shift and go forward to score center
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointPos)
-                            .lineToLinearHeading(new Pose2d(-12.5, 30, Math.toRadians(90)))
+                            .forward(18)
+                            .back(8)
                             .build();
 
             redBackstage_CenterSpikeToDecisionPoint =  //Shift to decision point
@@ -172,7 +180,8 @@ public class Artemis_PurpleParkAutoTrajectories {
 
             redBackstage_DecisionPointToRightSpike = //shift and go forward to score center
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointPos)
-                            .lineToLinearHeading(new Pose2d(-12.5, 32, Math.toRadians(0)))
+                            .forward(6)
+                            .turn(Math.toRadians(-45))
                             .build();
 
             redBackstage_RightSpikeToDecisionPoint =  //Shift to decision point
@@ -183,7 +192,61 @@ public class Artemis_PurpleParkAutoTrajectories {
 
             redBackstage_DecisionPointToCornerPark = //go to and spin to parking between backdrops
                     drive.trajectorySequenceBuilder(redBackstage_StartPositionToDecisionPoint.end())
-                            .lineToLinearHeading(new Pose2d(-52, 64.5, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-56, 62, Math.toRadians(0)))
+                            .build();
+        }
+
+        //red wings
+        {
+            redWings_StartPositionToDecisionPoint = //shift and go forward to score center
+                    drive.trajectorySequenceBuilder(redWings_StartPos)
+                            .lineTo(new Vector2d(40.5, 64.5), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                            .forward(6)
+                            .turn(Math.toRadians(180))
+                            .lineTo(redWings_DecisionPointPos.vec(), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                            .build();
+
+            redWings_DecisionPointToLeftSpike = //shift and go forward to score left
+                    drive.trajectorySequenceBuilder(redWings_DecisionPointPos)
+                            .forward(2)
+                            .turn(Math.toRadians(-45))
+                            .forward(4)
+                            .build();
+
+            redWings_LeftSpikeToDecisionPoint =  //Shift to decision point
+                    drive.trajectorySequenceBuilder(redWings_DecisionPointToLeftSpike.end())
+                            .back(4)
+                            .lineToLinearHeading(redWings_DecisionPointPos)
+                            .build();
+
+            redWings_DecisionPointToCenterSpike = //shift and go forward to score center
+                    drive.trajectorySequenceBuilder(redWings_DecisionPointPos)
+                            .forward(2)
+                            .build();
+
+            redWings_CenterSpikeToDecisionPoint =  //Shift to decision point
+                    drive.trajectorySequenceBuilder(redWings_DecisionPointToCenterSpike.end())
+                            .lineToLinearHeading(redWings_DecisionPointPos)
+                            .build();
+
+            redWings_DecisionPointToRightSpike = //shift and go forward to score right
+                    drive.trajectorySequenceBuilder(redWings_DecisionPointPos)
+                            .forward(16)
+                            .turn(Math.toRadians(90))
+                            .forward(2)
+                            .build();
+
+            redWings_RightSpikeToDecisionPoint =  //Shift to decision point
+                    drive.trajectorySequenceBuilder(redWings_DecisionPointToRightSpike.end())
+                            .lineToLinearHeading(redWings_DecisionPointPos)
+                            .build();
+
+
+            redWings_DecisionPointToCornerPark = //go to and spin to parking between backdrops
+                    drive.trajectorySequenceBuilder(redWings_DecisionPointPos)
+                            .lineToLinearHeading(new Pose2d(-48, 8, Math.toRadians(0)))
                             .build();
         }
 
