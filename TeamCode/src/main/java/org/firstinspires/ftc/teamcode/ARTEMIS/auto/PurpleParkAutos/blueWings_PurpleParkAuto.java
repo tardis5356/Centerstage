@@ -50,10 +50,6 @@ public class blueWings_PurpleParkAuto extends CommandOpMode {
     public void initialize() {
 //        MultipleTelemetry telemetry2 = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        drive = new SampleMecanumDrive(hardwareMap);
-        drive.setPoseEstimate(Artemis_ParkAutoTrajectories.blueWings_StartPos);
-        Artemis_ParkAutoTrajectories.generateTrajectories(drive);
-
         ////////‼️‼️⁉️⁉️CAMERA INITIALIZATION/DEFINING ⁉️⁉️⁉️
 //        public void runOpMode () throw InterruptedException {
         bluePropThreshold = new BluePropDetection();

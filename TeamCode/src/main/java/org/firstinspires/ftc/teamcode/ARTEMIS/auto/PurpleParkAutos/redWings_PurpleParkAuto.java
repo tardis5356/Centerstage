@@ -53,10 +53,6 @@ public class redWings_PurpleParkAuto extends CommandOpMode {
     public void initialize() {
 //        MultipleTelemetry telemetry2 = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        drive = new SampleMecanumDrive(hardwareMap);
-        drive.setPoseEstimate(Artemis_ParkAutoTrajectories.redWings_StartPos);
-        Artemis_ParkAutoTrajectories.generateTrajectories(drive);
-
         ////////‼️‼️⁉️⁉️CAMERA INITIALIZATION/DEFINING ⁉️⁉️⁉️
 //        public void runOpMode () throw InterruptedException {
         redPropThreshold = new RedPropDetection();
