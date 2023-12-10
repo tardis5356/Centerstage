@@ -24,6 +24,7 @@ public class LEDs extends SubsystemBase {
 
     // setup colors
     public RevBlinkinLedDriver.BlinkinPattern
+//            IdleAnim = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES,
             IdleAnim = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES,
             YellowBlink = RevBlinkinLedDriver.BlinkinPattern.CP2_HEARTBEAT_SLOW,
             RedBlink = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED,

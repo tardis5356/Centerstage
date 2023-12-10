@@ -45,7 +45,7 @@ public class Lift extends SubsystemBase {
     double leftPower = 0, rightPower = 0;
     double rightError = 0, leftError = 0,  error = 0, errorAvg = 0;
     PIDController leftSquaringController, rightSquaringController;
-    double leftSq_p = 0, leftSq_i = 0, leftSq_d = 0, rightSq_p = 0, rightSq_i = 0, rightSq_d = 0;
+    public static double leftSq_p = 0, leftSq_i = 0, leftSq_d = 0, rightSq_p = 0, rightSq_i = 0, rightSq_d = 0;
 
     // exp hub i2c
     //      0 right distance
@@ -200,9 +200,59 @@ public class Lift extends SubsystemBase {
         mBR.setPower(rightPower);
     }
 
+    public void squareToBackdropBangBang2() {
+        double distRight = distanceBackRight.getDistance(DistanceUnit.CM);
+        double distLeft = distanceBackLeft.getDistance(DistanceUnit.CM);
+
+        rightError = distRight - DISTANCE_FROM_BACKDROP; // positive = far away, negative = too close
+        leftError = distLeft - DISTANCE_FROM_BACKDROP;
+        error = distRight - distLeft;
+
+        // if error is positive, right is further away than left
+        // if error is negative, left is further away than right
+        // target position is DISTANCE_FROM_BACKDROP
+
+        double MAX_POWER = 1, MIN_POWER = 0;
+
+        double rightPowerScaled = scaleBetween(0, 40, MIN_POWER, MAX_POWER, rightError);
+        double leftPowerScaled = scaleBetween(0, 40, MIN_POWER, MAX_POWER, leftError);
+
+        double negRightPowerScaled = scaleBetween(-20, 0, -MAX_POWER, -MIN_POWER, rightError);
+        double negLeftPowerScaled = scaleBetween(-20, 0, -MAX_POWER, -MIN_POWER, leftError);
+
+        double turnMultiplier = Math.abs(error)/4;
+
+        if (leftError > 40) {
+            leftPower = MAX_POWER;
+        } else if (leftError >= 1) {
+            leftPower = leftPowerScaled * turnMultiplier;
+//            leftPower = 1;
+        } else if (leftError <= -0.5) {
+            leftPower = -0.5;
+        }
+
+        if (rightError > 40) {
+            rightPower = MAX_POWER;
+        } else if (rightError >= 1) {
+            rightPower = rightPowerScaled * turnMultiplier;
+//            rightPower = 1;
+        } else if (rightError <= -0.5) {
+//            rightPower = negRightPowerScaled * turnMultiplier;
+            rightPower = -0.5;
+        }
+
+        mFL.setPower(leftPower);
+        mBL.setPower(leftPower);
+        mFR.setPower(rightPower);
+        mBR.setPower(rightPower);
+    }
+
     public void squareToBackdropPID() {
         double distRight = distanceBackRight.getDistance(DistanceUnit.CM);
         double distLeft = distanceBackLeft.getDistance(DistanceUnit.CM);
+
+        leftSquaringController.setPID(leftSq_p, leftSq_i, leftSq_d);
+        rightSquaringController.setPID(leftSq_p, leftSq_i, leftSq_d);
 
         rightError = distRight - DISTANCE_FROM_BACKDROP; // positive = far away, negative = too close
         leftError = distLeft - DISTANCE_FROM_BACKDROP;
@@ -213,43 +263,13 @@ public class Lift extends SubsystemBase {
         // if error is negative, left is further away than right
         // target position is DISTANCE_FROM_BACKDROP
 
-        double MAX_POWER = 1, MIN_POWER = 0;
-
-//        double rightPowerScaled = scaleBetween(0, 40, MIN_POWER, MAX_POWER, rightError);
-//        double leftPowerScaled = scaleBetween(0, 40, MIN_POWER, MAX_POWER, leftError);
-//
-//        double negRightPowerScaled = scaleBetween(-20, 0, -MAX_POWER, -MIN_POWER, rightError);
-//        double negLeftPowerScaled = scaleBetween(-20, 0, -MAX_POWER, -MIN_POWER, leftError);
-
-//        double turnMultiplier = Math.abs(error)/4;
-
-//        if (leftError > 40) {
-//            leftPower = MAX_POWER;
-//        } else if (leftError >= 2) {
-//            leftPower = leftPowerScaled * turnMultiplier;
-////            leftPower = 1;
-//        } else if (leftError <= -2) {
-//            leftPower = negLeftPowerScaled * turnMultiplier;
-////            leftPower = -1;
-//        }
-//
-//        if (rightError > 40) {
-//            rightPower = MAX_POWER;
-//        } else if (rightError >= 2) {
-//            rightPower = rightPowerScaled * turnMultiplier;
-////            rightPower = 1;
-//        } else if (rightError <= -2) {
-//            rightPower = negRightPowerScaled * turnMultiplier;
-////            rightPower = -1;
-//        }
-
         leftPower = leftSquaringController.calculate(distLeft, DISTANCE_FROM_BACKDROP);
         rightPower = rightSquaringController.calculate(distRight, DISTANCE_FROM_BACKDROP);
 
-        mFL.setPower(leftPower);
-        mBL.setPower(leftPower);
-        mFR.setPower(rightPower);
-        mBR.setPower(rightPower);
+        mFL.setPower(-leftPower);
+        mBL.setPower(-leftPower);
+        mFR.setPower(-rightPower);
+        mBR.setPower(-rightPower);
     }
 
     public boolean getLiftBase() {

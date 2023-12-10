@@ -256,7 +256,7 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         // square to backdrop
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.A))
-                .whileActiveContinuous(() -> lift.squareToBackdropBangBang());
+                .whileActiveContinuous(() -> lift.squareToBackdropPID());
 
         // Speed controls
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.B))
@@ -280,7 +280,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         // automatically grab pixels
         new Trigger(() -> leds.checkLeftPixel() && leds.checkRightPixel())
                 .whenActive(new SequentialCommandGroup(
-                        new WaitCommand(500),
+                        new WaitCommand(250),
                         robotGrabPixelsCommand,
                         new InstantCommand(intake::out),
                         new WaitCommand(1000),
