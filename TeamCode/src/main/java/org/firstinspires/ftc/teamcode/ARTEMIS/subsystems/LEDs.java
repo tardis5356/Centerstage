@@ -168,7 +168,7 @@ public class LEDs extends SubsystemBase {
 
     // Method sets color to a blinking red
     public void setTwoPixels() {
-        blinkin.setPattern(RedBlink);
+        blinkin.setPattern(Green);
     }
 
 }

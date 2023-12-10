@@ -41,8 +41,11 @@ public class Lift extends SubsystemBase {
 
     public int liftOffset = 0;
 
+    // squaring logic
     double leftPower = 0, rightPower = 0;
-    double rightError = 0, leftError = 0,  error = 0;
+    double rightError = 0, leftError = 0,  error = 0, errorAvg = 0;
+    PIDController leftSquaringController, rightSquaringController;
+    double leftSq_p = 0, leftSq_i = 0, leftSq_d = 0, rightSq_p = 0, rightSq_i = 0, rightSq_d = 0;
 
     // exp hub i2c
     //      0 right distance
@@ -53,6 +56,9 @@ public class Lift extends SubsystemBase {
         mLL = hardwareMap.get(DcMotorEx.class, "mLL");
 
         controller = new PIDController(p, i, d);
+        leftSquaringController = new PIDController(leftSq_p, leftSq_i, leftSq_d);
+        rightSquaringController = new PIDController(leftSq_p, leftSq_i, leftSq_d);
+//        rightSquaringController = new PIDController(rightSq_p, rightSq_i, rightSq_d);
 
         liftBase = hardwareMap.get(TouchSensor.class, "touchLift");
         distanceBackRight = hardwareMap.get(DistanceSensor.class, "distanceBackRight");
@@ -106,11 +112,11 @@ public class Lift extends SubsystemBase {
 
         // micro adjustment
         if (stickValue2 < 0) stickValue2 = stick2 * 0.2; // when lowering, move at 20% speed
-        else stickValue2 = stick2 * 0.6; // when raising, move at 40% speed
+        else stickValue2 = stick2 * 0.8; // when raising, move at 40% speed
     }
 
     public void liftPID_R2V2() {
-        int liftPos = mLR.getCurrentPosition();
+        int liftPos = -mLL.getCurrentPosition();
         int liftTarget = target; // + liftOffset;
         double pidController = controller.calculate(liftPos, target);
         pid = pidController; // for getLiftPID()
@@ -118,7 +124,7 @@ public class Lift extends SubsystemBase {
         if (!manualActive) {
             // lowest position (no motor power) target position is -10
             if (liftTarget != -10)
-                power = pid + ff; // if lift is not supposed to be fully retracted, motor power is feedforward (counteract gravity) + value from pid controller
+                power = -pid + ff; // if lift is not supposed to be fully retracted, motor power is feedforward (counteract gravity) + value from pid controller
 
             if (liftTarget == -10 && !liftBase.isPressed())
                 power = 0.1; // if lift is supposed to be retracted but the lift base touch sensor is not pressed, motors should lower
@@ -145,7 +151,7 @@ public class Lift extends SubsystemBase {
         return (inputInput - inputMin) / (inputMax - inputMin) * (scaledMax - scaledMin) + scaledMin;
     }
 
-    public void squareToBackdrop() {
+    public void squareToBackdropBangBang() {
         double distRight = distanceBackRight.getDistance(DistanceUnit.CM);
         double distLeft = distanceBackLeft.getDistance(DistanceUnit.CM);
 
@@ -194,6 +200,58 @@ public class Lift extends SubsystemBase {
         mBR.setPower(rightPower);
     }
 
+    public void squareToBackdropPID() {
+        double distRight = distanceBackRight.getDistance(DistanceUnit.CM);
+        double distLeft = distanceBackLeft.getDistance(DistanceUnit.CM);
+
+        rightError = distRight - DISTANCE_FROM_BACKDROP; // positive = far away, negative = too close
+        leftError = distLeft - DISTANCE_FROM_BACKDROP;
+        error = distRight - distLeft;
+        errorAvg = (distLeft + distRight)/2;
+
+        // if error is positive, right is further away than left
+        // if error is negative, left is further away than right
+        // target position is DISTANCE_FROM_BACKDROP
+
+        double MAX_POWER = 1, MIN_POWER = 0;
+
+//        double rightPowerScaled = scaleBetween(0, 40, MIN_POWER, MAX_POWER, rightError);
+//        double leftPowerScaled = scaleBetween(0, 40, MIN_POWER, MAX_POWER, leftError);
+//
+//        double negRightPowerScaled = scaleBetween(-20, 0, -MAX_POWER, -MIN_POWER, rightError);
+//        double negLeftPowerScaled = scaleBetween(-20, 0, -MAX_POWER, -MIN_POWER, leftError);
+
+//        double turnMultiplier = Math.abs(error)/4;
+
+//        if (leftError > 40) {
+//            leftPower = MAX_POWER;
+//        } else if (leftError >= 2) {
+//            leftPower = leftPowerScaled * turnMultiplier;
+////            leftPower = 1;
+//        } else if (leftError <= -2) {
+//            leftPower = negLeftPowerScaled * turnMultiplier;
+////            leftPower = -1;
+//        }
+//
+//        if (rightError > 40) {
+//            rightPower = MAX_POWER;
+//        } else if (rightError >= 2) {
+//            rightPower = rightPowerScaled * turnMultiplier;
+////            rightPower = 1;
+//        } else if (rightError <= -2) {
+//            rightPower = negRightPowerScaled * turnMultiplier;
+////            rightPower = -1;
+//        }
+
+        leftPower = leftSquaringController.calculate(distLeft, DISTANCE_FROM_BACKDROP);
+        rightPower = rightSquaringController.calculate(distRight, DISTANCE_FROM_BACKDROP);
+
+        mFL.setPower(leftPower);
+        mBL.setPower(leftPower);
+        mFR.setPower(rightPower);
+        mBR.setPower(rightPower);
+    }
+
     public boolean getLiftBase() {
         return liftBase.isPressed();
     }
@@ -235,7 +293,7 @@ public class Lift extends SubsystemBase {
     }
 
     public double getLiftPosition() {
-        return mLR.getCurrentPosition();
+        return -mLL.getCurrentPosition();
     }
 
     public double getLiftPower() {

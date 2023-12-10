@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.ARTEMIS.commands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -23,38 +25,40 @@ public class RobotToStateCommand extends ParallelCommandGroup {
             case "intake":
                 currentState = "intake";
                 addCommands(
-                        new SequentialCommandGroup(
-                                // send lift to fully retracted, wait for it to reach that position (via isFinished)
-                                new LiftToPositionCommand(lift, -10, 25),
-                                new InstantCommand(intake::stop),
-                                // make sure arm isn't already in intake
-                                new WaitUntilCommand(() -> !arm.inIntakeEntering()),
+                        new ParallelDeadlineGroup(
+                                new SequentialCommandGroup(
+                                        // send lift to fully retracted, wait for it to reach that position (via isFinished)
+                                        new InstantCommand(intake::stop),
+                                        // make sure arm isn't already in intake
+                                        new WaitUntilCommand(() -> !arm.inIntakeEntering()),
 
-                                // open grippers & send wrist to transition position
-                                new InstantCommand(wrist::toTransition),
-                                new InstantCommand(gripper::releaseRight),
-                                new InstantCommand(gripper::releaseLeft),
+                                        // open grippers & send wrist to transition position
+                                        new InstantCommand(wrist::toTransition),
+                                        new InstantCommand(gripper::releaseRight),
+                                        new InstantCommand(gripper::releaseLeft),
 
-                                // wait 1 second for servos to move
-                                new WaitCommand(500),
+                                        // wait 1 second for servos to move
+                                        new WaitCommand(500),
 
-                                // move arm to transition position
-                                new InstantCommand(arm::toTransition),
+                                        // move arm to transition position
+                                        new InstantCommand(arm::toTransition),
 
-                                // wait for arm to reach transition position
-                                new WaitUntilCommand(() -> arm.inIntakeEntering()),
+                                        // wait for arm to reach transition position
+                                        new WaitUntilCommand(() -> arm.inIntakeEntering()),
 //                                new WaitUntilCommand(() -> arm.fullIntake()),
-                                new WaitCommand(250),
+                                        new WaitCommand(100),
 
-                                // send wrist to intake position
-                                new InstantCommand(wrist::tiltToIntake),
+                                        // send wrist to intake position
+                                        new InstantCommand(wrist::tiltToIntake),
 
-                                // wait for wrist to catch up
-                                new WaitCommand(500),
+                                        // wait for wrist to catch up
+                                        new WaitCommand(200),
 
-                                // send arm to intake position
-                                new InstantCommand(arm::toIntake)
-                        )
+                                        // send arm to intake position
+                                        new InstantCommand(arm::toIntake)
+                                ),
+                                new LiftToPositionCommand(lift, -10, 25)
+                                )
                 );
                 break;
             case "grab_pixels":
@@ -62,7 +66,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                 addCommands(
                         new SequentialCommandGroup(
                                 // ensure arm is already in intake
-                                new WaitUntilCommand(() -> arm.fullIntake()),
+                                new WaitUntilCommand(() -> arm.inIntakeFully()),
 
 //                                new IntakeInCommand(intake, leds),
                                 new InstantCommand(intake::in),
@@ -98,6 +102,8 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                 new InstantCommand(arm::toTransition),
                                 new InstantCommand(wrist::toTransition),
 
+                                new WaitCommand(250),
+
                                 // ensure arm isn't in intake anymore
                                 new WaitUntilCommand(() -> !arm.inIntakeExiting()),
 
@@ -108,6 +114,8 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                 // TODO: tune lift pid
                                 new InstantCommand(arm::toDeposit),
                                 //new LiftToPositionCommand(lift, 100, 25),
+
+                                new WaitCommand(250),
 
 //                                new WaitCommand(100),
                                 new InstantCommand(wrist::tiltToDeposit),

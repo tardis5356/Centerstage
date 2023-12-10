@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.teleop;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
@@ -15,6 +17,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.IntakeInCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.IntakeOutCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.LiftToPositionCommand;
@@ -46,7 +49,8 @@ public class Gen1_TeleOp extends CommandOpMode {
     private Servo wristRoll;
 
     //keep track of time to ensure that e-game specific items dont trigger
-    ElapsedTime gametime = new ElapsedTime();
+    ElapsedTime runtime = new ElapsedTime();
+    ElapsedTime rumbleTimer = new ElapsedTime();
 
     // speed multiplier (granny mode)
     double FAST_SPEED_MULTIPLIER = 1.0;
@@ -84,8 +88,12 @@ public class Gen1_TeleOp extends CommandOpMode {
 
     private DcMotorEx mW;
 
+//    double startTime = 0;
+
     @Override
     public void initialize() {
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
+
         //init controllers
         driver1 = new GamepadEx(gamepad1);
         driver2 = new GamepadEx(gamepad2);
@@ -248,7 +256,7 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         // square to backdrop
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.A))
-                .whileActiveContinuous(() -> lift.squareToBackdrop());
+                .whileActiveContinuous(() -> lift.squareToBackdropBangBang());
 
         // Speed controls
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.B))
@@ -315,6 +323,9 @@ public class Gen1_TeleOp extends CommandOpMode {
     public void run() {
         super.run();
 
+        double start = System.nanoTime();
+
+
         //lift always runs with manual control tied to gamepads unless stated otherwise
         lift.manualControl(gamepad2.left_stick_y, gamepad2.right_stick_y);
 
@@ -336,24 +347,31 @@ public class Gen1_TeleOp extends CommandOpMode {
         LR = -gamepad1.left_stick_x;
         Rotation = -gamepad1.right_stick_x;
 
-        if(leds.checkLeftPixel() && !leds.checkRightPixel() && !gamepad1.isRumbling() || leds.checkRightPixel() && !leds.checkLeftPixel() && !gamepad1.isRumbling()){
-            gamepad1.rumbleBlips(1);
-            gamepad2.rumbleBlips(1);
-        }
+        if(rumbleTimer.seconds() >= 0.5) {
+//            if (leds.checkLeftPixel() && !leds.checkRightPixel() && !gamepad1.isRumbling() || leds.checkRightPixel() && !leds.checkLeftPixel() && !gamepad1.isRumbling()) {
+//                gamepad1.rumbleBlips(1);
+//                gamepad2.rumbleBlips(1);
+//            }
 
-        if(leds.checkLeftPixel() && leds.checkRightPixel() && !gamepad1.isRumbling()){
-            gamepad1.rumbleBlips(2);
-            gamepad2.rumbleBlips(2);
+            if (leds.checkLeftPixel() && leds.checkRightPixel()) {
+                gamepad1.rumbleBlips(2);
+                gamepad2.rumbleBlips(2);
+            }
+            rumbleTimer.reset();
         }
 
         //map motor power to vars (tb tested)
         //depending on the wheel, forward back, left right, and rotation's power may be different
         //think, if fb is positive, thus the bot should move forward, will the motor drive the bot forward if its power is positive.
         if(!gamepad1.a) {
-            mFL.setPower(FB + LR + Rotation);
-            mFR.setPower(FB - LR - Rotation);
-            mBL.setPower(FB - LR + Rotation);
-            mBR.setPower(FB + LR - Rotation);
+            double mFLPower = FB + LR + Rotation;
+            double mFRPower = FB - LR - Rotation;
+            double mBLPower = FB - LR + Rotation;
+            double mBRPower = FB + LR - Rotation;
+            mFL.setPower(mFLPower * CURRENT_SPEED_MULTIPLIER);
+            mFR.setPower(mFRPower * CURRENT_SPEED_MULTIPLIER);
+            mBL.setPower(mBLPower * CURRENT_SPEED_MULTIPLIER);
+            mBR.setPower(mBRPower * CURRENT_SPEED_MULTIPLIER);
         }
 
 //        if (gamepad1.a) { //&& gametime.seconds() > 90){
@@ -395,7 +413,8 @@ public class Gen1_TeleOp extends CommandOpMode {
         telemetry.addData("leftError", lift.getLeftError());
         telemetry.addData("rightError", lift.getRightError());
 
-        telemetry.update();
+        telemetry.addData("looptime", System.nanoTime()-start);
 
+        telemetry.update();
     }
 }
