@@ -52,7 +52,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
                             .forward(2)
                             .turn(Math.toRadians(45))
                             .forward(14)
-                            .back(4)
+                            .back(9)
                             .build();
 
             redBackstage_LeftSpikeToDecisionPoint =  //Shift to decision point
@@ -89,21 +89,23 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             redBackstage_WaypointToLeftSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointToBackdropWaypoint.end())
-                            .lineToLinearHeading(new Pose2d(-30, 32, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-50, 32, Math.toRadians(0)))
                             .build();
 
             redBackstage_WaypointToCenterSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointToBackdropWaypoint.end())
-                            .lineToLinearHeading(new Pose2d(-30, 35, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-49.5, 39, Math.toRadians(0)))
                             .build();
 
             redBackstage_WaypointToRightSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointToBackdropWaypoint.end())
-                            .lineToLinearHeading(new Pose2d(-30, 38, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-49.5, 46, Math.toRadians(0)))
                             .build();
 
             redBackstage_BackdropToCornerPark = //go to and spin to parking between backdrops
-                    drive.trajectorySequenceBuilder(redBackstage_StartPositionToDecisionPoint.end())
+                    drive.trajectorySequenceBuilder(redBackstage_WaypointToCenterSlots.end())
+                            .forward(4)
+                            .strafeLeft(24)
                             .lineToLinearHeading(new Pose2d(-56, 62, Math.toRadians(0)))
                             .build();
         }

@@ -20,6 +20,8 @@ import android.util.Size;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -33,8 +35,20 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainCon
 import org.firstinspires.ftc.teamcode.ARTEMIS.auto.FollowTrajectoryCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos.Artemis_ParkAutoTrajectories;
 import org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories;
+import org.firstinspires.ftc.teamcode.ARTEMIS.commands.IntakeInCommand;
+import org.firstinspires.ftc.teamcode.ARTEMIS.commands.IntakeOutCommand;
+import org.firstinspires.ftc.teamcode.ARTEMIS.commands.LiftToPositionCommand;
+import org.firstinspires.ftc.teamcode.ARTEMIS.commands.RobotToStateCommand;
+import org.firstinspires.ftc.teamcode.ARTEMIS.commands.WinchDeployCommand;
+import org.firstinspires.ftc.teamcode.ARTEMIS.commands.WinchPullUpCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Gripper;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.LEDs;
+import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Lift;
+import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Winch;
+import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Wrist;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.BluePropDetection;
 import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.RedPropDetection;
@@ -44,7 +58,7 @@ import java.util.concurrent.TimeUnit;
 
 //public class CSTB_redWings_Park {
 //@Disabled
-@Autonomous(group = "drive", name = "redBackstage Purple/Yellow+Park")
+@Autonomous(group = "drive", name = "redBackstage Purple+Yellow+Park")
 public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
@@ -55,13 +69,17 @@ public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
     public static TrajectorySequence redBackstage_DecisionPointToSpike, redBackstage_SpikeToDecisionPoint, redBackstage_WaypointToBackdrop;
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
+    private LEDs leds;
+    private Gripper gripper;
+    private Wrist wrist;
+    private Arm arm;
+    private Lift lift;
+    private Intake intake;
+    private Winch winch;
+
     @Override
     public void initialize() {
 //        MultipleTelemetry telemetry2 = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
-        drive = new SampleMecanumDrive(hardwareMap);
-        drive.setPoseEstimate(Artemis_ParkAutoTrajectories.redBackstage_StartPos);
-        Artemis_ParkAutoTrajectories.generateTrajectories(drive);
 
         ////////‼️‼️⁉️⁉️CAMERA INITIALIZATION/DEFINING ⁉️⁉️⁉️
 //        public void runOpMode () throw InterruptedException {
@@ -99,13 +117,19 @@ public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
 //        }
 
         drive = new SampleMecanumDrive(hardwareMap);
-        Intake intake = new Intake(hardwareMap);
-
 
         drive.setPoseEstimate(redBackstage_StartPos);
-        Artemis_PurpleParkAutoTrajectories.generateTrajectories(drive);
+        Artemis_PurpleYellowParkAutoTrajectories.generateTrajectories(drive);
 
-        //gripper.close();
+        intake = new Intake(hardwareMap);
+        leds = new LEDs(hardwareMap);
+        lift = new Lift(hardwareMap);
+        gripper = new Gripper(hardwareMap);
+        wrist = new Wrist(hardwareMap);
+        arm = new Arm(hardwareMap);
+        winch = new Winch(hardwareMap);
+
+        gripper.grabRight();
 ////////////////////////////DEFINING PARK TRAJECTORIES//////////////////////////////
 
         ////////////////////////////////////DONE DEFINING PARK TRAJECTORIES///////////////////////////////////////
@@ -162,13 +186,26 @@ public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
 
                 new FollowTrajectoryCommand(drive, redBackstage_StartPositionToDecisionPoint),
                 new FollowTrajectoryCommand(drive, redBackstage_DecisionPointToSpike),
-                new InstantCommand(intake::out),
-                new WaitCommand(700),
+                new InstantCommand(intake::slowOut),
+                new WaitCommand(500),
                 new InstantCommand(intake::stop),
                 new FollowTrajectoryCommand(drive, redBackstage_SpikeToDecisionPoint),
                 new FollowTrajectoryCommand(drive, redBackstage_DecisionPointToBackdropWaypoint),
-                new FollowTrajectoryCommand(drive, redBackstage_WaypointToBackdrop),
-                new FollowTrajectoryCommand(drive, redBackstage_BackdropToCornerPark)
+                new ParallelCommandGroup(
+                        new FollowTrajectoryCommand(drive, redBackstage_WaypointToBackdrop),
+                        new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit")
+                ),
+                new WaitCommand(1000),
+                new InstantCommand(gripper::releaseRight),
+                new WaitCommand(1000),
+                new ParallelDeadlineGroup(
+                        new FollowTrajectoryCommand(drive, redBackstage_BackdropToCornerPark),
+                        new SequentialCommandGroup(
+                                new WaitCommand(500),
+                                new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake")
+                        )
+                )
+
 
         ));
 

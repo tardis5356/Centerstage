@@ -10,7 +10,7 @@ public class IntakeOutSlowCommand extends SequentialCommandGroup {
     public IntakeOutSlowCommand(Intake intake) {
         addCommands(
                 new InstantCommand(intake::slowOut),
-                new WaitCommand(1000),
+                new WaitCommand(750),
                 new InstantCommand(intake::stop)
         );
     }
