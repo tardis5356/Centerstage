@@ -6,7 +6,6 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
 
 public class Artemis_PurpleParkAutoTrajectories {
 
@@ -31,7 +30,7 @@ public class Artemis_PurpleParkAutoTrajectories {
     public static final Pose2d redWings_XXXXSpikeMarkPos = new Pose2d(-14.5, 31, Math.toRadians(270));
 
     public static TrajectorySequence blueBackstage_StartPositionToDecisionPoint, blueBackstage_DecisionPointToCenterSpike, blueBackstage_DecisionPointToLeftSpike, blueBackstage_DecisionPointToRightSpike, blueBackstage_LeftSpikeToDecisionPoint, blueBackstage_RightSpikeToDecisionPoint, blueBackstage_CenterSpikeToDecisionPoint, blueBackstage_DecisionPointToCornerPark;
-    public static TrajectorySequence blueWings_StartPositionToDecisionPoint, blueWings_DecisionPointToCenterSpike, blueWings_DecisionPointToLeftSpike, blueWings_DecisionPointToRightSpike, blueWings_LeftSpikeToDecisionPoint, blueWings_RightSpikeToDecisionPoint, blueWings_CenterSpikeToDecisionPoint, blueWings_DecisionPointToCornerPark;
+    public static TrajectorySequence blueWings_StartPositionToDecisionPoint, blueWings_DecisionPointToCenterSpike, blueWings_DecisionPointToLeftSpike, blueWings_DecisionPointToRightSpike, blueWings_LeftSpikeToDecisionPoint, blueWings_RightSpikeToDecisionPoint, blueWings_CenterSpikeToDecisionPoint, blueWings_DecisionPointToCenterPark;
     public static TrajectorySequence redBackstage_StartPositionToDecisionPoint, redBackstage_DecisionPointToCenterSpike, redBackstage_DecisionPointToLeftSpike, redBackstage_DecisionPointToRightSpike, redBackstage_LeftSpikeToDecisionPoint, redBackstage_RightSpikeToDecisionPoint, redBackstage_CenterSpikeToDecisionPoint, redBackstage_DecisionPointToCornerPark;
     public static TrajectorySequence redWings_StartPositionToDecisionPoint, redWings_DecisionPointToCenterSpike, redWings_DecisionPointToLeftSpike, redWings_DecisionPointToRightSpike, redWings_LeftSpikeToDecisionPoint, redWings_RightSpikeToDecisionPoint, redWings_CenterSpikeToDecisionPoint, redWings_DecisionPointToCornerPark;
     public static void generateTrajectories(SampleMecanumDrive drive) {
@@ -138,7 +137,7 @@ public class Artemis_PurpleParkAutoTrajectories {
                             .build();
 
 
-            blueWings_DecisionPointToCornerPark = //go to and spin to parking between backdrops
+            blueWings_DecisionPointToCenterPark = //go to and spin to parking between backdrops
                     drive.trajectorySequenceBuilder(blueWings_DecisionPointPos)
                             .lineToLinearHeading(new Pose2d(-48, -8, Math.toRadians(0)))
                             .build();
@@ -159,7 +158,7 @@ public class Artemis_PurpleParkAutoTrajectories {
                             .forward(2)
                             .turn(Math.toRadians(45))
                             .forward(14)
-                            .back(4)
+                            .back(10)
                             .build();
 
             redBackstage_LeftSpikeToDecisionPoint =  //Shift to decision point
@@ -233,7 +232,7 @@ public class Artemis_PurpleParkAutoTrajectories {
 
             redWings_DecisionPointToRightSpike = //shift and go forward to score right
                     drive.trajectorySequenceBuilder(redWings_DecisionPointPos)
-                            .forward(16)
+                            .forward(22)
                             .turn(Math.toRadians(90))
                             .forward(2)
                             .build();
@@ -246,7 +245,8 @@ public class Artemis_PurpleParkAutoTrajectories {
 
             redWings_DecisionPointToCornerPark = //go to and spin to parking between backdrops
                     drive.trajectorySequenceBuilder(redWings_DecisionPointPos)
-                            .lineToLinearHeading(new Pose2d(-48, 8, Math.toRadians(0)))
+                            .turn(Math.toRadians(-90))
+                            .lineToLinearHeading(new Pose2d(-55, 14, Math.toRadians(0)))
                             .build();
         }
 

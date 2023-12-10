@@ -144,7 +144,7 @@ public class redWings_PurpleParkAuto extends CommandOpMode {
                 new WaitCommand(700),
                 new InstantCommand(intake::stop),
                 new FollowTrajectoryCommand(drive, redWings_SpikeToDecisionPoint),
-                new FollowTrajectoryCommand(drive, redWings_DecisionPointToCenterPark)
+                new FollowTrajectoryCommand(drive, redWings_DecisionPointToCornerPark)
 
         ));
 
