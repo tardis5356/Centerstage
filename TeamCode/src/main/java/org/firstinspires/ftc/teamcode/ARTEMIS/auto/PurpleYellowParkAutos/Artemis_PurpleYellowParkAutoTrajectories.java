@@ -33,7 +33,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
     public static TrajectorySequence blueBackstage_StartPositionToDecisionPoint, blueBackstage_DecisionPointToCenterSpike, blueBackstage_DecisionPointToLeftSpike, blueBackstage_DecisionPointToRightSpike, blueBackstage_LeftSpikeToDecisionPoint, blueBackstage_RightSpikeToDecisionPoint, blueBackstage_CenterSpikeToDecisionPoint, blueBackstage_DecisionPointToCornerPark;
     public static TrajectorySequence blueWings_StartPositionToDecisionPoint, blueWings_DecisionPointToCenterSpike, blueWings_DecisionPointToLeftSpike, blueWings_DecisionPointToRightSpike, blueWings_LeftSpikeToDecisionPoint, blueWings_RightSpikeToDecisionPoint, blueWings_CenterSpikeToDecisionPoint, blueWings_DecisionPointToCornerPark;
-    public static TrajectorySequence redBackstage_StartPositionToDecisionPoint, redBackstage_DecisionPointToCenterSpike, redBackstage_DecisionPointToLeftSpike, redBackstage_DecisionPointToRightSpike, redBackstage_LeftSpikeToDecisionPoint, redBackstage_RightSpikeToDecisionPoint, redBackstage_CenterSpikeToDecisionPoint, redBackstage_DecisionPointToBackdropWaypoint, redBackstage_WaypointToLeftSlots, redBackstage_WaypointToCenterSlots, redBackstage_WaypointToRightSlots;
+    public static TrajectorySequence redBackstage_StartPositionToDecisionPoint, redBackstage_DecisionPointToCenterSpike, redBackstage_DecisionPointToLeftSpike, redBackstage_DecisionPointToRightSpike, redBackstage_LeftSpikeToDecisionPoint, redBackstage_RightSpikeToDecisionPoint, redBackstage_CenterSpikeToDecisionPoint, redBackstage_DecisionPointToBackdropWaypoint, redBackstage_WaypointToLeftSlots, redBackstage_WaypointToCenterSlots, redBackstage_WaypointToRightSlots, redBackstage_BackdropToCornerPark;
     public static TrajectorySequence redWings_StartPositionToDecisionPoint, redWings_DecisionPointToCenterSpike, redWings_DecisionPointToLeftSpike, redWings_DecisionPointToRightSpike, redWings_LeftSpikeToDecisionPoint, redWings_RightSpikeToDecisionPoint, redWings_CenterSpikeToDecisionPoint, redWings_DecisionPointToCornerPark;
     public static void generateTrajectories(SampleMecanumDrive drive) {
 
@@ -102,10 +102,10 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
                             .lineToLinearHeading(new Pose2d(-30, 38, Math.toRadians(0)))
                             .build();
 
-//            redBackstage_DecisionPointToCornerPark = //go to and spin to parking between backdrops
-//                    drive.trajectorySequenceBuilder(redBackstage_StartPositionToDecisionPoint.end())
-//                            .lineToLinearHeading(new Pose2d(-56, 62, Math.toRadians(0)))
-//                            .build();
+            redBackstage_BackdropToCornerPark = //go to and spin to parking between backdrops
+                    drive.trajectorySequenceBuilder(redBackstage_StartPositionToDecisionPoint.end())
+                            .lineToLinearHeading(new Pose2d(-56, 62, Math.toRadians(0)))
+                            .build();
         }
 
     }

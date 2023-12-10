@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos;
 
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_BackdropToCornerPark;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSpikeToDecisionPoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToCenterSpike;
@@ -43,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 
 //public class CSTB_redWings_Park {
 //@Disabled
-@Autonomous(group = "drive", name = "A redBackstage Purple/Yellow+Park")
+@Autonomous(group = "drive", name = "redBackstage Purple/Yellow+Park")
 public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
@@ -166,7 +167,8 @@ public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
                 new InstantCommand(intake::stop),
                 new FollowTrajectoryCommand(drive, redBackstage_SpikeToDecisionPoint),
                 new FollowTrajectoryCommand(drive, redBackstage_DecisionPointToBackdropWaypoint),
-                new FollowTrajectoryCommand(drive, redBackstage_WaypointToBackdrop)
+                new FollowTrajectoryCommand(drive, redBackstage_WaypointToBackdrop),
+                new FollowTrajectoryCommand(drive, redBackstage_BackdropToCornerPark)
 
         ));
 
