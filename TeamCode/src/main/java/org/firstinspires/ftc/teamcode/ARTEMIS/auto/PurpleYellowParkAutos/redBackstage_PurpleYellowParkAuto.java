@@ -1,14 +1,18 @@
-package org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos;
+package org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_CenterSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_DecisionPointToCenterSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_DecisionPointToCornerPark;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_DecisionPointToLeftSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_DecisionPointToRightSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_LeftSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_RightSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_StartPos;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories.redBackstage_StartPositionToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSpikeToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToCenterSpike;
+//import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToCornerPark;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToLeftSpike;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToRightSpike;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_LeftSpikeToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_RightSpikeToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_StartPos;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_StartPositionToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_WaypointToCenterSlots;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_WaypointToLeftSlots;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_WaypointToRightSlots;
 
 import android.util.Size;
 
@@ -27,6 +31,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.Exposur
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.teamcode.ARTEMIS.auto.FollowTrajectoryCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos.Artemis_ParkAutoTrajectories;
+import org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos.Artemis_PurpleParkAutoTrajectories;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;
@@ -38,15 +43,15 @@ import java.util.concurrent.TimeUnit;
 
 //public class CSTB_redWings_Park {
 //@Disabled
-@Autonomous(group = "drive", name = "A redBackstage Purple+Park")
-public class redBackstage_PurpleParkAuto extends CommandOpMode {
+@Autonomous(group = "drive", name = "A redBackstage Purple/Yellow+Park")
+public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
     private SampleMecanumDrive drive;
     private VisionPortal portal;
     private RedPropDetection redPropThreshold;
     //    private Lift lift;
-    public static TrajectorySequence redBackstage_DecisionPointToSpike, redBackstage_SpikeToDecisionPoint;
+    public static TrajectorySequence redBackstage_DecisionPointToSpike, redBackstage_SpikeToDecisionPoint, redBackstage_WaypointToBackdrop;
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
     @Override
@@ -124,6 +129,22 @@ public class redBackstage_PurpleParkAuto extends CommandOpMode {
                 break;
         }
 
+        switch (redPropThreshold.getPropPosition()) {
+            case "left":
+                redBackstage_WaypointToBackdrop = redBackstage_WaypointToLeftSlots;
+                telemetry.addLine("park traj 1");
+                break;
+            default:
+            case "center":
+                redBackstage_WaypointToBackdrop = redBackstage_WaypointToCenterSlots;
+                telemetry.addLine("park traj 2");
+                break;
+            case "right":
+                redBackstage_WaypointToBackdrop = redBackstage_WaypointToRightSlots;
+                telemetry.addLine("park traj 3");
+                break;
+        }
+
         telemetry.setMsTransmissionInterval(50);
 
         while (!isStarted() && !isStopRequested()) {
@@ -144,7 +165,8 @@ public class redBackstage_PurpleParkAuto extends CommandOpMode {
                 new WaitCommand(700),
                 new InstantCommand(intake::stop),
                 new FollowTrajectoryCommand(drive, redBackstage_SpikeToDecisionPoint),
-                new FollowTrajectoryCommand(drive, redBackstage_DecisionPointToCornerPark)
+                new FollowTrajectoryCommand(drive, redBackstage_DecisionPointToBackdropWaypoint),
+                new FollowTrajectoryCommand(drive, redBackstage_WaypointToBackdrop)
 
         ));
 
