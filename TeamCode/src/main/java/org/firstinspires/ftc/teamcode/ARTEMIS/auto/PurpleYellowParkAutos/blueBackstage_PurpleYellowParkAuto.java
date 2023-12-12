@@ -134,45 +134,43 @@ public class blueBackstage_PurpleYellowParkAuto extends CommandOpMode {
 
         ////////////////////////////////////DONE DEFINING PARK TRAJECTORIES///////////////////////////////////////
 
-
-        switch (bluePropThreshold.getPropPosition()) {
-            case "left":
-                blueBackstage_DecisionPointToSpike = blueBackstage_DecisionPointToLeftSpike;
-                blueBackstage_SpikeToDecisionPoint = blueBackstage_LeftSpikeToDecisionPoint;
-                telemetry.addLine("park traj 1");
-                break;
-            default:
-            case "center":
-                blueBackstage_DecisionPointToSpike = blueBackstage_DecisionPointToCenterSpike;
-                blueBackstage_SpikeToDecisionPoint = blueBackstage_CenterSpikeToDecisionPoint;
-                telemetry.addLine("park traj 2");
-                break;
-            case "right":
-                blueBackstage_DecisionPointToSpike = blueBackstage_DecisionPointToRightSpike;
-                blueBackstage_SpikeToDecisionPoint = blueBackstage_RightSpikeToDecisionPoint;
-                telemetry.addLine("park traj 3");
-                break;
-        }
-
-        switch (bluePropThreshold.getPropPosition()) {
-            case "left":
-                blueBackstage_WaypointToBackdrop = blueBackstage_WaypointToLeftSlots;
-                telemetry.addLine("park traj 1");
-                break;
-            default:
-            case "center":
-                blueBackstage_WaypointToBackdrop = blueBackstage_WaypointToCenterSlots;
-                telemetry.addLine("park traj 2");
-                break;
-            case "right":
-                blueBackstage_WaypointToBackdrop = blueBackstage_WaypointToRightSlots;
-                telemetry.addLine("park traj 3");
-                break;
-        }
-
         telemetry.setMsTransmissionInterval(50);
 
         while (!isStarted() && !isStopRequested()) {
+            switch (bluePropThreshold.getPropPosition()) {
+                case "left":
+                    blueBackstage_DecisionPointToSpike = blueBackstage_DecisionPointToLeftSpike;
+                    blueBackstage_SpikeToDecisionPoint = blueBackstage_LeftSpikeToDecisionPoint;
+                    telemetry.addLine("park traj 1");
+                    break;
+                default:
+                case "center":
+                    blueBackstage_DecisionPointToSpike = blueBackstage_DecisionPointToCenterSpike;
+                    blueBackstage_SpikeToDecisionPoint = blueBackstage_CenterSpikeToDecisionPoint;
+                    telemetry.addLine("park traj 2");
+                    break;
+                case "right":
+                    blueBackstage_DecisionPointToSpike = blueBackstage_DecisionPointToRightSpike;
+                    blueBackstage_SpikeToDecisionPoint = blueBackstage_RightSpikeToDecisionPoint;
+                    telemetry.addLine("park traj 3");
+                    break;
+            }
+
+            switch (bluePropThreshold.getPropPosition()) {
+                case "left":
+                    blueBackstage_WaypointToBackdrop = blueBackstage_WaypointToLeftSlots;
+                    telemetry.addLine("park traj 1");
+                    break;
+                default:
+                case "center":
+                    blueBackstage_WaypointToBackdrop = blueBackstage_WaypointToCenterSlots;
+                    telemetry.addLine("park traj 2");
+                    break;
+                case "right":
+                    blueBackstage_WaypointToBackdrop = blueBackstage_WaypointToRightSlots;
+                    telemetry.addLine("park traj 3");
+                    break;
+            }
 
             telemetry.addLine("waitForStart");
             telemetry.addData("Prop Position", bluePropThreshold.getPropPosition());
@@ -187,7 +185,7 @@ public class blueBackstage_PurpleYellowParkAuto extends CommandOpMode {
                 new FollowTrajectoryCommand(drive, blueBackstage_StartPositionToDecisionPoint),
                 new FollowTrajectoryCommand(drive, blueBackstage_DecisionPointToSpike),
                 new InstantCommand(intake::slowOut),
-                new WaitCommand(500),
+                new WaitCommand(750),
                 new InstantCommand(intake::stop),
                 new FollowTrajectoryCommand(drive, blueBackstage_SpikeToDecisionPoint),
                 new FollowTrajectoryCommand(drive, blueBackstage_DecisionPointToBackdropWaypoint),

@@ -15,7 +15,7 @@ public class BotPositions {
     public static double LEFT_BRACE_EXTENDED = 0.77, RIGHT_BRACE_EXTENDED = 0.7, LEFT_BRACE_OVEREXTENDED = 1, RIGHT_BRACE_OVEREXTENDED = 0.45;
 
     //intake powers and positions
-    public static double INTAKE_MOTOR_INWARD_POWER = 1, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.3;
+    public static double INTAKE_MOTOR_INWARD_POWER = 1, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.5;
     //the stationary intake power is 0, what did you think it'd be?
 
     //gripper positions
