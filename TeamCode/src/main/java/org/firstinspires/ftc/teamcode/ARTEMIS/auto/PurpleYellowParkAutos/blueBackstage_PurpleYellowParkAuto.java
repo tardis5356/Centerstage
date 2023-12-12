@@ -1,13 +1,16 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos;
 
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_BackdropToCornerPark;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_CenterSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_CenterSpikeToDecisionPoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_DecisionPointToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_DecisionPointToCenterSpike;
 //import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_DecisionPointToCornerPark;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_DecisionPointToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_DecisionPointToRightSpike;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_LeftSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_LeftSpikeToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_RightSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_RightSpikeToDecisionPoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_StartPos;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueBackstage_StartPositionToDecisionPoint;
@@ -66,7 +69,7 @@ public class blueBackstage_PurpleYellowParkAuto extends CommandOpMode {
     private VisionPortal portal;
     private BluePropDetection bluePropThreshold;
     //    private Lift lift;
-    public static TrajectorySequence blueBackstage_DecisionPointToSpike, blueBackstage_SpikeToDecisionPoint, blueBackstage_WaypointToBackdrop;
+    public static TrajectorySequence blueBackstage_DecisionPointToSpike, blueBackstage_SpikeToDecisionPoint, blueBackstage_WaypointToBackdrop, blueBackstage_BackdropToBackdropWaypoint;
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
     private LEDs leds;
@@ -141,33 +144,29 @@ public class blueBackstage_PurpleYellowParkAuto extends CommandOpMode {
                 case "left":
                     blueBackstage_DecisionPointToSpike = blueBackstage_DecisionPointToLeftSpike;
                     blueBackstage_SpikeToDecisionPoint = blueBackstage_LeftSpikeToDecisionPoint;
+
+                    blueBackstage_WaypointToBackdrop = blueBackstage_WaypointToLeftSlots;
+                    blueBackstage_BackdropToBackdropWaypoint = blueBackstage_LeftSlotsToBackdropWaypoint;
+
                     telemetry.addLine("park traj 1");
                     break;
                 default:
                 case "center":
                     blueBackstage_DecisionPointToSpike = blueBackstage_DecisionPointToCenterSpike;
                     blueBackstage_SpikeToDecisionPoint = blueBackstage_CenterSpikeToDecisionPoint;
+
+                    blueBackstage_WaypointToBackdrop = blueBackstage_WaypointToCenterSlots;
+                    blueBackstage_BackdropToBackdropWaypoint = blueBackstage_CenterSlotsToBackdropWaypoint;
+
                     telemetry.addLine("park traj 2");
                     break;
                 case "right":
                     blueBackstage_DecisionPointToSpike = blueBackstage_DecisionPointToRightSpike;
                     blueBackstage_SpikeToDecisionPoint = blueBackstage_RightSpikeToDecisionPoint;
-                    telemetry.addLine("park traj 3");
-                    break;
-            }
 
-            switch (bluePropThreshold.getPropPosition()) {
-                case "left":
-                    blueBackstage_WaypointToBackdrop = blueBackstage_WaypointToLeftSlots;
-                    telemetry.addLine("park traj 1");
-                    break;
-                default:
-                case "center":
-                    blueBackstage_WaypointToBackdrop = blueBackstage_WaypointToCenterSlots;
-                    telemetry.addLine("park traj 2");
-                    break;
-                case "right":
                     blueBackstage_WaypointToBackdrop = blueBackstage_WaypointToRightSlots;
+                    blueBackstage_BackdropToBackdropWaypoint = blueBackstage_RightSlotsToBackdropWaypoint;
+
                     telemetry.addLine("park traj 3");
                     break;
             }
@@ -197,7 +196,10 @@ public class blueBackstage_PurpleYellowParkAuto extends CommandOpMode {
                 new InstantCommand(gripper::releaseRight),
                 new WaitCommand(1000),
                 new ParallelDeadlineGroup(
-                        new FollowTrajectoryCommand(drive, blueBackstage_BackdropToCornerPark),
+                        new SequentialCommandGroup(
+                                new FollowTrajectoryCommand(drive, blueBackstage_BackdropToBackdropWaypoint),
+                                new FollowTrajectoryCommand(drive, blueBackstage_BackdropToCornerPark)
+                                ),
                         new SequentialCommandGroup(
                                 new WaitCommand(500),
                                 new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake")
