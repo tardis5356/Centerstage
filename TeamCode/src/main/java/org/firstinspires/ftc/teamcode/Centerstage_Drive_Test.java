@@ -8,13 +8,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Disabled
+//@Disabled
 @TeleOp (name = "Centerstage_Drive_Test")
 public class Centerstage_Drive_Test extends LinearOpMode {
 
     double FB;
     double LR;
     double Rotation;
+
 
     DcMotor mFL, mFR, mBL, mBR;
     Servo Drone;
@@ -44,11 +45,11 @@ public class Centerstage_Drive_Test extends LinearOpMode {
             mBL.setPower(FB-LR+Rotation);
             mBR.setPower(FB+LR-Rotation);
 
-            if (gamepad1.a){
-                Drone.setPosition(.2);
+            if (gamepad1.b == true){
+                Drone.setPosition(Test_Bed_Drone_Positions.Launched);
             }
             else{
-                Drone.setPosition(.1);
+                Drone.setPosition(Test_Bed_Drone_Positions.Latched);
             }
 
         }
