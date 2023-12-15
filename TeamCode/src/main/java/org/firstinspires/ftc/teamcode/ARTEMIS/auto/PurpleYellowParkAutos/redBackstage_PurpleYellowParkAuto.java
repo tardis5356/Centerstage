@@ -1,16 +1,19 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos;
 
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSlotsToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_LeftSlotsToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_RightSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_WaypointToCornerPark;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSlotsToWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSpikeToDecisionPoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToCenterSpike;
 //import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToCornerPark;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToRightSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_LeftSlotsToWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_LeftSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_LeftSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_RightSlotsToWaypoint;
+//import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_RightSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_RightSpikeToDecisionPoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_StartPos;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_StartPositionToDecisionPoint;
@@ -165,16 +168,16 @@ public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
 
         switch (redPropThreshold.getPropPosition()) {
             case "left":
-                redBackstage_BackdropToWaypoint = redBackstage_LeftSlotsToWaypoint;
+                redBackstage_BackdropToWaypoint = redBackstage_LeftSlotsToBackdropWaypoint;
                 telemetry.addLine("park traj 1");
                 break;
             default:
             case "center":
-                redBackstage_BackdropToWaypoint = redBackstage_CenterSlotsToWaypoint;
+                redBackstage_BackdropToWaypoint = redBackstage_CenterSlotsToBackdropWaypoint;
                 telemetry.addLine("park traj 2");
                 break;
             case "right":
-                redBackstage_BackdropToWaypoint = redBackstage_RightSlotsToWaypoint;
+                redBackstage_BackdropToWaypoint = redBackstage_RightSlotsToBackdropWaypoint;
                 telemetry.addLine("park traj 3");
                 break;
         }

@@ -11,14 +11,14 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
 
     //BLUE BACKSTAGE
-    public static final Pose2d blueBackstage_StartPos = new Pose2d(-12.5, -64.5, Math.toRadians(90));
+    public static final Pose2d blueBackstage_StartPos = new Pose2d(-8.5, -64.5, Math.toRadians(90));
     public static final Pose2d blueBackstage_DecisionPointPos = new Pose2d(-12.5, -48, Math.toRadians(90));
     public static final Pose2d blueBackstage_BackdropWaypointPos = new Pose2d(-38, -38, Math.toRadians(0));
 
 
     //BLUE WINGS
     public static final Pose2d blueWings_StartPos = new Pose2d(36.5, -64.5, Math.toRadians(90));
-    public static final Pose2d blueWings_DecisionPointPos = new Pose2d(40.5, -13, Math.toRadians(270));
+    public static final Pose2d blueWings_DecisionPointPos = new Pose2d(40.5, -13, Math.toRadians(90));
     public static final Pose2d blueWings_BackdropWaypointPos = new Pose2d(-38, -34, Math.toRadians(0));
 
     //RED BACKSTAGE
@@ -52,6 +52,8 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
                     drive.trajectorySequenceBuilder(blueBackstage_DecisionPointPos)
                             .forward(4)
                             .turn(Math.toRadians(45))
+                            .forward(12)
+                            .back(12.5)
                             .build();
 
             blueBackstage_LeftSpikeToDecisionPoint =  //Shift to decision point
@@ -85,13 +87,13 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             blueBackstage_DecisionPointToBackdropWaypoint = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(blueBackstage_DecisionPointPos)
-                            .back(4)
+                            .back(8)
                             .lineToLinearHeading(new Pose2d(-38, -38, Math.toRadians(0)))
                             .build();
 
             blueBackstage_WaypointToLeftSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(blueBackstage_BackdropWaypointPos)
-                            .lineToLinearHeading(new Pose2d(-50, -44, Math.toRadians(0)), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            .lineToLinearHeading(new Pose2d(-50.35, -44, Math.toRadians(0)), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                     SampleMecanumDrive.getAccelerationConstraint(40))
                             .build();
 
@@ -102,7 +104,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             blueBackstage_WaypointToRightSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(blueBackstage_BackdropWaypointPos)
-                            .lineToLinearHeading(new Pose2d(-49.5, -28, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-49, -28, Math.toRadians(0)))
                             .build();
 
             blueBackstage_LeftSlotsToBackdropWaypoint =
@@ -126,7 +128,8 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
             blueBackstage_BackdropToCornerPark = //go to and spin to parking between backdrops
                     drive.trajectorySequenceBuilder(blueBackstage_BackdropWaypointPos)
                             .strafeRight(24)
-                            .lineToLinearHeading(new Pose2d(-56, -62, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-59, -58, Math.toRadians(0)))
+                            .back(3)
                             .build();
         }
 

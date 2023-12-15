@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos;
 
 //import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_BackdropToCornerPark;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSlotsToWaypoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_LeftSlotsToWaypoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_RightSlotsToWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSlotsToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_LeftSlotsToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_RightSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_WaypointToCornerPark;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_BackdropToCenterPark;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_CenterSpikeToDecisionPoint;
@@ -149,7 +149,7 @@ public class redWings_PurpleYellowParkAuto extends CommandOpMode {
                 redWings_SpikeToDecisionPoint = redWings_LeftSpikeToDecisionPoint;
 
                 redWings_WaypointToBackdrop = redWings_WaypointToLeftSlots;
-                redWings_BackdropToWaypoint = redBackstage_LeftSlotsToWaypoint;
+                redWings_BackdropToWaypoint = redBackstage_LeftSlotsToBackdropWaypoint;
 
                 telemetry.addLine("park traj 1");
                 break;
@@ -159,7 +159,7 @@ public class redWings_PurpleYellowParkAuto extends CommandOpMode {
                 redWings_SpikeToDecisionPoint = redWings_CenterSpikeToDecisionPoint;
 
                 redWings_WaypointToBackdrop = redWings_WaypointToCenterSlots;
-                redWings_BackdropToWaypoint = redBackstage_CenterSlotsToWaypoint;
+                redWings_BackdropToWaypoint = redBackstage_CenterSlotsToBackdropWaypoint;
 
                 telemetry.addLine("park traj 2");
                 break;
@@ -168,7 +168,7 @@ public class redWings_PurpleYellowParkAuto extends CommandOpMode {
                 redWings_SpikeToDecisionPoint = redWings_RightSpikeToDecisionPoint;
 
                 redWings_WaypointToBackdrop = redWings_WaypointToRightSlots;
-                redWings_BackdropToWaypoint = redBackstage_RightSlotsToWaypoint;
+                redWings_BackdropToWaypoint = redBackstage_RightSlotsToBackdropWaypoint;
 
                 telemetry.addLine("park traj 3");
                 break;
