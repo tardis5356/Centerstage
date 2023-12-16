@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_LeftSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_RightSlotsToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_WaypointToCenterPark;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_WaypointToCornerPark;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSpikeToDecisionPoint;
@@ -195,13 +196,14 @@ public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
 
         telemetry.update();
         schedule(new SequentialCommandGroup(
-
+                new InstantCommand(() -> leds.setLEDstate("purple")),
                 new FollowTrajectoryCommand(drive, redBackstage_StartPositionToDecisionPoint),
                 new FollowTrajectoryCommand(drive, redBackstage_DecisionPointToSpike),
                 new InstantCommand(intake::slowOut),
                 new WaitCommand(1500),
                 new InstantCommand(intake::stop),
                 new FollowTrajectoryCommand(drive, redBackstage_SpikeToDecisionPoint),
+                new InstantCommand(() -> leds.setLEDstate("yellow")),
                 new FollowTrajectoryCommand(drive, redBackstage_DecisionPointToBackdropWaypoint),
                 new ParallelCommandGroup(
                         new FollowTrajectoryCommand(drive, redBackstage_WaypointToBackdrop),
@@ -213,6 +215,7 @@ public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
                 new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
                                 new FollowTrajectoryCommand(drive, redBackstage_BackdropToWaypoint),
+                                new InstantCommand(() -> leds.setLEDstate("idle")),
                                 new FollowTrajectoryCommand(drive, redBackstage_WaypointToCornerPark)
                         ),
                         new SequentialCommandGroup(

@@ -127,6 +127,12 @@ public class Gen1_TeleOp extends CommandOpMode {
         robotToDepositCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit");
         robotToIntakeCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake");
         robotGrabPixelsCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "grab_pixels");
+
+        arm.toIntake();
+        wrist.tiltToIntake();
+        wrist.rollToCentered();
+
+        leds.setLEDstate("idle");
 /*
 
     Driver

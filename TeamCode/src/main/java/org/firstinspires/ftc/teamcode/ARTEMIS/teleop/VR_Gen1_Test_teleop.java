@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -32,6 +33,7 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Wrist;
 
 
 @TeleOp(name = "VR_Gen1_Debug")
+@Disabled
 public class VR_Gen1_Test_teleop extends CommandOpMode {
     //gamepads
     private GamepadEx driver1, driver2;
@@ -129,25 +131,25 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
 
         //triggers to change the led color to signal to human player what pixels are needed
-        new Trigger(() -> driver2.getButton(GamepadKeys.Button.A))
-                .whenActive(new InstantCommand(() -> {
-                    leds.changeColor(leds.Green);
-                }));
-
-        new Trigger(() -> driver2.getButton(GamepadKeys.Button.X))
-                .whenActive(new InstantCommand(() -> {
-                    leds.changeColor(leds.Purple);
-                }));
-
-        new Trigger(() -> driver2.getButton(GamepadKeys.Button.Y))
-                .whenActive(new InstantCommand(() -> {
-                    leds.changeColor(leds.Yellow);
-                }));
-
-        new Trigger(() -> driver2.getButton(GamepadKeys.Button.B))
-                .whenActive(new InstantCommand(() -> {
-                    leds.changeColor(leds.White);
-                }));
+//        new Trigger(() -> driver2.getButton(GamepadKeys.Button.A))
+//                .whenActive(new InstantCommand(() -> {
+//                    leds.changeColor(leds.Green);
+//                }));
+//
+//        new Trigger(() -> driver2.getButton(GamepadKeys.Button.X))
+//                .whenActive(new InstantCommand(() -> {
+//                    leds.changeColor(leds.Purple);
+//                }));
+//
+//        new Trigger(() -> driver2.getButton(GamepadKeys.Button.Y))
+//                .whenActive(new InstantCommand(() -> {
+//                    leds.changeColor(leds.Yellow);
+//                }));
+//
+//        new Trigger(() -> driver2.getButton(GamepadKeys.Button.B))
+//                .whenActive(new InstantCommand(() -> {
+//                    leds.changeColor(leds.White);
+//                }));
 
 
         //triggers to open and close gripper
