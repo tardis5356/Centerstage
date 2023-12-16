@@ -206,7 +206,7 @@ public class redWings_PurpleYellowParkAuto extends CommandOpMode {
                 new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
                                 new FollowTrajectoryCommand(drive, redWings_BackdropToWaypoint),
-                                new FollowTrajectoryCommand(drive, redBackstage_WaypointToCornerPark)
+                                new FollowTrajectoryCommand(drive, redWings_BackdropToCenterPark)
                         ),
                         new SequentialCommandGroup(
                                 new WaitCommand(500),

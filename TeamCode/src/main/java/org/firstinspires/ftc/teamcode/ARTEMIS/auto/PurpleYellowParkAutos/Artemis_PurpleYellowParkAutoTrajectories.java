@@ -18,7 +18,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
     //BLUE WINGS
     public static final Pose2d blueWings_StartPos = new Pose2d(36.5, -64.5, Math.toRadians(90));
-    public static final Pose2d blueWings_DecisionPointPos = new Pose2d(40.5, -13, Math.toRadians(90));
+    public static final Pose2d blueWings_DecisionPointPos = new Pose2d(40.5, -13, Math.toRadians(270));
     public static final Pose2d blueWings_BackdropWaypointPos = new Pose2d(-38, -34, Math.toRadians(0));
 
     //RED BACKSTAGE
@@ -28,7 +28,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
     //RED WINGS
     public static final Pose2d redWings_StartPos = new Pose2d(36.5, 64.5, Math.toRadians(270));
-    public static final Pose2d redWings_DecisionPointPos = new Pose2d(40.5, 14, Math.toRadians(90));
+    public static final Pose2d redWings_DecisionPointPos = new Pose2d(40.5, 11, Math.toRadians(90));
     public static final Pose2d redWings_BackdropWaypointPos = new Pose2d(-38, 38, Math.toRadians(0));
 
     public static TrajectorySequence blueBackstage_StartPositionToDecisionPoint, blueBackstage_DecisionPointToCenterSpike, blueBackstage_DecisionPointToLeftSpike, blueBackstage_DecisionPointToRightSpike, blueBackstage_LeftSpikeToDecisionPoint, blueBackstage_RightSpikeToDecisionPoint, blueBackstage_CenterSpikeToDecisionPoint, blueBackstage_DecisionPointToBackdropWaypoint, blueBackstage_WaypointToLeftSlots, blueBackstage_WaypointToCenterSlots, blueBackstage_WaypointToRightSlots, blueBackstage_LeftSlotsToBackdropWaypoint, blueBackstage_CenterSlotsToBackdropWaypoint, blueBackstage_RightSlotsToBackdropWaypoint, blueBackstage_BackdropToCornerPark;
@@ -64,7 +64,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
             blueBackstage_DecisionPointToCenterSpike = //shift and go forward to score center
                     drive.trajectorySequenceBuilder(blueBackstage_DecisionPointPos)
                             .forward(18)
-                            .back(7)
+                            .back(6)
                             .build();
 
             blueBackstage_CenterSpikeToDecisionPoint =  //Shift to decision point
@@ -93,18 +93,18 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             blueBackstage_WaypointToLeftSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(blueBackstage_BackdropWaypointPos)
-                            .lineToLinearHeading(new Pose2d(-50.35, -44, Math.toRadians(0)), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            .lineToLinearHeading(new Pose2d(-50.35, -42, Math.toRadians(0)), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                     SampleMecanumDrive.getAccelerationConstraint(40))
                             .build();
 
             blueBackstage_WaypointToCenterSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(blueBackstage_BackdropWaypointPos)
-                            .lineToLinearHeading(new Pose2d(-50.25, -37, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-50.65, -35, Math.toRadians(0)))
                             .build();
 
             blueBackstage_WaypointToRightSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(blueBackstage_BackdropWaypointPos)
-                            .lineToLinearHeading(new Pose2d(-49, -28, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-51.5, -27.5, Math.toRadians(0)))
                             .build();
 
             blueBackstage_LeftSlotsToBackdropWaypoint =
@@ -128,8 +128,9 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
             blueBackstage_BackdropToCornerPark = //go to and spin to parking between backdrops
                     drive.trajectorySequenceBuilder(blueBackstage_BackdropWaypointPos)
                             .strafeRight(24)
-                            .lineToLinearHeading(new Pose2d(-59, -58, Math.toRadians(0)))
-                            .back(3)
+                            .turn(Math.toRadians(90))
+//                            .lineToLinearHeading(new Pose2d(-68, -56, Math.toRadians(0)))
+                            .back(24)
                             .build();
         }
 
@@ -147,7 +148,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             blueWings_DecisionPointToLeftSpike = //shift and go forward to score center
                     drive.trajectorySequenceBuilder(blueWings_DecisionPointPos)
-                            .forward(12)
+                            .forward(14)
                             .turn(Math.toRadians(-90))
                             .forward(2)
                             .build();
@@ -183,7 +184,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
             blueWings_DecisionPointToSafetyWaypoint = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(blueWings_DecisionPointPos)
                             .turn(Math.toRadians(90))
-                            .lineToLinearHeading(new Pose2d(-38, -13, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-38, -10, Math.toRadians(0)))
                             .build();
 
             blueWings_SafetyWaypointToBackdropWaypoint = //decision point to position around backdrop to prep for where to score yellow
@@ -204,7 +205,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             blueWings_WaypointToCenterSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(blueWings_BackdropWaypointPos)
-                            .lineToLinearHeading(new Pose2d(-47.5, -34.5, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-47.5, -34, Math.toRadians(0)))
                             .build();
 
             blueWings_WaypointToRightSlots = //decision point to position around backdrop to prep for where to score yellow
@@ -301,12 +302,12 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             redBackstage_WaypointToCenterSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointToBackdropWaypoint.end())
-                            .lineToLinearHeading(new Pose2d(-49.5, 39, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-50, 39, Math.toRadians(0)))
                             .build();
 
             redBackstage_WaypointToRightSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointToBackdropWaypoint.end())
-                            .lineToLinearHeading(new Pose2d(-49.5, 46, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-50, 46, Math.toRadians(0)))
                             .build();
 
             redBackstage_LeftSlotsToBackdropWaypoint =
@@ -349,7 +350,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
             redWings_DecisionPointToLeftSpike = //shift and go forward to score center
                     drive.trajectorySequenceBuilder(redWings_DecisionPointPos)
                             .forward(2)
-                            .turn(Math.toRadians(45))
+                            .turn(Math.toRadians(-45))
                             .forward(14)
                             .back(5)
                             .build();
@@ -361,7 +362,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             redWings_DecisionPointToCenterSpike = //shift and go forward to score center
                     drive.trajectorySequenceBuilder(redWings_DecisionPointPos)
-                            .forward(2)
+                            .forward(6)
                             .build();
 
             redWings_CenterSpikeToDecisionPoint =  //Shift to decision point
@@ -371,8 +372,9 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             redWings_DecisionPointToRightSpike = //shift and go forward to score center
                     drive.trajectorySequenceBuilder(redWings_DecisionPointPos)
-                            .forward(6)
-                            .turn(Math.toRadians(-50))
+                            .forward(14)
+                            .turn(Math.toRadians(90))
+                            .forward(2)
                             .build();
 
             redWings_RightSpikeToDecisionPoint =  //Shift to decision point
@@ -383,7 +385,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
             redWings_DecisionPointToSafetyWaypoint = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(redWings_DecisionPointPos)
                             .turn(Math.toRadians(-90))
-                            .lineToLinearHeading(new Pose2d(-38, 12, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-38, 14, Math.toRadians(0)))
                             .build();
 
             redWings_SafetyWaypointToBackdropWaypoint = //decision point to position around backdrop to prep for where to score yellow
@@ -398,17 +400,17 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             redWings_WaypointToLeftSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(redWings_SafetyWaypointToBackdropWaypoint.end())
-                            .lineToLinearHeading(new Pose2d(-50, 32, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-51, 33, Math.toRadians(0)))
                             .build();
 
             redWings_WaypointToCenterSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(redWings_SafetyWaypointToBackdropWaypoint.end())
-                            .lineToLinearHeading(new Pose2d(-48, 41, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-49.5, 41, Math.toRadians(0)))
                             .build();
 
             redWings_WaypointToRightSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(redWings_SafetyWaypointToBackdropWaypoint.end())
-                            .lineToLinearHeading(new Pose2d(-49.5, 46, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-50, 46, Math.toRadians(0)))
                             .build();
 
             redWings_LeftSlotsToBackdropWaypoint =
@@ -433,6 +435,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
                     drive.trajectorySequenceBuilder(redWings_WaypointToCenterSlots.end())
                             .forward(4)
                             .strafeLeft(24)
+//                            .back(12)
                             .lineToLinearHeading(new Pose2d(-56, 62, Math.toRadians(0)))
                             .build();
         }
