@@ -61,8 +61,8 @@ public class Lift extends SubsystemBase {
 //        rightSquaringController = new PIDController(rightSq_p, rightSq_i, rightSq_d);
 
         liftBase = hardwareMap.get(TouchSensor.class, "touchLift");
-        distanceBackRight = hardwareMap.get(DistanceSensor.class, "distanceBackRight");
-        distanceBackLeft = hardwareMap.get(DistanceSensor.class, "distanceBackLeft");
+//        distanceBackRight = hardwareMap.get(DistanceSensor.class, "distanceBackRight");
+//        distanceBackLeft = hardwareMap.get(DistanceSensor.class, "distanceBackLeft");
 
         mFL = hardwareMap.get(DcMotorEx.class, "mFL");
         mFR = hardwareMap.get(DcMotorEx.class, "mFR");
@@ -151,6 +151,7 @@ public class Lift extends SubsystemBase {
         return (inputInput - inputMin) / (inputMax - inputMin) * (scaledMax - scaledMin) + scaledMin;
     }
 
+    /*
     public void squareToBackdropBangBang() {
         double distRight = distanceBackRight.getDistance(DistanceUnit.CM);
         double distLeft = distanceBackLeft.getDistance(DistanceUnit.CM);
@@ -271,7 +272,7 @@ public class Lift extends SubsystemBase {
         mFR.setPower(-rightPower);
         mBR.setPower(-rightPower);
     }
-
+*/
     public boolean getLiftBase() {
         return liftBase.isPressed();
     }
