@@ -108,9 +108,9 @@ public class CSTB_RobotAutoDriveXYToAprilTagOmni extends LinearOpMode {
 
     public static double X_P = 0.05, X_I = 0, X_D = 0;
     public static double Y_P = 0.05, Y_I = 0, Y_D = 0;
-    public static double T_P = 0.005, T_I = 0, T_D = 0;
+    public static double tBearing_p = 0.03, tYaw_p = 0.006, T_I = 0, T_D = 0;
 
-    double targetX = 0, targetY = 20, targetT = 0;
+    double targetX = 6, targetY = 20, targetT = 0;
 
     double x = 0;
     double y = 0;
@@ -155,7 +155,7 @@ public class CSTB_RobotAutoDriveXYToAprilTagOmni extends LinearOpMode {
 
         XControl = new PIDController(X_P, X_I, X_D);
         YControl = new PIDController(Y_P, Y_I, Y_D);
-        TControl = new PIDController(T_P, T_I, T_D);
+        TControl = new PIDController(tBearing_p, T_I, T_D);
 
 //        if (WEBCAM)
         setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
@@ -209,13 +209,19 @@ public class CSTB_RobotAutoDriveXYToAprilTagOmni extends LinearOpMode {
             if (gamepad1.left_bumper && targetFound) {
                 XControl.setPID(X_P, X_I, X_D);
                 YControl.setPID(Y_P, Y_I, Y_D);
-                TControl.setPID(T_P, T_I, T_D);
+                TControl.setPID(tYaw_p, T_I, T_D);
 
                 x = XControl.calculate(desiredTag.ftcPose.x, targetX);
                 y = YControl.calculate(desiredTag.ftcPose.y, targetY);
-                t = TControl.calculate(desiredTag.ftcPose.bearing, AngleUnit.normalizeDegrees(targetT));
+//                if (desiredTag.ftcPose.bearing >= 10) {
+//                    TControl.setPID(tBearing_p, T_I, T_D);
+//                    t = TControl.calculate(desiredTag.ftcPose.bearing, AngleUnit.normalizeDegrees(targetT));
+//                } else {
+//                    TControl.setPID(tYaw_p, T_I, T_D);
+                    t = TControl.calculate(desiredTag.ftcPose.yaw, AngleUnit.normalizeDegrees(targetT));
+//                }
 
-                strafe = x * Math.cos(t) - y * Math.sin(t); //X-  rotated
+                strafe = (x * Math.cos(t) - y * Math.sin(t)); //X-  rotated
                 drive = -(x * Math.sin(t) + y * Math.cos(t));//Y - rotated
                 turn = -t;
 
