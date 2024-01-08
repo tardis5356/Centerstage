@@ -1,20 +1,19 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_WaypointToCornerPark;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSlotsToWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_CenterSpikeToDecisionPoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToCenterSpike;
-//import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToCornerPark;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_DecisionPointToRightSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_LeftSlotsToWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_LeftSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_LeftSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_RightSlotsToWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_RightSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_RightSpikeToDecisionPoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_StartPos;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_StartPositionToDecisionPoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_WaypointToCenterSlots;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_WaypointToCornerPark;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_WaypointToLeftSlots;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redBackstage_WaypointToRightSlots;
 
@@ -51,8 +50,8 @@ import java.util.concurrent.TimeUnit;
 
 //public class CSTB_redWings_Park {
 //@Disabled
-@Autonomous(group = "drive", name = "redBackstage Purple+Yellow+Park")
-public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
+@Autonomous(group = "drive", name = "redBackstage Purple+Yellow+CornerPark")
+public class redBackstage_PurpleYellowCornerParkAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
     private SampleMecanumDrive drive;
@@ -128,60 +127,39 @@ public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
         ////////////////////////////////////DONE DEFINING PARK TRAJECTORIES///////////////////////////////////////
 
 
-        switch (redPropThreshold.getPropPosition()) {
-            case "left":
-                redBackstage_DecisionPointToSpike = redBackstage_DecisionPointToLeftSpike;
-                redBackstage_SpikeToDecisionPoint = redBackstage_LeftSpikeToDecisionPoint;
-                telemetry.addLine("park traj 1");
-                break;
-            default:
-            case "center":
-                redBackstage_DecisionPointToSpike = redBackstage_DecisionPointToCenterSpike;
-                redBackstage_SpikeToDecisionPoint = redBackstage_CenterSpikeToDecisionPoint;
-                telemetry.addLine("park traj 2");
-                break;
-            case "right":
-                redBackstage_DecisionPointToSpike = redBackstage_DecisionPointToRightSpike;
-                redBackstage_SpikeToDecisionPoint = redBackstage_RightSpikeToDecisionPoint;
-                telemetry.addLine("park traj 3");
-                break;
-        }
-
-        switch (redPropThreshold.getPropPosition()) {
-            case "left":
-                redBackstage_WaypointToBackdrop = redBackstage_WaypointToLeftSlots;
-                telemetry.addLine("park traj 1");
-                break;
-            default:
-            case "center":
-                redBackstage_WaypointToBackdrop = redBackstage_WaypointToCenterSlots;
-                telemetry.addLine("park traj 2");
-                break;
-            case "right":
-                redBackstage_WaypointToBackdrop = redBackstage_WaypointToRightSlots;
-                telemetry.addLine("park traj 3");
-                break;
-        }
-
-        switch (redPropThreshold.getPropPosition()) {
-            case "left":
-                redBackstage_BackdropToWaypoint = redBackstage_LeftSlotsToWaypoint;
-                telemetry.addLine("park traj 1");
-                break;
-            default:
-            case "center":
-                redBackstage_BackdropToWaypoint = redBackstage_CenterSlotsToWaypoint;
-                telemetry.addLine("park traj 2");
-                break;
-            case "right":
-                redBackstage_BackdropToWaypoint = redBackstage_RightSlotsToWaypoint;
-                telemetry.addLine("park traj 3");
-                break;
-        }
-
         telemetry.setMsTransmissionInterval(50);
 
         while (!isStarted() && !isStopRequested()) {
+            switch (redPropThreshold.getPropPosition()) {
+                case "left":
+                    redBackstage_DecisionPointToSpike = redBackstage_DecisionPointToLeftSpike;
+                    redBackstage_SpikeToDecisionPoint = redBackstage_LeftSpikeToDecisionPoint;
+
+                    redBackstage_WaypointToBackdrop = redBackstage_WaypointToLeftSlots;
+                    redBackstage_BackdropToWaypoint = redBackstage_LeftSlotsToBackdropWaypoint;
+
+                    telemetry.addLine("park traj 1");
+                    break;
+                default:
+                case "center":
+                    redBackstage_DecisionPointToSpike = redBackstage_DecisionPointToCenterSpike;
+                    redBackstage_SpikeToDecisionPoint = redBackstage_CenterSpikeToDecisionPoint;
+
+                    redBackstage_WaypointToBackdrop = redBackstage_WaypointToCenterSlots;
+                    redBackstage_BackdropToWaypoint = redBackstage_CenterSlotsToBackdropWaypoint;
+
+                    telemetry.addLine("park traj 2");
+                    break;
+                case "right":
+                    redBackstage_DecisionPointToSpike = redBackstage_DecisionPointToRightSpike;
+                    redBackstage_SpikeToDecisionPoint = redBackstage_RightSpikeToDecisionPoint;
+
+                    redBackstage_WaypointToBackdrop = redBackstage_WaypointToRightSlots;
+                    redBackstage_BackdropToWaypoint = redBackstage_RightSlotsToBackdropWaypoint;
+
+                    telemetry.addLine("park traj 3");
+                    break;
+            }
 
             telemetry.addLine("waitForStart");
             telemetry.addData("Prop Position", redPropThreshold.getPropPosition());
@@ -192,13 +170,14 @@ public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
 
         telemetry.update();
         schedule(new SequentialCommandGroup(
-
+                new InstantCommand(() -> leds.setLEDstate("purple")),
                 new FollowTrajectoryCommand(drive, redBackstage_StartPositionToDecisionPoint),
                 new FollowTrajectoryCommand(drive, redBackstage_DecisionPointToSpike),
                 new InstantCommand(intake::slowOut),
                 new WaitCommand(1500),
                 new InstantCommand(intake::stop),
                 new FollowTrajectoryCommand(drive, redBackstage_SpikeToDecisionPoint),
+                new InstantCommand(() -> leds.setLEDstate("yellow")),
                 new FollowTrajectoryCommand(drive, redBackstage_DecisionPointToBackdropWaypoint),
                 new ParallelCommandGroup(
                         new FollowTrajectoryCommand(drive, redBackstage_WaypointToBackdrop),
@@ -210,6 +189,7 @@ public class redBackstage_PurpleYellowParkAuto extends CommandOpMode {
                 new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
                                 new FollowTrajectoryCommand(drive, redBackstage_BackdropToWaypoint),
+                                new InstantCommand(() -> leds.setLEDstate("idle")),
                                 new FollowTrajectoryCommand(drive, redBackstage_WaypointToCornerPark)
                         ),
                         new SequentialCommandGroup(

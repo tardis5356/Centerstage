@@ -22,8 +22,8 @@ public class MeepMeepTesting {
                 .setConstraints(30, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(blueBackstage_StartPos)
-                                .lineTo(new Vector2d(-12.5, -64.5))
-                                .lineTo(blueBackstage_DecisionPointPos.vec())
+                                .splineTo(blueBackstage_DecisionPointPos.vec(), 90)
+//                                .lineTo(blueBackstage_DecisionPointPos.vec())
                                 .lineToLinearHeading(new Pose2d(-12.5, -30, Math.toRadians(180)))
                                 .lineToLinearHeading(blueBackstage_DecisionPointPos)
                                 .lineToLinearHeading(new Pose2d(-42, -60.5, Math.toRadians(0)))
@@ -31,13 +31,18 @@ public class MeepMeepTesting {
                 );
 
         Image img = null;
-        try { img = ImageIO.read(new File("/Users/sabinamiller/StudioProjects/Centerstage/MeepMeepTesting/src/main/java/com/example/meepmeeptesting/field-2023-juice-dark-flipped.png")); }
-            catch (IOException e) {}
+//        try { img = ImageIO.read(new File("/Users/sabinamiller/StudioProjects/Centerstage/MeepMeepTesting/src/main/java/com/example/meepmeeptesting/field-2023-juice-dark-flipped.png")); }
+        try {
+            img = ImageIO.read(new File("/Users/thesimg/Robotics/Centerstage/MeepMeepTesting/src/main/java/com/example/meepmeeptesting/field-2023-juice-dark-flipped.png"));
+//            catch (IOException e) {}
 //        meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
-        meepMeep.setBackground(img)
-                .setDarkMode(true)
-                .setBackgroundAlpha(0.95f)
-                .addEntity(myBot)
-                .start();
+            meepMeep.setBackground(img)
+                    .setDarkMode(true)
+                    .setBackgroundAlpha(0.95f)
+                    .addEntity(myBot)
+                    .start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

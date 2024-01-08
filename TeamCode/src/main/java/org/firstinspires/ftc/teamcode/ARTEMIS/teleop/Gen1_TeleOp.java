@@ -88,6 +88,8 @@ public class Gen1_TeleOp extends CommandOpMode {
 
     private DcMotorEx mW;
 
+//    private boolean gripped = true;
+
 //    double startTime = 0;
 
     @Override
@@ -127,6 +129,12 @@ public class Gen1_TeleOp extends CommandOpMode {
         robotToDepositCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit");
         robotToIntakeCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake");
         robotGrabPixelsCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "grab_pixels");
+
+        arm.toIntake();
+        wrist.tiltToIntake();
+        wrist.rollToCentered();
+
+        leds.setLEDstate("idle");
 /*
 
     Driver
@@ -237,17 +245,33 @@ public class Gen1_TeleOp extends CommandOpMode {
 
 
         //triggers to open and close gripper
+//        new Trigger(() -> driver1.getButton(GamepadKeys.Button.Y) || driver2.getButton(GamepadKeys.Button.Y))
+//                .toggleWhenActive(
+//                        new ParallelCommandGroup(
+//                                new InstantCommand(gripper::grabRight),
+//                                new InstantCommand(gripper::grabLeft)
+//                        ),
+//                        new ParallelCommandGroup(
+//                                new InstantCommand(gripper::releaseRight),
+//                                new InstantCommand(gripper::releaseLeft)
+//                        )
+//                );
+
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.Y) || driver2.getButton(GamepadKeys.Button.Y))
-                .toggleWhenActive(
-                        new ParallelCommandGroup(
-                                new InstantCommand(gripper::grabRight),
-                                new InstantCommand(gripper::grabLeft)
-                        ),
+                .whenActive(
                         new ParallelCommandGroup(
                                 new InstantCommand(gripper::releaseRight),
                                 new InstantCommand(gripper::releaseLeft)
                         )
                 );
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.A) || driver2.getButton(GamepadKeys.Button.A))
+                .whenActive(
+                        new ParallelCommandGroup(
+                                new InstantCommand(gripper::grabRight),
+                                new InstantCommand(gripper::grabLeft)
+                        )
+                );
+
 
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.B))
                 .toggleWhenActive(new InstantCommand(gripper::grabRight), new InstantCommand(gripper::releaseRight));
@@ -255,8 +279,8 @@ public class Gen1_TeleOp extends CommandOpMode {
                 .toggleWhenActive(new InstantCommand(gripper::grabLeft), new InstantCommand(gripper::releaseLeft));
 
         // square to backdrop
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.A))
-                .whileActiveContinuous(() -> lift.squareToBackdropPID());
+//        new Trigger(() -> driver1.getButton(GamepadKeys.Button.A))
+//                .whileActiveContinuous(() -> lift.squareToBackdropPID());
 
         // Speed controls
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.B))
@@ -347,7 +371,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         LR = -gamepad1.left_stick_x;
         Rotation = -gamepad1.right_stick_x;
 
-        if(rumbleTimer.seconds() >= 0.5) {
+        if (rumbleTimer.seconds() >= 0.5) {
 //            if (leds.checkLeftPixel() && !leds.checkRightPixel() && !gamepad1.isRumbling() || leds.checkRightPixel() && !leds.checkLeftPixel() && !gamepad1.isRumbling()) {
 //                gamepad1.rumbleBlips(1);
 //                gamepad2.rumbleBlips(1);
@@ -363,7 +387,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         //map motor power to vars (tb tested)
         //depending on the wheel, forward back, left right, and rotation's power may be different
         //think, if fb is positive, thus the bot should move forward, will the motor drive the bot forward if its power is positive.
-        if(!gamepad1.a) {
+        if (!gamepad1.a) {
             double mFLPower = FB + LR + Rotation;
             double mFRPower = FB - LR - Rotation;
             double mBLPower = FB - LR + Rotation;
@@ -403,17 +427,16 @@ public class Gen1_TeleOp extends CommandOpMode {
         telemetry.addData("lift position", lift.getLiftPosition());
         telemetry.addData("pid out", lift.getLiftPID());
 
-        telemetry.addData("distanceBackLeft", lift.getDistanceBackLeft());
-        telemetry.addData("distanceBackRight", lift.getDistanceBackRight());
-        telemetry.addData("drivePowerLeft", lift.getLeftDrivePower());
-        telemetry.addData("drivePowerRight", lift.getRightDrivePower());
-        telemetry.addData("drivePowerLeftValue", lift.getLeftDrivePowerValue());
-        telemetry.addData("drivePowerRightValue", lift.getRightDrivePowerValue());
+//        telemetry.addData("distanceBackLeft", lift.getDistanceBackLeft());
+//        telemetry.addData("distanceBackRight", lift.getDistanceBackRight());
+//        telemetry.addData("drivePowerLeft", lift.getLeftDrivePower());
+//        telemetry.addData("drivePowerRight", lift.getRightDrivePower());
+//        telemetry.addData("drivePowerLeftValue", lift.getLeftDrivePowerValue());
+//        telemetry.addData("drivePowerRightValue", lift.getRightDrivePowerValue());
+//        telemetry.addData("leftError", lift.getLeftError());
+//        telemetry.addData("rightError", lift.getRightError());
 
-        telemetry.addData("leftError", lift.getLeftError());
-        telemetry.addData("rightError", lift.getRightError());
-
-        telemetry.addData("looptime", System.nanoTime()-start);
+        telemetry.addData("looptime", System.nanoTime() - start);
 
         telemetry.update();
     }
