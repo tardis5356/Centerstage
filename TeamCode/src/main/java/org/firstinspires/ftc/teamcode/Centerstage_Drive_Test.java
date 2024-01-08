@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions;
+import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Gripper;
+
 //@Disabled
 @TeleOp (name = "Centerstage_Drive_Test")
 public class Centerstage_Drive_Test extends LinearOpMode {
@@ -15,6 +18,7 @@ public class Centerstage_Drive_Test extends LinearOpMode {
     double FB;
     double LR;
     double Rotation;
+    Servo LeftGrip, RightGrip, Roll;
 
 
     DcMotor mFL, mFR, mBL, mBR;
@@ -28,6 +32,10 @@ public class Centerstage_Drive_Test extends LinearOpMode {
         mBL = hardwareMap.get(DcMotorEx.class, "mBL");
         mBR = hardwareMap.get(DcMotorEx.class, "mBR");
         Drone = hardwareMap.get(Servo.class, "Drone");
+
+        LeftGrip = hardwareMap.get(Servo.class, "LG");
+        RightGrip = hardwareMap.get(Servo.class, "RG");
+        Roll = hardwareMap.get(Servo.class, "Roll");
 
 
         mBR.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -50,6 +58,16 @@ public class Centerstage_Drive_Test extends LinearOpMode {
             }
             else{
                 Drone.setPosition(Test_Bed_Drone_Positions.Latched);
+            }
+
+            if (gamepad1.dpad_up == true){
+                Roll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
+                LeftGrip.setPosition(BotPositions.GRIPPER_LEFT_CLOSED);
+                RightGrip.setPosition(BotPositions.GRIPPER_RIGHT_CLOSED);
+            }
+            else if (gamepad1.dpad_down == true){
+                LeftGrip.setPosition(BotPositions.GRIPPER_LEFT_OPEN);
+                RightGrip.setPosition(BotPositions.GRIPPER_RIGHT_OPEN);
             }
 
         }
