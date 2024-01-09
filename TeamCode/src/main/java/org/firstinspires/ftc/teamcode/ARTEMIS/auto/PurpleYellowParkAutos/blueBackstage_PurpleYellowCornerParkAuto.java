@@ -184,7 +184,7 @@ public class blueBackstage_PurpleYellowCornerParkAuto extends CommandOpMode {
                 ),
                 new WaitCommand(1000),
                 new InstantCommand(gripper::releaseRight),
-                new WaitCommand(1000),
+                new WaitCommand(2000),
                 new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
                                 new FollowTrajectoryCommand(drive, blueBackstage_BackdropToBackdropWaypoint),

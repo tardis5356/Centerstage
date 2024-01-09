@@ -38,7 +38,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                         new InstantCommand(gripper::releaseLeft),
 
                                         // wait 1 second for servos to move
-                                        new WaitCommand(500),
+                                        new WaitCommand(1000),
 
                                         // move arm to transition position
                                         new InstantCommand(arm::toTransition),
@@ -52,7 +52,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                         new InstantCommand(wrist::tiltToIntake),
 
                                         // wait for wrist to catch up
-                                        new WaitCommand(200),
+                                        new WaitCommand(500),
 
                                         // send arm to intake position
                                         new InstantCommand(arm::toIntake)
