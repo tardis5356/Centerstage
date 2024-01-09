@@ -57,6 +57,15 @@ public class Gen1_TeleOp extends CommandOpMode {
     double SLOW_SPEED_MULTIPLIER = 0.5;
     double CURRENT_SPEED_MULTIPLIER = FAST_SPEED_MULTIPLIER;
 
+    public enum RobotState {
+        INTAKE,
+        INTAKING,
+        TRANSITION,
+        DEPOSIT
+    }
+    RobotState robotState = RobotState.INTAKE;
+
+    public boolean intakeStageActive = true;
 
     //intake and intake commands
     private Intake intake;
@@ -179,10 +188,18 @@ public class Gen1_TeleOp extends CommandOpMode {
         //button map intake commands
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
                 .cancelWhenActive(intakeOutCommand)
-                .whenActive(intakeInCommand);
+                .whenActive(intakeInCommand)
+                .whenActive(new InstantCommand(()->{
+                    robotState = RobotState.INTAKING;
+                    if(intakeStageActive)
+                        intake.down();
+                }));
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
                 .cancelWhenActive(intakeInCommand)
-                .whenActive(intakeOutCommand);
+                .whenActive(intakeOutCommand)
+                .whenActive(new InstantCommand(()->{
+                    robotState = RobotState.INTAKE;
+                }));
 //                .whenActive(
 //                        new SequentialCommandGroup(
 //                                new InstantCommand(intake::out),
@@ -193,12 +210,18 @@ public class Gen1_TeleOp extends CommandOpMode {
 
 
         // map position commands
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) || driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))
+        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) || driver2.getButton(GamepadKeys.Button.LEFT_BUMPER)) && (robotState != RobotState.INTAKE && robotState != RobotState.INTAKING))
                 .whenActive(robotToIntakeCommand)
+                .whenActive(new InstantCommand(()->{
+                    robotState = RobotState.INTAKE;
+                }))
                 .cancelWhenActive(robotGrabPixelsCommand)
                 .cancelWhenActive(robotToDepositCommand);
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) || driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER))
+        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) || driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER)) && robotState != RobotState.DEPOSIT)
                 .whenActive(robotToDepositCommand)
+                .whenActive(new InstantCommand(()->{
+                    robotState = RobotState.DEPOSIT;
+                }))
                 .cancelWhenActive(robotGrabPixelsCommand)
                 .cancelWhenActive(robotToIntakeCommand);
 
@@ -304,7 +327,10 @@ public class Gen1_TeleOp extends CommandOpMode {
         // automatically grab pixels
         new Trigger(() -> leds.checkLeftPixel() && leds.checkRightPixel())
                 .whenActive(new SequentialCommandGroup(
-                        new WaitCommand(250),
+                        new InstantCommand(()->{
+                            robotState = RobotState.TRANSITION;
+                        }),
+                        new WaitCommand(100),//250ms originally
                         robotGrabPixelsCommand,
                         new InstantCommand(intake::out),
                         new WaitCommand(1000),
@@ -411,6 +437,7 @@ public class Gen1_TeleOp extends CommandOpMode {
 //        telemetry.addData("LeftStickY", FB);
 //        telemetry.addData("LeftStickX", LR);
 //        telemetry.addData("RightStickX", Rotation);
+        telemetry.addData("RobotState\n", robotState);
 
         telemetry.addData("LeftStickY", gamepad2.left_stick_y);
         telemetry.addData("arm distance", arm.getArmDistance());
@@ -423,7 +450,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         telemetry.addData("inIntake", lift.manualActive);
         telemetry.addData("liftPower", lift.getLiftPower());
 
-        telemetry.addData("lift target", lift.getLiftTargetPosition());
+        telemetry.addData("\nlift target", lift.getLiftTargetPosition());
         telemetry.addData("lift position", lift.getLiftPosition());
         telemetry.addData("pid out", lift.getLiftPID());
 

@@ -1,19 +1,26 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.subsystems;
 
+import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.INTAKE_DOWN;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.INTAKE_UP;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Intake extends SubsystemBase {
     private DcMotorEx mIntake;
+    private Servo sIntake;
     private ColorSensor colorLeft, colorRight;
 
     public Intake(HardwareMap hardwareMap) {
         mIntake = hardwareMap.get(DcMotorEx.class, "mI");
+        sIntake = hardwareMap.get(Servo.class, "sI");
 
         colorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
         colorRight = hardwareMap.get(ColorSensor.class, "colorRight");
@@ -23,9 +30,16 @@ public class Intake extends SubsystemBase {
     public void periodic() {
     }
 
+    public void down() {
+        sIntake.setPosition(INTAKE_DOWN);
+    }
+
+    public void up() {
+        sIntake.setPosition(INTAKE_UP);
+    }
+
     public void in() {
         mIntake.setPower(BotPositions.INTAKE_MOTOR_INWARD_POWER);
-//        LEDstate = "Intaking";
     }
 
     public void out() {

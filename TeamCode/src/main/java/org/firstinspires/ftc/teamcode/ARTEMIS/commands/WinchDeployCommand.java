@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Winch;
 public class WinchDeployCommand extends SequentialCommandGroup {
     public WinchDeployCommand(Winch winch) {
         addCommands(
-                new InstantCommand(winch::extendScissor)//,
+//                new InstantCommand(winch::extendScissor)//,
                 //new InstantCommand(winch::extendBraces),
                 //new InstantCommand(winch::extendBraces)
         );

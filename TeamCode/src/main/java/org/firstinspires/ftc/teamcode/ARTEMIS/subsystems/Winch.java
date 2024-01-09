@@ -17,7 +17,7 @@ public class Winch extends SubsystemBase {
     //hardwaremap the above objects to their physical counterparts
     public Winch(HardwareMap hardwareMap) {
         mWinch = hardwareMap.get(DcMotor.class, "mW");
-        sWinch = hardwareMap.get(Servo.class, "sW");
+//        sWinch = hardwareMap.get(Servo.class, "sW");
         sBraceL = hardwareMap.get(Servo.class, "sBL");
         sBraceR = hardwareMap.get(Servo.class, "sBR");
     }
@@ -30,9 +30,9 @@ public class Winch extends SubsystemBase {
     }
 
     //deploys the scissor lift
-    public void extendScissor() {
-        sWinch.setPosition(BotPositions.WINCH_SERVO_DEPLOYED);
-    }
+//    public void extendScissor() {
+//        sWinch.setPosition(BotPositions.WINCH_SERVO_DEPLOYED);
+//    }
 
     //deploys the braces
     public void extendBraces() {
@@ -45,9 +45,9 @@ public class Winch extends SubsystemBase {
     }
 
     //retracts the scissor lift
-    public void retractScissor() {
-        sWinch.setPosition(BotPositions.WINCH_SERVO_RETRACTED);
-    }
+//    public void retractScissor() {
+//        sWinch.setPosition(BotPositions.WINCH_SERVO_RETRACTED);
+//    }
 
     //actually lifts the bot. pls work
     public void liftRobot() {
