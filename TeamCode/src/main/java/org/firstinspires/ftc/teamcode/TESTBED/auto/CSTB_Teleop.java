@@ -6,10 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name="CSTB_Teleop")
-@Disabled
+//@Disabled
 public class
 CSTB_Teleop extends Base_CSTB{
 
+    static final double POWER_MULTIPLIER = 0.75;
 
     @Override
     public void runOpMode(){
@@ -27,10 +28,10 @@ CSTB_Teleop extends Base_CSTB{
             double gP1sRx = gamepad1.right_stick_x;
 
             CSTB.CSTBDrive(gP1sLy,gP1sLx,-gP1sRx);
-            double FLPOWER = gP1sLy+gP1sLx+gP1sRx;
-            double FRPOWER = gP1sLy-gP1sLx-gP1sRx;
-            double BLPOWER = gP1sLy-gP1sLx+gP1sRx;
-            double BRPOWER = gP1sLy+gP1sLx-gP1sRx;
+            double FLPOWER = (gP1sLy+gP1sLx+gP1sRx)*POWER_MULTIPLIER;
+            double FRPOWER = (gP1sLy-gP1sLx-gP1sRx)*POWER_MULTIPLIER;
+            double BLPOWER = (gP1sLy-gP1sLx+gP1sRx)*POWER_MULTIPLIER;
+            double BRPOWER = (gP1sLy+gP1sLx-gP1sRx)*POWER_MULTIPLIER;
 
             telemetry.addData("Front_Left", FLPOWER);
             telemetry.addData("Front_Right", FRPOWER);

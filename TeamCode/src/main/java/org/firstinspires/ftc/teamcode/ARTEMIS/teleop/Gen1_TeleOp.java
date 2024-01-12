@@ -53,7 +53,7 @@ public class Gen1_TeleOp extends CommandOpMode {
     ElapsedTime rumbleTimer = new ElapsedTime();
 
     // speed multiplier (granny mode)
-    double FAST_SPEED_MULTIPLIER = 1.0;
+    double FAST_SPEED_MULTIPLIER = 0.8;
     double SLOW_SPEED_MULTIPLIER = 0.5;
     double CURRENT_SPEED_MULTIPLIER = FAST_SPEED_MULTIPLIER;
 
@@ -63,6 +63,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         TRANSITION,
         DEPOSIT
     }
+
     RobotState robotState = RobotState.INTAKE;
 
     public boolean intakeStageActive = true;
@@ -188,18 +189,26 @@ public class Gen1_TeleOp extends CommandOpMode {
         //button map intake commands
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
                 .cancelWhenActive(intakeOutCommand)
-                .whenActive(intakeInCommand)
-                .whenActive(new InstantCommand(()->{
-                    robotState = RobotState.INTAKING;
-                    if(intakeStageActive)
-                        intake.down();
-                }));
+                .whenActive(
+                        new ParallelCommandGroup(
+                                intakeInCommand,
+                                new InstantCommand(() -> {
+                                    robotState = RobotState.INTAKING;
+                                    if (intakeStageActive)
+                                        intake.down();
+                                })
+                        )
+                );
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
                 .cancelWhenActive(intakeInCommand)
-                .whenActive(intakeOutCommand)
-                .whenActive(new InstantCommand(()->{
-                    robotState = RobotState.INTAKE;
-                }));
+                .whenActive(
+                        new ParallelCommandGroup(
+                                new InstantCommand(() -> {
+                                    robotState = RobotState.INTAKE;
+                                }),
+                                intakeOutCommand
+                        )
+                );
 //                .whenActive(
 //                        new SequentialCommandGroup(
 //                                new InstantCommand(intake::out),
@@ -210,18 +219,27 @@ public class Gen1_TeleOp extends CommandOpMode {
 
 
         // map position commands
-        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) || driver2.getButton(GamepadKeys.Button.LEFT_BUMPER)) && (robotState != RobotState.INTAKE && robotState != RobotState.INTAKING))
-                .whenActive(robotToIntakeCommand)
-                .whenActive(new InstantCommand(()->{
-                    robotState = RobotState.INTAKE;
-                }))
+        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) || driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))) //&& (robotState != RobotState.INTAKE && robotState != RobotState.INTAKING))
+                .whenActive(
+                        robotToIntakeCommand
+//                        new ParallelCommandGroup(
+//                                ,
+//                                new InstantCommand(() -> {
+//                                    robotState = RobotState.INTAKE;
+//                                })
+//                        )
+                )
                 .cancelWhenActive(robotGrabPixelsCommand)
                 .cancelWhenActive(robotToDepositCommand);
-        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) || driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER)) && robotState != RobotState.DEPOSIT)
-                .whenActive(robotToDepositCommand)
-                .whenActive(new InstantCommand(()->{
-                    robotState = RobotState.DEPOSIT;
-                }))
+        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) || driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER)))// && robotState != RobotState.DEPOSIT)
+                .whenActive(
+                        new ParallelCommandGroup(
+                                new InstantCommand(() -> {
+                                    robotState = RobotState.DEPOSIT;
+                                }),
+                                robotToDepositCommand
+                        )
+                )
                 .cancelWhenActive(robotGrabPixelsCommand)
                 .cancelWhenActive(robotToIntakeCommand);
 
@@ -296,9 +314,9 @@ public class Gen1_TeleOp extends CommandOpMode {
                 );
 
 
-        new Trigger(() -> driver2.getButton(GamepadKeys.Button.B))
-                .toggleWhenActive(new InstantCommand(gripper::grabRight), new InstantCommand(gripper::releaseRight));
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.X))
+                .toggleWhenActive(new InstantCommand(gripper::grabRight), new InstantCommand(gripper::releaseRight));
+        new Trigger(() -> driver2.getButton(GamepadKeys.Button.B))
                 .toggleWhenActive(new InstantCommand(gripper::grabLeft), new InstantCommand(gripper::releaseLeft));
 
         // square to backdrop
@@ -327,7 +345,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         // automatically grab pixels
         new Trigger(() -> leds.checkLeftPixel() && leds.checkRightPixel())
                 .whenActive(new SequentialCommandGroup(
-                        new InstantCommand(()->{
+                        new InstantCommand(() -> {
                             robotState = RobotState.TRANSITION;
                         }),
                         new WaitCommand(100),//250ms originally
