@@ -136,6 +136,9 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         mW = hardwareMap.get(DcMotorEx.class, "mW");
 
+        //init the drone servo
+        sDroneLauncher = hardwareMap.get(Servo.class, "sDL");
+
         robotToDepositCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit");
         robotToIntakeCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake");
         robotGrabPixelsCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "grab_pixels");
@@ -254,8 +257,8 @@ public class Gen1_TeleOp extends CommandOpMode {
                 .toggleWhenActive(new InstantCommand(winch::extendBraces), new InstantCommand(winch::overextendBraces));
 
         // ORIGINALLY new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.BACK))
-                .toggleWhenActive((() -> sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED)), () -> sDroneLauncher.setPosition(BotPositions.DRONE_UNLATCHED));
+//        new Trigger(() -> driver1.getButton(GamepadKeys.Button.BACK))
+//                .toggleWhenActive((() -> sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED)), () -> sDroneLauncher.setPosition(BotPositions.DRONE_UNLATCHED));
 
         //map buttons to lift positions
 //        new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_DOWN))
@@ -347,6 +350,7 @@ public class Gen1_TeleOp extends CommandOpMode {
                 .whenActive(new SequentialCommandGroup(
                         new InstantCommand(() -> {
                             robotState = RobotState.TRANSITION;
+                            leds.setLEDstate("green");
                         }),
                         new WaitCommand(100),//250ms originally
                         robotGrabPixelsCommand,
@@ -382,8 +386,6 @@ public class Gen1_TeleOp extends CommandOpMode {
         mFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         mBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //init the drone servo
-        sDroneLauncher = hardwareMap.get(Servo.class, "sDL");
     }
 
     @Override
@@ -431,7 +433,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         //map motor power to vars (tb tested)
         //depending on the wheel, forward back, left right, and rotation's power may be different
         //think, if fb is positive, thus the bot should move forward, will the motor drive the bot forward if its power is positive.
-        if (!gamepad1.a) {
+//        if (!gamepad1.a) {
             double mFLPower = FB + LR + Rotation;
             double mFRPower = FB - LR - Rotation;
             double mBLPower = FB - LR + Rotation;
@@ -440,13 +442,13 @@ public class Gen1_TeleOp extends CommandOpMode {
             mFR.setPower(mFRPower * CURRENT_SPEED_MULTIPLIER);
             mBL.setPower(mBLPower * CURRENT_SPEED_MULTIPLIER);
             mBR.setPower(mBRPower * CURRENT_SPEED_MULTIPLIER);
-        }
-
-//        if (gamepad1.a) { //&& gametime.seconds() > 90){
-//            sDroneLauncher.setPosition(BotPositions.DRONE_UNLATCHED);
-//        } else {
-//            sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED);
 //        }
+
+        if (gamepad1.back) { //&& gametime.seconds() > 90){
+            sDroneLauncher.setPosition(BotPositions.DRONE_UNLATCHED);
+        } else {
+            sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED);
+        }
 
 //        if (gamepad1.dpad_left)
 //            mW.setPower(-BotPositions.WINCH_MOTOR_POWER);

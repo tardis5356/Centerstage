@@ -19,7 +19,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
     //BLUE WINGS
     public static final Pose2d blueWings_StartPos = new Pose2d(36.5, -64.5, Math.toRadians(90));
     public static final Pose2d blueWings_DecisionPointPos = new Pose2d(40.5, -13, Math.toRadians(270));
-    public static final Pose2d blueWings_BackdropWaypointPos = new Pose2d(-38, -34, Math.toRadians(0));
+    public static final Pose2d blueWings_BackdropWaypointPos = new Pose2d(-32, -34, Math.toRadians(0));
 
     //RED BACKSTAGE
     public static final Pose2d redBackstage_StartPos = new Pose2d(-8.5, 64.5, Math.toRadians(270));
@@ -137,7 +137,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             blueBackstage_BackdropToCenterPark = //go to and spin to parking between backdrops
                     drive.trajectorySequenceBuilder(blueBackstage_BackdropWaypointPos)
-                            .strafeLeft(26)
+                            .strafeLeft(28)
                             .turn(Math.toRadians(-90))
                             .strafeRight(20)
 //                            .turn(Math.toRadians(90))
@@ -196,7 +196,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
             blueWings_DecisionPointToSafetyWaypoint = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(blueWings_DecisionPointPos)
                             .turn(Math.toRadians(90))
-                            .lineToLinearHeading(new Pose2d(-38, -10, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-32, -10, Math.toRadians(0))) //38
                             .build();
 
             blueWings_SafetyWaypointToBackdropWaypoint = //decision point to position around backdrop to prep for where to score yellow
@@ -229,22 +229,22 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
             blueWings_LeftSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(blueWings_WaypointToLeftSlots.end())
                             .forward(3)
-                            .lineTo(blueWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+//                            .lineTo(blueWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+//                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                             .build();
 
             blueWings_CenterSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(blueWings_WaypointToCenterSlots.end())
                             .forward(3)
-                            .lineTo(blueWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+//                            .lineTo(blueWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+//                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                             .build();
 
             blueWings_RightSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(blueWings_WaypointToRightSlots.end())
                             .forward(3)
-                            .lineTo(blueWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+//                            .lineTo(blueWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+//                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                             .build();
 
             blueWings_BackdropToCornerPark = //go to and spin to parking between backdrops
