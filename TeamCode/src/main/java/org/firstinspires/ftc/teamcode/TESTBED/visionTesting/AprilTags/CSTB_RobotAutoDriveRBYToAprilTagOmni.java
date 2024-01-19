@@ -93,20 +93,20 @@ import org.firstinspires.ftc.teamcode.TESTBED.visionTesting.AprilTags.AprilTagGe
 public class CSTB_RobotAutoDriveRBYToAprilTagOmni extends LinearOpMode {
     // Adjust these numbers to suit your robot.
     final double DESIRED_Y_OFFSET = 24; //  this is how close the camera should get to the target (inches)
-    final double DESIRED_X_OFFSET = -6; // INches
+    final double DESIRED_X_OFFSET = -3; // INches
     final double DESIRED_ROBOT_THETA = 0; // Degrees
     final double TARGET_TAG_THETA = 0; //Degrees
 
-    final double DESIRED_BEARING = Math.toDegrees(Math.atan2(-DESIRED_X_OFFSET, DESIRED_Y_OFFSET));
     final double DESIRED_RANGE = Math.sqrt(DESIRED_X_OFFSET * DESIRED_X_OFFSET + DESIRED_Y_OFFSET * DESIRED_Y_OFFSET);
+    final double DESIRED_BEARING = Math.toDegrees(Math.atan2(-DESIRED_X_OFFSET, DESIRED_Y_OFFSET));
     final double DESIRED_YAW = DESIRED_ROBOT_THETA - TARGET_TAG_THETA;
 
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
     //  applied to the drive motors to correct the error.
     //  Drive = Error * Gain    Make these values smaller for smoother control, or larger for a more aggressive response.
-    final double SPEED_GAIN = 0.028;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
-    final double STRAFE_GAIN = 0.028;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
-    final double TURN_GAIN = 0.02;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
+    final double SPEED_GAIN = 0.065; // 0.028 Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
+    final double STRAFE_GAIN = 0.07; // 0.028 Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
+    final double TURN_GAIN = 0.065; // 0.02  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
 
     final double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot) 0.5
     final double MAX_AUTO_STRAFE = 0.5;   //  Clip the approach speed to this max value (adjust for your robot) 0.5
@@ -202,6 +202,8 @@ public class CSTB_RobotAutoDriveRBYToAprilTagOmni extends LinearOpMode {
                 telemetry.addData("DesiredRange", "%5.1f inches", DESIRED_RANGE);
                 telemetry.addData("DesiredBearing", "%3.0f degrees", DESIRED_BEARING);
                 telemetry.addData("DesiredYaw", "%3.0f degrees", DESIRED_YAW);
+                telemetry.addData("X", "%3.2f inches", RBYtoXYT(desiredTag.ftcPose.range, desiredTag.ftcPose.bearing, desiredTag.ftcPose.yaw, 0)[0]);
+                telemetry.addData("Y", "%3.2f inches", RBYtoXYT(desiredTag.ftcPose.range, desiredTag.ftcPose.bearing, desiredTag.ftcPose.yaw, 0)[1]);
 
             } else {
                 telemetry.addData("\n>", "Drive using joysticks to find valid target\n");
@@ -224,27 +226,36 @@ public class CSTB_RobotAutoDriveRBYToAprilTagOmni extends LinearOpMode {
                 turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
                 strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
 
-                double[] errorValues = RBYtoXYT(desiredTag.ftcPose.range, desiredTag.ftcPose.bearing, desiredTag.ftcPose.yaw, 0);
-                double xError = errorValues[0];
-                double yError = errorValues[1];
-                double tError = errorValues[2];
+                double[] actualValues = RBYtoXYT(desiredTag.ftcPose.range, desiredTag.ftcPose.bearing, desiredTag.ftcPose.yaw, 0);
+                double xError = Math.abs(actualValues[0]) - Math.abs(DESIRED_X_OFFSET);
+                double yError = Math.abs(actualValues[1]) - Math.abs(DESIRED_Y_OFFSET);
+                double tError = Math.abs(actualValues[2]) - Math.abs(DESIRED_YAW);
 
-                double totaledErrors = Math.abs(xError) + Math.abs(yError) + Math.abs(tError * 3.6);
+                double xyErrors = Math.abs(xError) + Math.abs(yError);
+                double thetaErrors = Math.abs(tError);
 
-                telemetry.addData("RangeError", "%5.1f inches", rangeError);
-                telemetry.addData("BearingError", "%3.0f degrees", headingError);
-                telemetry.addData("YawError", "%3.0f degrees", yawError);
+                telemetry.addLine("");
+
+                telemetry.addData("RangeError", "%5.3f inches", rangeError);
+                telemetry.addData("BearingError", "%3.2f degrees", headingError);
+                telemetry.addData("YawError", "%3.2f degrees", yawError);
+
+                telemetry.addLine("");
 
                 telemetry.addData("Auto", "Drive %5.2f, Strafe %5.2f, Turn %5.2f ", drive, strafe, turn);
 
-                if(totaledErrors < 1) {
+                telemetry.addLine("");
+
+                telemetry.addData("xyError", "%3.2f inches", xyErrors);
+                telemetry.addData("thetaError", "%3.0f degrees", thetaErrors);
+
+                if(xyErrors < 1 && thetaErrors < 3) {
                     telemetry.addLine("\nAT POSITION");
-                    drive = 0;
-                    strafe = 0;
-                    turn = 0;
+//                    drive = 0;
+//                    strafe = 0;
+//                    turn = 0;
                 }
             } else {
-
                 // drive using manual POV Joystick mode.  Slow things down to make the robot more controlable.
                 drive = -gamepad1.left_stick_y / 2.0;  // Reduce drive rate to 50%.
                 strafe = -gamepad1.left_stick_x / 2.0;  // Reduce strafe rate to 50%.
