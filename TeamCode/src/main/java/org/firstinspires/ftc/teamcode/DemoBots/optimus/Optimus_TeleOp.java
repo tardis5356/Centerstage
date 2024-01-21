@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 //@Disabled
 @TeleOp(name="Optimus_TeleOp")
-@Disabled
+//@Disabled
 public class Optimus_TeleOp extends LinearOpMode{
 
     // create objects and give them classes
@@ -46,9 +46,9 @@ public class Optimus_TeleOp extends LinearOpMode{
             double RightTrigger = gamepad2.right_trigger;
 
             if (RightTrigger != 0){
-                sG.setPosition(0.3);
+                sG.setPosition(0.35);
             } else {
-              sG.setPosition(.9);
+              sG.setPosition(.6);
             }
 
             //wrist
@@ -79,7 +79,7 @@ public class Optimus_TeleOp extends LinearOpMode{
             //else if (limit.isPressed() == true){
            // mA.setPower(-0.5);
 
-            //}
+            //}-
             telemetry.addData("trigger", gamepad2.right_trigger);
             telemetry.addData("lbump", gamepad2.left_bumper);
             telemetry.addData("rbump", gamepad2.right_bumper);
