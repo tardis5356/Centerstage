@@ -12,11 +12,11 @@ public class BotPositions {
     public static double WINCH_MOTOR_POWER = 0.8, WINCH_SERVO_DEPLOYED = 0.35, WINCH_SERVO_RETRACTED = 0.6;
 
     //brace positions
-    public static double LEFT_BRACE_EXTENDED = 0.77, RIGHT_BRACE_EXTENDED = 0.7, LEFT_BRACE_OVEREXTENDED = 1, RIGHT_BRACE_OVEREXTENDED = 0.45;
+    public static double LEFT_BRACE_EXTENDED = 0.69, RIGHT_BRACE_EXTENDED = 0.68, LEFT_BRACE_OVEREXTENDED = 0.28, RIGHT_BRACE_OVEREXTENDED = 0.35;
 
     //intake powers and positions
     public static double INTAKE_MOTOR_INWARD_POWER = 1, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.5;
-    public static double INTAKE_DOWN = 0.6, INTAKE_UP = 0.2;
+    public static double INTAKE_DOWN = 0.48, INTAKE_UP = 0.2;
 
     //gripper positions
     public static double GRIPPER_LEFT_CLOSED = 0.79, GRIPPER_LEFT_OPEN = 0.33, GRIPPER_RIGHT_CLOSED = 0.22, GRIPPER_RIGHT_OPEN = 0.65;
