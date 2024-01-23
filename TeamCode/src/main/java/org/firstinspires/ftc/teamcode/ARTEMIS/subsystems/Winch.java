@@ -1,25 +1,29 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
+@Config
 public class Winch extends SubsystemBase {
 
     //create DcMotor and Servo objects specific to this class
     //includes the winch motor, servo, and brace servos
     private DcMotor mWinch;
     private Servo sWinch;
-    private Servo sBraceL;
-    private Servo sBraceR;
+    private ServoImplEx sBraceL;
+    private ServoImplEx sBraceR;
 
     //hardwaremap the above objects to their physical counterparts
     public Winch(HardwareMap hardwareMap) {
         mWinch = hardwareMap.get(DcMotor.class, "mW");
 //        sWinch = hardwareMap.get(Servo.class, "sW");
-        sBraceL = hardwareMap.get(Servo.class, "sBL");
-        sBraceR = hardwareMap.get(Servo.class, "sBR");
+        sBraceL = hardwareMap.get(ServoImplEx.class, "sBL");
+        sBraceR = hardwareMap.get(ServoImplEx.class, "sBR");
     }
 
     @Override
@@ -42,6 +46,16 @@ public class Winch extends SubsystemBase {
     public void overextendBraces() {
         sBraceL.setPosition(BotPositions.LEFT_BRACE_OVEREXTENDED);
         sBraceR.setPosition(BotPositions.RIGHT_BRACE_OVEREXTENDED);
+    }
+
+    public void disablePWM() {
+        sBraceL.setPwmDisable();
+        sBraceR.setPwmDisable();
+    }
+
+    public void enablePWM() {
+        sBraceL.setPwmEnable();
+        sBraceR.setPwmEnable();
     }
 
     //retracts the scissor lift

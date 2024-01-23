@@ -46,8 +46,6 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.firstinspires.ftc.teamcode.TESTBED.visionTesting.AprilTags.AprilTagGeometries;
-
 /*
  * This OpMode illustrates using a camera to locate and drive towards a specific AprilTag.
  * The code assumes a Holonomic (Mecanum or X Drive) Robot.
@@ -88,14 +86,18 @@ import org.firstinspires.ftc.teamcode.TESTBED.visionTesting.AprilTags.AprilTagGe
  *
  */
 
-@TeleOp(name = "CSTB Omni Drive RBY To AprilTag", group = "Concept")
+@TeleOp(name = "CSTB Omni Drive RBY FF To AprilTag", group = "Concept")
 //@Disabled
-public class CSTB_RobotAutoDriveRBYToAprilTagOmni extends LinearOpMode {
+public class CSTB_RobotAutoDriveRBYFFToAprilTagOmni extends LinearOpMode {
     // Adjust these numbers to suit your robot.
     final double DESIRED_Y_OFFSET = 24; //  this is how close the camera should get to the target (inches)
     final double DESIRED_X_OFFSET = -3; // INches
     final double DESIRED_ROBOT_THETA = 0; // Degrees
     final double TARGET_TAG_THETA = 0; //Degrees
+
+    public final double drive_ff = 0.03;//0.07
+    public final double strafe_ff = 0.05;//0.1
+    public final double turn_ff = 0.03;//0.07
 
     final double DESIRED_RANGE = Math.sqrt(DESIRED_X_OFFSET * DESIRED_X_OFFSET + DESIRED_Y_OFFSET * DESIRED_Y_OFFSET);
     final double DESIRED_BEARING = Math.toDegrees(Math.atan2(-DESIRED_X_OFFSET, DESIRED_Y_OFFSET));
@@ -104,9 +106,9 @@ public class CSTB_RobotAutoDriveRBYToAprilTagOmni extends LinearOpMode {
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
     //  applied to the drive motors to correct the error.
     //  Drive = Error * Gain    Make these values smaller for smoother control, or larger for a more aggressive response.
-    final double SPEED_GAIN = 0.036; // 0.065 Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
+    final double SPEED_GAIN = 0.03575; // 0.065 Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
     final double STRAFE_GAIN = 0.0375; // 0.07 Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
-    final double TURN_GAIN = 0.041; // 0.065 Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
+    final double TURN_GAIN = 0.024; // 0.065 Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
 
     final double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot) 0.5
     final double MAX_AUTO_STRAFE = 0.5;   //  Clip the approach speed to this max value (adjust for your robot) 0.5
@@ -222,9 +224,28 @@ public class CSTB_RobotAutoDriveRBYToAprilTagOmni extends LinearOpMode {
                 }
 
                 // Use the speed and turn "gains" to calculate how we want the robot to move.
-                drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
-                turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
-                strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
+
+                double drivePower = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
+                double turnPower = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
+                double strafePower = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
+
+                if(drivePower < 0) {
+                    drive = drivePower - drive_ff;
+                } else {
+                    drive = drivePower + drive_ff;
+                }
+
+                if(strafePower < 0) {
+                    strafe = strafePower - strafe_ff;
+                } else {
+                    strafe = strafePower + strafe_ff;
+                }
+
+                if(turnPower < 0) {
+                    turn = turnPower - turn_ff;
+                } else {
+                    turn = turnPower + turn_ff;
+                }
 
                 double[] actualValues = RBYtoXYT(desiredTag.ftcPose.range, desiredTag.ftcPose.bearing, desiredTag.ftcPose.yaw, 0);
                 double xError = Math.abs(actualValues[0]) - Math.abs(DESIRED_X_OFFSET);

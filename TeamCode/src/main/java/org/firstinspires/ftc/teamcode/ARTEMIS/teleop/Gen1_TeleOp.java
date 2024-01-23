@@ -53,7 +53,7 @@ public class Gen1_TeleOp extends CommandOpMode {
     ElapsedTime rumbleTimer = new ElapsedTime();
 
     // speed multiplier (granny mode)
-    double FAST_SPEED_MULTIPLIER = 0.8;
+    double FAST_SPEED_MULTIPLIER = 1;
     double SLOW_SPEED_MULTIPLIER = 0.5;
     double CURRENT_SPEED_MULTIPLIER = FAST_SPEED_MULTIPLIER;
 
@@ -146,6 +146,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         arm.toIntake();
         wrist.tiltToIntake();
         wrist.rollToCentered();
+
 
         leds.setLEDstate("idle");
 /*
@@ -248,13 +249,21 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         //button map winch commands
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))
-                .whenActive(winchDeployCommand);
+                .whenActive(new SequentialCommandGroup(
+                        new InstantCommand(winch::extendBraces),
+                        new WaitCommand(1000),
+                        new InstantCommand(winch::disablePWM)
+                ));
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))
                 .toggleWhenActive(winchPullUpCommand, new InstantCommand(winch::stopWinch));
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_RIGHT))
                 .toggleWhenActive(() -> mW.setPower(-BotPositions.WINCH_MOTOR_POWER), () -> mW.setPower(0)); //, () -> mW.setPower(BotPositions.WINCH_MOTOR_POWER)
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
-                .toggleWhenActive(new InstantCommand(winch::extendBraces), new InstantCommand(winch::overextendBraces));
+                .whenActive(new SequentialCommandGroup(
+                        new InstantCommand(winch::overextendBraces)//,
+//                        new WaitCommand(1000),
+//                        new InstantCommand(winch::disablePWM)
+                ));
 
         // ORIGINALLY new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
 //        new Trigger(() -> driver1.getButton(GamepadKeys.Button.BACK))
@@ -333,17 +342,17 @@ public class Gen1_TeleOp extends CommandOpMode {
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.X))
                 .whenActive(() -> CURRENT_SPEED_MULTIPLIER = SLOW_SPEED_MULTIPLIER);
 
-//        new Trigger(() -> leds.checkLeftPixel() == true)
-//                .whenActive(new SequentialCommandGroup(
-//                        new WaitCommand(750),
-//                        new InstantCommand(gripper::grabLeft)
-//                        ));
-//
-//        new Trigger(()-> leds.checkRightPixel() == true)
-//                .whenActive(new SequentialCommandGroup(
-//                        new WaitCommand(750),
-//                        new InstantCommand(gripper::grabRight)
-//                ));
+        new Trigger(() -> leds.checkLeftPixel() == true)
+                .whenActive(new SequentialCommandGroup(
+                        new WaitCommand(50),
+                        new InstantCommand(gripper::grabLeft)
+                ));
+
+        new Trigger(() -> leds.checkRightPixel() == true)
+                .whenActive(new SequentialCommandGroup(
+                        new WaitCommand(50),
+                        new InstantCommand(gripper::grabRight)
+                ));
 
         // automatically grab pixels
         new Trigger(() -> leds.checkLeftPixel() && leds.checkRightPixel())
@@ -352,12 +361,21 @@ public class Gen1_TeleOp extends CommandOpMode {
                             robotState = RobotState.TRANSITION;
                             leds.setLEDstate("green");
                         }),
-                        new WaitCommand(100),//250ms originally
-                        robotGrabPixelsCommand,
+                        new WaitCommand(100),
                         new InstantCommand(intake::out),
-                        new WaitCommand(1000),
+                        new WaitCommand(100),
+                        new InstantCommand(arm::toTransition),
+                        new InstantCommand(wrist::toTransition),
+                        new WaitCommand(100),
+                        new InstantCommand(() -> {
+                            leds.setLEDstate("purple");
+                        }),
+                        new WaitCommand(500),
+                        new InstantCommand(intake::up),
+                        new WaitCommand(500),
                         new InstantCommand(intake::stop)
-                ));
+                ))
+                .cancelWhenActive(robotToDepositCommand);
 
         //triggers to roll wrist
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_RIGHT))
@@ -434,14 +452,14 @@ public class Gen1_TeleOp extends CommandOpMode {
         //depending on the wheel, forward back, left right, and rotation's power may be different
         //think, if fb is positive, thus the bot should move forward, will the motor drive the bot forward if its power is positive.
 //        if (!gamepad1.a) {
-            double mFLPower = FB + LR + Rotation;
-            double mFRPower = FB - LR - Rotation;
-            double mBLPower = FB - LR + Rotation;
-            double mBRPower = FB + LR - Rotation;
-            mFL.setPower(mFLPower * CURRENT_SPEED_MULTIPLIER);
-            mFR.setPower(mFRPower * CURRENT_SPEED_MULTIPLIER);
-            mBL.setPower(mBLPower * CURRENT_SPEED_MULTIPLIER);
-            mBR.setPower(mBRPower * CURRENT_SPEED_MULTIPLIER);
+        double mFLPower = FB + LR + Rotation;
+        double mFRPower = FB - LR - Rotation;
+        double mBLPower = FB - LR + Rotation;
+        double mBRPower = FB + LR - Rotation;
+        mFL.setPower(mFLPower * CURRENT_SPEED_MULTIPLIER);
+        mFR.setPower(mFRPower * CURRENT_SPEED_MULTIPLIER);
+        mBL.setPower(mBLPower * CURRENT_SPEED_MULTIPLIER);
+        mBR.setPower(mBRPower * CURRENT_SPEED_MULTIPLIER);
 //        }
 
         if (gamepad1.back) { //&& gametime.seconds() > 90){
