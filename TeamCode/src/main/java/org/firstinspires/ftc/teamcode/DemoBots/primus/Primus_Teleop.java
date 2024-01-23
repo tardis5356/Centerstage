@@ -2,9 +2,10 @@ package org.firstinspires.ftc.teamcode.DemoBots.primus;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Disabled
+//@Disabled
 @TeleOp(name = "Primus_TeleOp", group = "Linear Opmode")
 public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
 
@@ -12,13 +13,17 @@ public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
 
     double zeroPosition = 0;
     boolean encoderReset = false;
-
+    double armPosition;
+    double PosDiff;
+    boolean FarForward;
+    boolean FarBack;
+    TouchSensor ArmLim;
 
     @Override
     public void runOpMode() {
 
         defineComponentsPrimus();
-
+        ArmLim = hardwareMap.get(TouchSensor.class, "aTouch");
 //        while(armLimit.getVoltage() > 3.0) {
 
 //            telemetry.addData("armLimit", armLimit.getVoltage());
@@ -48,11 +53,17 @@ public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
 
         while (opModeIsActive()) {
 
+            armPosition = mBR.getCurrentPosition() + PosDiff;
 
 //            telemetry.addData("armLimit", armLimit.getVoltage());
             telemetry.addData("arm power", mArm.getPower());
-            telemetry.addData("arm position", mBR.getCurrentPosition());
+            telemetry.addData("true arm position", mBR.getCurrentPosition());
             telemetry.addData("zeroPosition", zeroPosition);
+            telemetry.addData("ArmPosition", armPosition);
+            telemetry.addData("Position Diff", PosDiff);
+            telemetry.addData("touchSensor", ArmLim.isPressed());
+            telemetry.addData("FarForward", FarForward);
+            telemetry.addData("FarBack", FarBack);
             telemetry.update();
 
 
@@ -75,7 +86,29 @@ public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
             mFL.setPower(-leftY1 + rightX1);
             mFR.setPower(leftY1 + rightX1);
 
-            mArm.setPower(rightY2);
+            if(ArmLim.isPressed() == false || (FarForward == false && FarBack == false)){
+                mArm.setPower(rightY2);
+//                FarForward = false;
+            }
+            if(ArmLim.isPressed() == true){
+                armPosition = 1000;
+                PosDiff = armPosition - mBR.getCurrentPosition();
+                FarForward = true;
+                mArm.setPower(-1);
+            }
+            if(armPosition > 0 && FarForward == true){
+                mArm.setPower(-1);
+            }
+            if(armPosition <= 0){
+                FarForward = false;
+            }
+            if(armPosition <= -3500 || FarBack == true){
+                FarBack = true;
+                mArm.setPower(1);
+            }
+            if(armPosition <= -2500){
+                FarBack = false;
+            }
 
             //Arm Motor Controls
 
@@ -106,18 +139,18 @@ public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
 //
 //            }
 //            mArm.setPower(leftY2);
-            if (aButton) {
-                if (mBR.getCurrentPosition() > 1020) {
-                    mArm.setPower(-1);
-                } else if (mBR.getCurrentPosition() < 980) {
-                    mArm.setPower(1);
-                } else if (mBR.getCurrentPosition() > 980 && mBR.getCurrentPosition() < 1020) {
-                    mArm.setPower(0);
-                }
-            }
-            if (bButton) {
-                mBR.setTargetPosition(1000);
-            }
+//            if (aButton) {
+//                if (mBR.getCurrentPosition() > 1020) {
+//                    mArm.setPower(-1);
+//                } else if (mBR.getCurrentPosition() < 980) {
+//                    mArm.setPower(1);
+//                } else if (mBR.getCurrentPosition() > 980 && mBR.getCurrentPosition() < 1020) {
+//                    mArm.setPower(0);
+//                }
+//            }
+//            if (bButton) {
+//                mBR.setTargetPosition(1000);
+//            }
 
             if (rightTrigger2 != 0) {
                 //sL.setPosition(0.3);
@@ -129,7 +162,7 @@ public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
                 sL.setPosition(0.35);
                 //sR.setPosition(0.3);
             } else {
-                sL.setPosition(0.8); //0.3
+                sL.setPosition(0.75); //0.3
             }
 
 
