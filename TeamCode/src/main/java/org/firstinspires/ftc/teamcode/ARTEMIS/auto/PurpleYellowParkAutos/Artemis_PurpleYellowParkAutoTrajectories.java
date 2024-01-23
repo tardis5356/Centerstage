@@ -184,8 +184,8 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
                     drive.trajectorySequenceBuilder(blueWings_DecisionPointPos)
                             .forward(2)
                             .turn(Math.toRadians(35))
-                            .forward(12)
-                            .back(6)
+                            .forward(10)
+                            .back(3)
                             .build();
 
             blueWings_RightSpikeToDecisionPoint =  //Shift to decision point

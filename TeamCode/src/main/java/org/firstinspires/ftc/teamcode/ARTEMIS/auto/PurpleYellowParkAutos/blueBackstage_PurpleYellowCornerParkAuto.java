@@ -122,6 +122,7 @@ public class blueBackstage_PurpleYellowCornerParkAuto extends CommandOpMode {
         winch = new Winch(hardwareMap);
 
         gripper.grabRight();
+        intake.up();
 ////////////////////////////DEFINING PARK TRAJECTORIES//////////////////////////////
 
         ////////////////////////////////////DONE DEFINING PARK TRAJECTORIES///////////////////////////////////////
@@ -179,12 +180,15 @@ public class blueBackstage_PurpleYellowCornerParkAuto extends CommandOpMode {
                 new InstantCommand(() -> leds.setLEDstate("yellow")),
                 new FollowTrajectoryCommand(drive, blueBackstage_DecisionPointToBackdropWaypoint),
                 new ParallelCommandGroup(
-                        new FollowTrajectoryCommand(drive, blueBackstage_WaypointToBackdrop),
+                        new SequentialCommandGroup(
+                                new WaitCommand(200),
+                                new FollowTrajectoryCommand(drive, blueBackstage_WaypointToBackdrop)
+                        ),
                         new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit")
                 ),
-                new WaitCommand(1000),
+                new WaitCommand(250),
                 new InstantCommand(gripper::releaseRight),
-                new WaitCommand(2000),
+                new WaitCommand(500),
                 new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
                                 new FollowTrajectoryCommand(drive, blueBackstage_BackdropToBackdropWaypoint),

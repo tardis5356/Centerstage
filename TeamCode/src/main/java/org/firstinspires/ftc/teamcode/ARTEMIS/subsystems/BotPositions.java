@@ -16,7 +16,7 @@ public class BotPositions {
 
     //intake powers and positions
     public static double INTAKE_MOTOR_INWARD_POWER = 1, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.5;
-    public static double INTAKE_DOWN = 0.48, INTAKE_UP = 0.2;
+    public static double INTAKE_DOWN = 0.48, INTAKE_UP = 0.25;
 
     //gripper positions
     public static double GRIPPER_LEFT_CLOSED = 0.79, GRIPPER_LEFT_OPEN = 0.33, GRIPPER_RIGHT_CLOSED = 0.22, GRIPPER_RIGHT_OPEN = 0.65;
@@ -27,7 +27,7 @@ public class BotPositions {
     public static double DISTANCE_FROM_BACKDROP = 20, DISTANCE_FROM_BACKDROP_TOLERANCE;
 
     //wrist positions
-    public static double WRIST_LEFT_ROLL = 0.497, WRIST_RIGHT_ROLL = 0.432, WRIST_ROLL_CENTERED = 0.464, WRIST_TILT_TRANSITION = 0.79, WRIST_TILT_INTAKE = 0.768, WRIST_TILT_DEPOSIT = 0.673, WRIST_TILT_DROP_PURPLE = 0.67;
+    public static double WRIST_LEFT_ROLL = 0.497, WRIST_RIGHT_ROLL = 0.432, WRIST_ROLL_CENTERED = 0.464, WRIST_TILT_TRANSITION = 0.19, WRIST_TILT_INTAKE = 0.29, WRIST_TILT_DEPOSIT = 0.78, WRIST_TILT_DROP_PURPLE = 0.8;
     //for tilt, 0.09 = 30º
 //    0.115 = 30º
 

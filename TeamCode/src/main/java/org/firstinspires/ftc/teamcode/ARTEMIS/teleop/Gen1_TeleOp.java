@@ -146,7 +146,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         arm.toIntake();
         wrist.tiltToIntake();
         wrist.rollToCentered();
-
+        intake.up();
 
         leds.setLEDstate("idle");
 /*

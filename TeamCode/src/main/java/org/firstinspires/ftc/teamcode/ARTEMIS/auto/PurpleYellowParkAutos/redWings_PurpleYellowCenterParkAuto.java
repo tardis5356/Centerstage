@@ -127,6 +127,7 @@ public class redWings_PurpleYellowCenterParkAuto extends CommandOpMode {
         winch = new Winch(hardwareMap);
 
         gripper.grabRight();
+        intake.up();
 ////////////////////////////DEFINING PARK TRAJECTORIES//////////////////////////////
 
         ////////////////////////////////////DONE DEFINING PARK TRAJECTORIES///////////////////////////////////////
@@ -187,12 +188,15 @@ public class redWings_PurpleYellowCenterParkAuto extends CommandOpMode {
                 new FollowTrajectoryCommand(drive, redWings_DecisionPointToSafetyWaypoint),
                 new FollowTrajectoryCommand(drive, redWings_SafetyWaypointToBackdropWaypoint),
                 new ParallelCommandGroup(
-                        new FollowTrajectoryCommand(drive, redWings_WaypointToBackdrop),
+                        new SequentialCommandGroup(
+                                new WaitCommand(200),
+                                new FollowTrajectoryCommand(drive, redWings_WaypointToBackdrop)
+                        ),
                         new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit")
                 ),
-                new WaitCommand(1000),
+                new WaitCommand(250),
                 new InstantCommand(gripper::releaseRight),
-                new WaitCommand(2000),
+                new WaitCommand(500),
                 new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
                                 new FollowTrajectoryCommand(drive, redWings_BackdropToWaypoint),

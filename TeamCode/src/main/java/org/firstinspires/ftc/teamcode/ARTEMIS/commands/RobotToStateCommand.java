@@ -38,7 +38,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                         new InstantCommand(gripper::releaseLeft),
 
                                         // wait 1 second for servos to move
-                                        new WaitCommand(1000),
+                                        new WaitCommand(250),
 
                                         // move arm to transition position
                                         new InstantCommand(arm::toTransition),
@@ -46,13 +46,13 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                         // wait for arm to reach transition position
                                         new WaitUntilCommand(() -> arm.inIntakeEntering()),
 //                                new WaitUntilCommand(() -> arm.fullIntake()),
-                                        new WaitCommand(100),
+                                        new WaitCommand(50),
 
                                         // send wrist to intake position
                                         new InstantCommand(wrist::tiltToIntake),
 
                                         // wait for wrist to catch up
-                                        new WaitCommand(500),
+                                        new WaitCommand(50),
 
                                         // send arm to intake position
                                         new InstantCommand(arm::toIntake)
@@ -98,29 +98,34 @@ public class RobotToStateCommand extends ParallelCommandGroup {
 //                        new IntakeOutCommand(intake),
                         new InstantCommand(intake::out),
                         new SequentialCommandGroup(
+//                                new InstantCommand(intake::in),
                                 // set arm to transition position (should already be there)
                                 new InstantCommand(arm::toTransition),
+
+                                new WaitCommand(100),
+
+//                                new InstantCommand(intake::out),
                                 new InstantCommand(wrist::toTransition),
 
-                                new WaitCommand(250),
+                                new WaitCommand(100),
 
                                 // ensure arm isn't in intake anymore
                                 new WaitUntilCommand(() -> !arm.inIntakeExiting()),
 
                                 // wait for one second
-//                                new WaitCommand(1000),
+//                                new WaitCommand(100),
 
                                 // send arm && lift to deposit
                                 new InstantCommand(arm::toDeposit),
                                 //new LiftToPositionCommand(lift, 100, 25),
 
-                                new WaitCommand(250),
+                                new WaitCommand(150),
 
 //                                new WaitCommand(100),
                                 new InstantCommand(wrist::tiltToDeposit),
 
                                 // wait for .5 seconds for arm to move
-                                new WaitCommand(500),
+                                new WaitCommand(250),
 
                                 // tilt wrist to deposit
                                 new InstantCommand(intake::stop)
