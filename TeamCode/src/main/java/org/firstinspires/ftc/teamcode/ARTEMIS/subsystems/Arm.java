@@ -55,7 +55,7 @@ public class Arm extends SubsystemBase {
     // original intaking position was 13cm
 
     public boolean inIntakeExiting() {
-        if (((DistanceSensor) colorArm).getDistance(DistanceUnit.CM) <= 12)
+        if (((DistanceSensor) colorArm).getDistance(DistanceUnit.CM) <= 9)
             return true;
         else
             return false;

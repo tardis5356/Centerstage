@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.ARTEMIS.teleop;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -191,19 +192,19 @@ public class Gen1_TeleOp extends CommandOpMode {
 
 
         //button map intake commands
-        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
-                .cancelWhenActive(intakeOutCommand)
-                .whenActive(
-                        new ParallelCommandGroup(
-                                intakeInCommand,
-                                new InstantCommand(() -> {
-                                    robotState = RobotState.INTAKING;
-                                    if (intakeStageActive)
-                                        intake.down();
-                                })
-                        )
-                );
-        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5 || driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
+//        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.15 || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.15)
+//                .cancelWhenActive(intakeOutCommand)
+//                .whenActive(
+//                        new ParallelCommandGroup(
+//                                intakeInCommand,
+//                                new InstantCommand(() -> {
+//                                    robotState = RobotState.INTAKING;
+//                                    if (intakeStageActive)
+//                                        intake.down();
+//                                })
+//                        )
+//                );
+        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.15 || driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.15)
                 .cancelWhenActive(intakeInCommand)
                 .whenActive(
                         new ParallelCommandGroup(
@@ -223,19 +224,20 @@ public class Gen1_TeleOp extends CommandOpMode {
 
 
         // map position commands
-        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) || driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))) //&& (robotState != RobotState.INTAKE && robotState != RobotState.INTAKING))
+        new Trigger(() -> (driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5 || driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))) //&& (robotState != RobotState.INTAKE && robotState != RobotState.INTAKING))
                 .whenActive(
-                        robotToIntakeCommand
-//                        new ParallelCommandGroup(
-//                                ,
-//                                new InstantCommand(() -> {
+                        new ParallelCommandGroup(
+                                new InstantCommand(() -> {
+                                    leds.setLEDstate("green");
 //                                    robotState = RobotState.INTAKE;
-//                                })
-//                        )
-                )
-                .cancelWhenActive(robotGrabPixelsCommand)
-                .cancelWhenActive(robotToDepositCommand);
-        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) || driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER)))// && robotState != RobotState.DEPOSIT)
+                                }),
+                                robotToIntakeCommand
+
+                        )
+                );
+//                .cancelWhenActive(robotGrabPixelsCommand)
+//                .cancelWhenActive(robotToDepositCommand);
+        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) || driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER)) && robotState != RobotState.DEPOSIT)
                 .whenActive(
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> {
@@ -249,11 +251,7 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         //button map winch commands
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))
-                .whenActive(new SequentialCommandGroup(
-                        new InstantCommand(winch::extendBraces),
-                        new WaitCommand(1000),
-                        new InstantCommand(winch::disablePWM)
-                ));
+                .whenActive(new InstantCommand(winch::extendBraces));
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))
                 .toggleWhenActive(winchPullUpCommand, new InstantCommand(winch::stopWinch));
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_RIGHT))
@@ -361,7 +359,7 @@ public class Gen1_TeleOp extends CommandOpMode {
                             robotState = RobotState.TRANSITION;
                             leds.setLEDstate("green");
                         }),
-                        new WaitCommand(100),
+                        new WaitCommand(250),
                         new InstantCommand(intake::out),
                         new WaitCommand(100),
                         new InstantCommand(arm::toTransition),
@@ -431,9 +429,9 @@ public class Gen1_TeleOp extends CommandOpMode {
         //fb is forward backward movement
         //lr is left right
         //rotation is rotation of the robot when the center of rotation is still
-        FB = gamepad1.left_stick_y;
-        LR = -gamepad1.left_stick_x;
-        Rotation = -gamepad1.right_stick_x;
+        FB = cubicScaling(gamepad1.left_stick_y);
+        LR = cubicScaling(-gamepad1.left_stick_x);
+        Rotation = cubicScaling(-gamepad1.right_stick_x * 0.75f);
 
         if (rumbleTimer.seconds() >= 0.5) {
 //            if (leds.checkLeftPixel() && !leds.checkRightPixel() && !gamepad1.isRumbling() || leds.checkRightPixel() && !leds.checkLeftPixel() && !gamepad1.isRumbling()) {
@@ -503,6 +501,14 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         telemetry.addData("looptime", System.nanoTime() - start);
 
+        telemetry.addData("\nintake power", intake.getIntakePower());
+
+        telemetry.addData("commands", CommandScheduler.getInstance());
+
         telemetry.update();
+    }
+
+    private double cubicScaling(float joystickValue) {
+        return (0.2 * joystickValue + 0.8 * Math.pow(joystickValue, 3));
     }
 }

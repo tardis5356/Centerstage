@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Intake extends SubsystemBase {
@@ -62,4 +63,11 @@ public class Intake extends SubsystemBase {
         return ((DistanceSensor) colorRight).getDistance(DistanceUnit.CM);
     }
 
+    public double getIntakePower() {
+        return mIntake.getPower();
+    }
+
+    public double getIntakeCurrent() {
+        return mIntake.getCurrent(CurrentUnit.MILLIAMPS);
+    }
 }

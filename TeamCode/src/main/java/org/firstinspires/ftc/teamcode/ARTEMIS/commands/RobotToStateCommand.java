@@ -27,10 +27,18 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                 addCommands(
                         new ParallelDeadlineGroup(
                                 new SequentialCommandGroup(
+
+                                        new InstantCommand(() -> {
+                                            leds.setLEDstate("yellow");
+                                        }),
                                         // send lift to fully retracted, wait for it to reach that position (via isFinished)
                                         new InstantCommand(intake::stop),
                                         // make sure arm isn't already in intake
-                                        new WaitUntilCommand(() -> !arm.inIntakeEntering()),
+//                                        new WaitUntilCommand(() -> !arm.inIntakeEntering()),
+
+                                        new InstantCommand(() -> {
+                                           leds.setLEDstate("green");
+                                        }),
 
                                         // open grippers & send wrist to transition position
                                         new InstantCommand(wrist::toTransition),
@@ -38,15 +46,15 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                         new InstantCommand(gripper::releaseLeft),
 
                                         // wait 1 second for servos to move
-                                        new WaitCommand(250),
+                                        new WaitCommand(1000),
 
                                         // move arm to transition position
                                         new InstantCommand(arm::toTransition),
 
                                         // wait for arm to reach transition position
-                                        new WaitUntilCommand(() -> arm.inIntakeEntering()),
+//                                        new WaitUntilCommand(() -> arm.inIntakeEntering()),
 //                                new WaitUntilCommand(() -> arm.fullIntake()),
-                                        new WaitCommand(50),
+                                        new WaitCommand(500),
 
                                         // send wrist to intake position
                                         new InstantCommand(wrist::tiltToIntake),
@@ -110,7 +118,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                 new WaitCommand(100),
 
                                 // ensure arm isn't in intake anymore
-                                new WaitUntilCommand(() -> !arm.inIntakeExiting()),
+//                                new WaitUntilCommand(() -> !arm.inIntakeExiting()),
 
                                 // wait for one second
 //                                new WaitCommand(100),
