@@ -184,7 +184,7 @@ public class blueWings_FARBACK_PurpleYellowCenterParkAuto extends CommandOpMode 
                 new FollowTrajectoryCommand(drive, blueWings_SafetyWaypointToBackdropWaypoint),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                new WaitCommand(200),
+                                new WaitCommand(750),
                                 new FollowTrajectoryCommand(drive, blueWings_WaypointToBackdrop)
                         ),
                         new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit")

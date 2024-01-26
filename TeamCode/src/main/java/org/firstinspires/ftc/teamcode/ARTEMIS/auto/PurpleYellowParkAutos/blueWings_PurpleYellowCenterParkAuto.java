@@ -171,6 +171,8 @@ public class blueWings_PurpleYellowCenterParkAuto extends CommandOpMode {
 
             telemetry.addLine("waitForStart");
             telemetry.addData("Prop Position", bluePropThreshold.getPropPosition());
+            telemetry.addData("Prop Position", bluePropThreshold.getAveragedLeftBoxBlue());
+            telemetry.addData("Prop Position", bluePropThreshold.getAveragedRightBoxBlue());
             telemetry.update();
             sleep(20);
         }
@@ -185,12 +187,12 @@ public class blueWings_PurpleYellowCenterParkAuto extends CommandOpMode {
                 new InstantCommand(intake::stop),
                 new FollowTrajectoryCommand(drive, blueWings_SpikeToDecisionPoint),
                 new InstantCommand(() -> leds.setLEDstate("yellow")),
-                new WaitCommand(5000),
+//                new WaitCommand(5000),
                 new FollowTrajectoryCommand(drive, blueWings_DecisionPointToSafetyWaypoint),
                 new FollowTrajectoryCommand(drive, blueWings_SafetyWaypointToBackdropWaypoint),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                new WaitCommand(200),
+                                new WaitCommand(750),
                                 new FollowTrajectoryCommand(drive, blueWings_WaypointToBackdrop)
                         ),
                         new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit")

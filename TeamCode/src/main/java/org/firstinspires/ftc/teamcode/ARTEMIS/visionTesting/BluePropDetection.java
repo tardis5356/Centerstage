@@ -23,7 +23,7 @@ public class BluePropDetection implements VisionProcessor {
     Mat lowMatBlue = new Mat();
     Mat finalMatBlue = new Mat();
     double redThreshold = 0.09;
-    double blueThreshold = 0.03;
+    double blueThreshold = 0.05;
     double averagedLeftBoxRed;
     double averagedRightBoxRed;
     double averagedLeftBoxBlue;

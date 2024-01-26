@@ -211,7 +211,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             blueWings_WaypointToLeftSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(blueWings_BackdropWaypointPos)
-                            .lineToLinearHeading(new Pose2d(-48.625, -37, Math.toRadians(0)), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            .lineToLinearHeading(new Pose2d(-48.625, -40, Math.toRadians(0)), SampleMecanumDrive.getVelocityConstraint(86, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                     SampleMecanumDrive.getAccelerationConstraint(40))
                             .build();
 

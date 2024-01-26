@@ -63,6 +63,12 @@ public class Intake extends SubsystemBase {
         return ((DistanceSensor) colorRight).getDistance(DistanceUnit.CM);
     }
 
+    public void disableLEDs() {
+        colorLeft.enableLed(false);
+        colorRight.enableLed(false);
+    }
+
+
     public double getIntakePower() {
         return mIntake.getPower();
     }

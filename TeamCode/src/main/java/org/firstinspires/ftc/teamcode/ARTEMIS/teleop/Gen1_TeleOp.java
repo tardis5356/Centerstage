@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.teleop;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -9,16 +10,23 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.hardware.RevIMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.IntakeInCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.IntakeOutCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.LiftToPositionCommand;
@@ -33,8 +41,10 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.LEDs;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Winch;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Wrist;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvWebcam;
 
-
+@Config
 @TeleOp(name = "Gen1_TeleOp", group = "Gen1")
 public class Gen1_TeleOp extends CommandOpMode {
     //gamepads
@@ -99,9 +109,19 @@ public class Gen1_TeleOp extends CommandOpMode {
 
     private DcMotorEx mW;
 
-//    private boolean gripped = true;
+    IMU imu;
+    public static double targetTheta = 0;
+    public static boolean thetaPIDActive = false;
+    public static double theta_p = 0.02;
+    public static double theta_i = 0;
+    public static double theta_d = 0.01;
 
-//    double startTime = 0;
+    private double integral = 0;
+    private double prevError = 0;
+
+//    int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//    OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+//    FtcDashboard.getInstance().startCameraStream(camera,
 
     @Override
     public void initialize() {
@@ -144,10 +164,24 @@ public class Gen1_TeleOp extends CommandOpMode {
         robotToIntakeCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake");
         robotGrabPixelsCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "grab_pixels");
 
+        imu = hardwareMap.get(IMU.class, "imu");
+
+        imu.initialize(
+                new IMU.Parameters(
+                        new RevHubOrientationOnRobot(
+                                RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
+                                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                        )
+                )
+        );
+
+        imu.resetYaw();
+
         arm.toIntake();
         wrist.tiltToIntake();
         wrist.rollToCentered();
         intake.up();
+        intake.disableLEDs();
 
         leds.setLEDstate("idle");
 /*
@@ -192,26 +226,21 @@ public class Gen1_TeleOp extends CommandOpMode {
 
 
         //button map intake commands
-//        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.15 || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.15)
-//                .cancelWhenActive(intakeOutCommand)
-//                .whenActive(
-//                        new ParallelCommandGroup(
-//                                intakeInCommand,
-//                                new InstantCommand(() -> {
-//                                    robotState = RobotState.INTAKING;
-//                                    if (intakeStageActive)
-//                                        intake.down();
-//                                })
-//                        )
-//                );
+        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.15 || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.15)
+                .cancelWhenActive(intakeOutCommand)
+                .whenActive(intakeInCommand)
+                .whenActive(new InstantCommand(() -> {
+                    if (intakeStageActive)
+                        intake.down();
+                }));
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.15 || driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.15)
                 .cancelWhenActive(intakeInCommand)
+                .whenActive(intakeOutCommand)
                 .whenActive(
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> {
-                                    robotState = RobotState.INTAKE;
-                                }),
-                                intakeOutCommand
+//                                    robotState = RobotState.INTAKE;
+                                })
                         )
                 );
 //                .whenActive(
@@ -224,28 +253,25 @@ public class Gen1_TeleOp extends CommandOpMode {
 
 
         // map position commands
-        new Trigger(() -> (driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5 || driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))) //&& (robotState != RobotState.INTAKE && robotState != RobotState.INTAKING))
+        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) || driver2.getButton(GamepadKeys.Button.LEFT_BUMPER)))// && (robotState != RobotState.INTAKE && robotState != RobotState.INTAKING))
                 .whenActive(
-                        new ParallelCommandGroup(
-                                new InstantCommand(() -> {
-                                    leds.setLEDstate("green");
+//                        new SequentialCommandGroup(
+                        robotToIntakeCommand
+//                                new InstantCommand(() -> {
 //                                    robotState = RobotState.INTAKE;
-                                }),
-                                robotToIntakeCommand
-
-                        )
-                );
-//                .cancelWhenActive(robotGrabPixelsCommand)
-//                .cancelWhenActive(robotToDepositCommand);
-        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) || driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER)) && robotState != RobotState.DEPOSIT)
-                .whenActive(
-                        new ParallelCommandGroup(
-                                new InstantCommand(() -> {
-                                    robotState = RobotState.DEPOSIT;
-                                }),
-                                robotToDepositCommand
-                        )
+//                                })
+//                        )
                 )
+                .whenActive(new InstantCommand(() -> {
+                    robotState = RobotState.INTAKE;
+                }))
+                .cancelWhenActive(robotGrabPixelsCommand)
+                .cancelWhenActive(robotToDepositCommand);
+        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) || driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER)))// && robotState != RobotState.DEPOSIT)
+                .whenActive(robotToDepositCommand)
+                .whenActive(new InstantCommand(() -> {
+                    robotState = RobotState.DEPOSIT;
+                }))
                 .cancelWhenActive(robotGrabPixelsCommand)
                 .cancelWhenActive(robotToIntakeCommand);
 
@@ -415,15 +441,13 @@ public class Gen1_TeleOp extends CommandOpMode {
         //lift always runs with manual control tied to gamepads unless stated otherwise
         lift.manualControl(gamepad2.left_stick_y, gamepad2.right_stick_y);
 
-//        if (gamepad2.dpad_left){
-//            wristRoll.setPosition(BotPositions.WRIST_LEFT_ROLL);
-//        }
-//        else if(gamepad2.dpad_right){
-//            wristRoll.setPosition(BotPositions.WRIST_RIGHT_ROLL);
-//        }
-//        else if(gamepad2.dpad_up){
-//            wristRoll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
-//        }
+        double currentTheta = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+
+//        PIDController thetaController = new PIDController(theta_p, theta_i, theta_d);
+
+        telemetry.addData("target theta", AngleUnit.normalizeDegrees(targetTheta));
+        telemetry.addData("current theta", AngleUnit.normalizeDegrees(currentTheta));
+        telemetry.addData("error", AngleUnit.normalizeDegrees(targetTheta)-currentTheta);
 
         //map drive vars to inputs
         //fb is forward backward movement
@@ -431,7 +455,12 @@ public class Gen1_TeleOp extends CommandOpMode {
         //rotation is rotation of the robot when the center of rotation is still
         FB = cubicScaling(gamepad1.left_stick_y);
         LR = cubicScaling(-gamepad1.left_stick_x);
-        Rotation = cubicScaling(-gamepad1.right_stick_x * 0.75f);
+        if (thetaPIDActive) {
+            targetTheta+=cubicScaling(-gamepad1.right_stick_x)*8;// * 0.75f)*8;
+//            Rotation = thetaController.calculate(AngleUnit.normalizeDegrees(currentTheta), AngleUnit.normalizeDegrees(targetTheta));
+            Rotation = calculateOutput(targetTheta, currentTheta);
+        }else
+            Rotation = cubicScaling(-gamepad1.right_stick_x * 0.75f);
 
         if (rumbleTimer.seconds() >= 0.5) {
 //            if (leds.checkLeftPixel() && !leds.checkRightPixel() && !gamepad1.isRumbling() || leds.checkRightPixel() && !leds.checkLeftPixel() && !gamepad1.isRumbling()) {
@@ -466,13 +495,6 @@ public class Gen1_TeleOp extends CommandOpMode {
             sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED);
         }
 
-//        if (gamepad1.dpad_left)
-//            mW.setPower(-BotPositions.WINCH_MOTOR_POWER);
-
-        //telemetry stoof
-//        telemetry.addData("LeftStickY", FB);
-//        telemetry.addData("LeftStickX", LR);
-//        telemetry.addData("RightStickX", Rotation);
         telemetry.addData("RobotState\n", robotState);
 
         telemetry.addData("LeftStickY", gamepad2.left_stick_y);
@@ -503,12 +525,43 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         telemetry.addData("\nintake power", intake.getIntakePower());
 
-        telemetry.addData("commands", CommandScheduler.getInstance());
-
         telemetry.update();
     }
 
     private double cubicScaling(float joystickValue) {
         return (0.2 * joystickValue + 0.8 * Math.pow(joystickValue, 3));
     }
+
+//    public PIDController(double kp, double ki, double kd) {
+//        kp = kp;
+//        ki = ki;
+//        kd = kd;
+//    }
+
+    public double calculateOutput(double setpoint, double currentAngle) {
+        double error = calculateError(setpoint, currentAngle);
+
+        integral += error;
+        double derivative = error - prevError;
+
+        double output = (theta_p * error) + (theta_i * integral) + (theta_d * derivative);
+
+        prevError = error;
+
+        return output;
+    }
+
+    private double calculateError(double setpoint, double currentAngle) {
+        double error = setpoint - currentAngle;
+
+        // Consider angle wrapping
+        if (error > 180) {
+            error -= 360;
+        } else if (error < -180) {
+            error += 360;
+        }
+
+        return error;
+    }
 }
+

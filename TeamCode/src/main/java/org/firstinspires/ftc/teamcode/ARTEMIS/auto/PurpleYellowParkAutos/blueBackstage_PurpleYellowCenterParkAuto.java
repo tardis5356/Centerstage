@@ -182,7 +182,7 @@ public class blueBackstage_PurpleYellowCenterParkAuto extends CommandOpMode {
                 new FollowTrajectoryCommand(drive, blueBackstage_DecisionPointToBackdropWaypoint),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                new WaitCommand(200),
+                                new WaitCommand(750),
                                 new FollowTrajectoryCommand(drive, blueBackstage_WaypointToBackdrop)
                         ),
                         new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit")
