@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.subsystems;
 
+import static org.firstinspires.ftc.teamcode.ARTEMIS.teleop.Gen1_TeleOp.highArmPosition;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -28,7 +30,10 @@ public class Wrist extends SubsystemBase {
     }
 
     public void tiltToDeposit(){
-        sGripperPitch.setPosition(BotPositions.WRIST_TILT_DEPOSIT);
+        if (highArmPosition)
+            sGripperPitch.setPosition(BotPositions.WRIST_TILT_DEPOSIT);
+        else
+            sGripperPitch.setPosition(BotPositions.WRIST_TILT_DEPOSIT_LOW);
     }
 
     public void tiltToDropPurplePixel(){

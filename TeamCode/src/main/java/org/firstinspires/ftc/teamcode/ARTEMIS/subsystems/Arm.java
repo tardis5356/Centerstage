@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.subsystems;
 
+import static org.firstinspires.ftc.teamcode.ARTEMIS.teleop.Gen1_TeleOp.highArmPosition;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -13,7 +15,7 @@ public class Arm extends SubsystemBase {
 
     private ColorSensor colorArm;
 
-    public Arm(HardwareMap hardwareMap){
+    public Arm(HardwareMap hardwareMap) {
         sArmLeft = hardwareMap.get(Servo.class, "sAL");
         sArmRight = hardwareMap.get(Servo.class, "sAR");
 
@@ -23,31 +25,36 @@ public class Arm extends SubsystemBase {
 
     @Override
 
-    public void periodic(){
+    public void periodic() {
         colorArm.enableLed(false);
     }
 
-    public void toIntake(){
+    public void toIntake() {
         sArmLeft.setPosition(BotPositions.ARM_INTAKE);
         sArmRight.setPosition(BotPositions.ARM_INTAKE);
     }
 
-    public void toGrab(){
+    public void toGrab() {
         sArmLeft.setPosition(BotPositions.ARM_GRAB_PIXELS);
         sArmLeft.setPosition(BotPositions.ARM_GRAB_PIXELS);
     }
 
-    public void toTransition(){
+    public void toTransition() {
         sArmLeft.setPosition(BotPositions.ARM_TRANSITION_POSITION);
         sArmRight.setPosition(BotPositions.ARM_TRANSITION_POSITION);
     }
 
-    public void toDeposit(){
-        sArmLeft.setPosition(BotPositions.ARM_DEPOSIT);
-        sArmRight.setPosition(BotPositions.ARM_DEPOSIT);
+    public void toDeposit() {
+        if (highArmPosition) {
+            sArmLeft.setPosition(BotPositions.ARM_DEPOSIT);
+            sArmRight.setPosition(BotPositions.ARM_DEPOSIT);
+        }else{
+            sArmLeft.setPosition(BotPositions.ARM_DEPOSIT_LOW);
+            sArmRight.setPosition(BotPositions.ARM_DEPOSIT_LOW);
+        }
     }
 
-    public void toDropPurple(){
+    public void toDropPurple() {
         sArmLeft.setPosition(BotPositions.ARM_DROP_PURPLE);
         sArmRight.setPosition(BotPositions.ARM_DROP_PURPLE);
     }
@@ -60,6 +67,7 @@ public class Arm extends SubsystemBase {
         else
             return false;
     }
+
     public boolean inIntakeEntering() {
         if (((DistanceSensor) colorArm).getDistance(DistanceUnit.CM) <= 18)
             return true;
@@ -74,7 +82,7 @@ public class Arm extends SubsystemBase {
             return false;
     }
 
-    public double getArmDistance(){
+    public double getArmDistance() {
         return ((DistanceSensor) colorArm).getDistance(DistanceUnit.CM);
     }
 }

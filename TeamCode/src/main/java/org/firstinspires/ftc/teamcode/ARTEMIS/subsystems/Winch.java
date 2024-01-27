@@ -58,6 +58,10 @@ public class Winch extends SubsystemBase {
         sBraceR.setPwmEnable();
     }
 
+    public void retractBraces() {
+        sBraceR.setPosition(BotPositions.RIGHT_BRACE_RETRACTED);
+    }
+
     //retracts the scissor lift
 //    public void retractScissor() {
 //        sWinch.setPosition(BotPositions.WINCH_SERVO_RETRACTED);

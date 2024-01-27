@@ -77,7 +77,8 @@ public class Gen1_TeleOp extends CommandOpMode {
 
     RobotState robotState = RobotState.INTAKE;
 
-    public boolean intakeStageActive = true;
+    public static boolean intakeStageActive = true;
+    public static boolean highArmPosition = false;
 
     //intake and intake commands
     private Intake intake;
@@ -177,11 +178,14 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         imu.resetYaw();
 
-        arm.toIntake();
-        wrist.tiltToIntake();
+        if(arm.inIntakeEntering()) {
+            arm.toIntake();
+            wrist.tiltToIntake();
+        }
         wrist.rollToCentered();
         intake.up();
         intake.disableLEDs();
+        winch.retractBraces();
 
         leds.setLEDstate("idle");
 /*
@@ -365,6 +369,16 @@ public class Gen1_TeleOp extends CommandOpMode {
                 .whenActive(new InstantCommand());
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.X))
                 .whenActive(() -> CURRENT_SPEED_MULTIPLIER = SLOW_SPEED_MULTIPLIER);
+        new Trigger(() -> driver2.getButton(GamepadKeys.Button.BACK))
+                .toggleWhenActive(() -> {
+                    highArmPosition = true;
+                    arm.toDeposit();
+                    wrist.tiltToDeposit();
+                }, () -> {
+                    highArmPosition = false;
+                    arm.toDeposit();
+                    wrist.tiltToDeposit();
+                });
 
         new Trigger(() -> leds.checkLeftPixel() == true)
                 .whenActive(new SequentialCommandGroup(
@@ -439,7 +453,7 @@ public class Gen1_TeleOp extends CommandOpMode {
 
 
         //lift always runs with manual control tied to gamepads unless stated otherwise
-        lift.manualControl(gamepad2.left_stick_y, gamepad2.right_stick_y);
+        lift.manualControl(cubicScaling(gamepad2.left_stick_y), gamepad2.right_stick_y);
 
         double currentTheta = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
 
@@ -447,20 +461,20 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         telemetry.addData("target theta", AngleUnit.normalizeDegrees(targetTheta));
         telemetry.addData("current theta", AngleUnit.normalizeDegrees(currentTheta));
-        telemetry.addData("error", AngleUnit.normalizeDegrees(targetTheta)-currentTheta);
+        telemetry.addData("error", AngleUnit.normalizeDegrees(targetTheta) - currentTheta);
 
         //map drive vars to inputs
         //fb is forward backward movement
         //lr is left right
         //rotation is rotation of the robot when the center of rotation is still
         FB = cubicScaling(gamepad1.left_stick_y);
-        LR = cubicScaling(-gamepad1.left_stick_x);
+        LR = cubicScaling(-gamepad1.left_stick_x) * 1.2;
         if (thetaPIDActive) {
-            targetTheta+=cubicScaling(-gamepad1.right_stick_x)*8;// * 0.75f)*8;
+            targetTheta += cubicScaling(-gamepad1.right_stick_x) * 8;// * 0.75f)*8;
 //            Rotation = thetaController.calculate(AngleUnit.normalizeDegrees(currentTheta), AngleUnit.normalizeDegrees(targetTheta));
             Rotation = calculateOutput(targetTheta, currentTheta);
-        }else
-            Rotation = cubicScaling(-gamepad1.right_stick_x * 0.75f);
+        } else
+            Rotation = cubicScaling(-gamepad1.right_stick_x);// * 0.75f);
 
         if (rumbleTimer.seconds() >= 0.5) {
 //            if (leds.checkLeftPixel() && !leds.checkRightPixel() && !gamepad1.isRumbling() || leds.checkRightPixel() && !leds.checkLeftPixel() && !gamepad1.isRumbling()) {
@@ -498,6 +512,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         telemetry.addData("RobotState\n", robotState);
 
         telemetry.addData("LeftStickY", gamepad2.left_stick_y);
+        telemetry.addData("RightStickY", gamepad2.left_stick_y);
         telemetry.addData("arm distance", arm.getArmDistance());
         telemetry.addData("intake left distance", intake.getIntakeLeftDistance());
         telemetry.addData("intake right distance", intake.getIntakeRightDistance());
@@ -510,6 +525,7 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         telemetry.addData("\nlift target", lift.getLiftTargetPosition());
         telemetry.addData("lift position", lift.getLiftPosition());
+        telemetry.addData("lift position", lift.getLiftPower());
         telemetry.addData("pid out", lift.getLiftPID());
 
 //        telemetry.addData("distanceBackLeft", lift.getDistanceBackLeft());

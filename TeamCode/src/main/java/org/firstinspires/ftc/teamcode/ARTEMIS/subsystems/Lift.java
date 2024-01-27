@@ -111,8 +111,9 @@ public class Lift extends SubsystemBase {
         stickValue = stick * 1;
 
         // micro adjustment
-        if (stickValue2 < 0) stickValue2 = stick2 * 0.2; // when lowering, move at 20% speed
-        else stickValue2 = stick2 * 0.8; // when raising, move at 40% speed
+        if (stick2 > 0.1) stickValue2 = 0.05; // -stick2 * 0.2; // when lowering, move at 20% speed  0.2
+        else if (stick2 < -0.1) stickValue2 = -0.45;// -stick2 * 0.5; //stick2 * 0.5; // when raising, move at 40% speed
+        else stickValue2 = 0;
     }
 
     public void liftPID_R2V2() {
