@@ -178,7 +178,7 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         imu.resetYaw();
 
-        if(arm.inIntakeEntering()) {
+        if (arm.inIntakeEntering()) {
             arm.toIntake();
             wrist.tiltToIntake();
         }
@@ -407,6 +407,8 @@ public class Gen1_TeleOp extends CommandOpMode {
                         new WaitCommand(100),
                         new InstantCommand(() -> {
                             leds.setLEDstate("purple");
+                            gamepad1.rumbleBlips(3);
+                            gamepad2.rumbleBlips(3);
                         }),
                         new WaitCommand(500),
                         new InstantCommand(intake::up),
