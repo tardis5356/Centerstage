@@ -15,19 +15,19 @@ public class BotPositions {
     public static double LEFT_BRACE_EXTENDED = 0.69, RIGHT_BRACE_EXTENDED = 0.68, RIGHT_BRACE_RETRACTED = 0.92, LEFT_BRACE_OVEREXTENDED = 0.28, RIGHT_BRACE_OVEREXTENDED = 0.35;
 
     //intake powers and positions
-    public static double INTAKE_MOTOR_INWARD_POWER = 1, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.25;
+    public static double INTAKE_MOTOR_INWARD_POWER = 1, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.25, INTAKE_MOTOR_OUTWARD_POWER_SUPER_SLOW = -.2;
     public static double INTAKE_DOWN = 0.25, INTAKE_UP = 0.65; // torque: 0.5 down, 0.25 up
 
     //gripper positions
     public static double GRIPPER_LEFT_CLOSED = 0.79, GRIPPER_LEFT_OPEN = 0.33, GRIPPER_RIGHT_CLOSED = 0.22, GRIPPER_RIGHT_OPEN = 0.65;
 
     //lift pid variables
-    public static double LIFT_p = 0, LIFT_i = 0, LIFT_d = 0, LIFT_ff = -.07;
+    public static double LIFT_p = 0, LIFT_i = 0, LIFT_d = 0, LIFT_ff = -.09;
     public static int LIFT_TOLERANCE = 25;
     public static double DISTANCE_FROM_BACKDROP = 20, DISTANCE_FROM_BACKDROP_TOLERANCE;
 
     //wrist positions
-    public static double WRIST_LEFT_ROLL = 0.497, WRIST_RIGHT_ROLL = 0.432, WRIST_ROLL_CENTERED = 0.464, WRIST_TILT_TRANSITION = 0.19, WRIST_TILT_INTAKE = 0.29, WRIST_TILT_DEPOSIT = 0.78, WRIST_TILT_DEPOSIT_LOW = 0.7, WRIST_TILT_DROP_PURPLE = 0.8;
+    public static double WRIST_LEFT_ROLL = 0.497, WRIST_RIGHT_ROLL = 0.432, WRIST_ROLL_CENTERED = 0.464, WRIST_TILT_TRANSITION = 0.19, WRIST_TILT_INTAKE = 0.29, WRIST_TILT_DEPOSIT = 0.78, WRIST_TILT_DEPOSIT_LOW = 0.68, WRIST_TILT_DROP_PURPLE = 0.8;
     //for tilt, 0.09 = 30º
 //    0.115 = 30º
 

@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueWings_BackdropToCenterPark;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueWings_BackdropToCornerPark;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueWings_CenterSlotsToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueWings_CenterSpikeToDecisionPoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.blueWings_DecisionPointToCenterSpike;
@@ -52,8 +50,8 @@ import java.util.concurrent.TimeUnit;
 
 //public class CSTB_blueWings_Park {
 //@Disabled
-@Autonomous(group = "drive", name = "blueWings Purple+Yellow+CornerPark")
-public class blueWings_PurpleYellowCornerParkAuto extends CommandOpMode {
+@Autonomous(group = "drive", name = "blueWings Purple+WAIT+Yellow+CenterPark")
+public class blueWings_PurpleWAITYellowCenterParkAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
     private SampleMecanumDrive drive;
@@ -180,6 +178,7 @@ public class blueWings_PurpleYellowCornerParkAuto extends CommandOpMode {
                 new InstantCommand(intake::stop),
                 new FollowTrajectoryCommand(drive, blueWings_SpikeToDecisionPoint),
                 new InstantCommand(() -> leds.setLEDstate("yellow")),
+                new WaitCommand(8000),
                 new FollowTrajectoryCommand(drive, blueWings_DecisionPointToSafetyWaypoint),
                 new FollowTrajectoryCommand(drive, blueWings_SafetyWaypointToBackdropWaypoint),
                 new ParallelCommandGroup(
@@ -195,8 +194,8 @@ public class blueWings_PurpleYellowCornerParkAuto extends CommandOpMode {
                 new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
                                 new FollowTrajectoryCommand(drive, blueWings_BackdropToWaypoint),
-                                new InstantCommand(() -> leds.setLEDstate("idle")),
-                                new FollowTrajectoryCommand(drive, blueWings_BackdropToCornerPark)
+                                new InstantCommand(() -> leds.setLEDstate("idle"))//,
+                                //new FollowTrajectoryCommand(drive, blueWings_BackdropToCenterPark)
                         ),
                         new SequentialCommandGroup(
                                 new WaitCommand(500),

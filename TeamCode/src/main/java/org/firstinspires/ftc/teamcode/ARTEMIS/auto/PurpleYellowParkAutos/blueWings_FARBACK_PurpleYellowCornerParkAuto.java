@@ -187,7 +187,7 @@ public class blueWings_FARBACK_PurpleYellowCornerParkAuto extends CommandOpMode 
                                 new WaitCommand(750),
                                 new FollowTrajectoryCommand(drive, blueWings_WaypointToBackdrop)
                         ),
-                        new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit")
+                        new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "depositHigh")
                 ),
                 new WaitCommand(250),
                 new InstantCommand(gripper::releaseRight),

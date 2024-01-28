@@ -50,10 +50,10 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             blueBackstage_DecisionPointToLeftSpike = //shift and go forward to score left
                     drive.trajectorySequenceBuilder(blueBackstage_DecisionPointPos)
-                            .forward(4)
+                            .forward(8)
                             .turn(Math.toRadians(45))
-                            .forward(12)
-                            .back(12.5)
+                            .forward(4)
+                            .back(4)
                             .build();
 
             blueBackstage_LeftSpikeToDecisionPoint =  //Shift to decision point
@@ -110,19 +110,22 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
             blueBackstage_LeftSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(blueBackstage_WaypointToLeftSlots.end())
                             .forward(3)
-                            .lineTo(blueBackstage_BackdropWaypointPos.vec())
+                            .lineTo(blueBackstage_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(30))
                             .build();
 
             blueBackstage_CenterSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(blueBackstage_WaypointToCenterSlots.end())
                             .forward(3)
-                            .lineTo(blueBackstage_BackdropWaypointPos.vec())
+                            .lineTo(blueBackstage_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(30))
                             .build();
 
             blueBackstage_RightSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(blueBackstage_WaypointToRightSlots.end())
                             .forward(3)
-                            .lineTo(blueBackstage_BackdropWaypointPos.vec())
+                            .lineTo(blueBackstage_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(30))
                             .build();
 
             blueBackstage_BackdropToCornerPark = //go to and spin to parking between backdrops
@@ -162,7 +165,8 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
                     drive.trajectorySequenceBuilder(blueWings_DecisionPointPos)
                             .forward(14)
                             .turn(Math.toRadians(-90))
-//                            .forward(2)
+                            .forward(4)
+                            .back(2)
                             .build();
 
             blueWings_LeftSpikeToDecisionPoint =  //Shift to decision point
@@ -229,22 +233,22 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
             blueWings_LeftSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(blueWings_WaypointToLeftSlots.end())
                             .forward(3)
-//                            .lineTo(blueWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-//                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+//                            .lineTo(blueWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+//                                    SampleMecanumDrive.getAccelerationConstraint(30))
                             .build();
 
             blueWings_CenterSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(blueWings_WaypointToCenterSlots.end())
                             .forward(3)
-//                            .lineTo(blueWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-//                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+//                            .lineTo(blueWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+//                                    SampleMecanumDrive.getAccelerationConstraint(30))
                             .build();
 
             blueWings_RightSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(blueWings_WaypointToRightSlots.end())
                             .forward(3)
-//                            .lineTo(blueWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-//                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+//                            .lineTo(blueWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+//                                    SampleMecanumDrive.getAccelerationConstraint(30))
                             .build();
 
             blueWings_BackdropToCornerPark = //go to and spin to parking between backdrops
@@ -279,7 +283,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
                             .forward(2)
                             .turn(Math.toRadians(45))
                             .forward(14)
-                            .back(5)
+                            .back(7)
                             .build();
 
             redBackstage_LeftSpikeToDecisionPoint =  //Shift to decision point
@@ -290,7 +294,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
             redBackstage_DecisionPointToCenterSpike = //shift and go forward to score center
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointPos)
                             .forward(18)
-                            .back(6)
+                            .back(5)
                             .build();
 
             redBackstage_CenterSpikeToDecisionPoint =  //Shift to decision point
@@ -302,7 +306,8 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointPos)
                             .forward(8)
                             .turn(Math.toRadians(-50))
-                            .forward(1)
+                            .forward(5)
+                            .back(2)
                             .build();
 
             redBackstage_RightSpikeToDecisionPoint =  //Shift to decision point
@@ -327,28 +332,28 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             redBackstage_WaypointToRightSlots = //decision point to position around backdrop to prep for where to score yellow
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointToBackdropWaypoint.end())
-                            .lineToLinearHeading(new Pose2d(-50, 46, Math.toRadians(0)))
+                            .lineToLinearHeading(new Pose2d(-50, 42, Math.toRadians(0)))//46
                             .build();
 
             redBackstage_LeftSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointToBackdropWaypoint.end())
                             .forward(2)
-                            .lineTo(redBackstage_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                            .lineTo(redBackstage_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(30))
                             .build();
 
             redBackstage_CenterSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointToBackdropWaypoint.end())
                             .forward(2)
-                            .lineTo(redBackstage_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                            .lineTo(redBackstage_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(30))
                             .build();
 
             redBackstage_RightSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(redBackstage_DecisionPointToBackdropWaypoint.end())
                             .forward(2)
-                            .lineTo(redBackstage_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                            .lineTo(redBackstage_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                    SampleMecanumDrive.getAccelerationConstraint(30))
                             .build();
 
             redBackstage_WaypointToCornerPark = //go to and spin to parking between backdrops
@@ -385,7 +390,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
                             .forward(12)
                             .turn(Math.toRadians(-45))
                             .forward(12)
-                            .back(12)
+                            .back(8)
                             .build();
 
             redWings_LeftSpikeToDecisionPoint =  //Shift to decision point
@@ -395,7 +400,7 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             redWings_DecisionPointToCenterSpike = //shift and go forward to score center
                     drive.trajectorySequenceBuilder(redWings_DecisionPointPos)
-                            .forward(6)
+                            .forward(4)
                             .build();
 
             redWings_CenterSpikeToDecisionPoint =  //Shift to decision point
@@ -448,23 +453,23 @@ public class Artemis_PurpleYellowParkAutoTrajectories {
 
             redWings_LeftSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(redWings_DecisionPointToBackdropWaypoint.end())
-                            .forward(2)
-                            .lineTo(redWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                            .forward(3)
+//                            .lineTo(redWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+//                                    SampleMecanumDrive.getAccelerationConstraint(30))
                             .build();
 
             redWings_CenterSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(redWings_DecisionPointToBackdropWaypoint.end())
-                            .forward(2)
-                            .lineTo(redWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                            .forward(3)
+//                            .lineTo(redWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+//                                    SampleMecanumDrive.getAccelerationConstraint(30))
                             .build();
 
             redWings_RightSlotsToBackdropWaypoint =
                     drive.trajectorySequenceBuilder(redWings_DecisionPointToBackdropWaypoint.end())
-                            .forward(2)
-                            .lineTo(redWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                    SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                            .forward(3)
+//                            .lineTo(redWings_BackdropWaypointPos.vec(), SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+//                                    SampleMecanumDrive.getAccelerationConstraint(30))
                             .build();
 
             redWings_BackdropToCenterPark = //go to and spin to parking between backdrops

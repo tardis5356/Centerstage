@@ -133,6 +133,46 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                         )
                 );
                 break;
+            case "deposithigh":
+                currentState = "depositHigh";
+                addCommands(
+//                        new IntakeOutCommand(intake),
+                        new SequentialCommandGroup(
+//                                new InstantCommand(intake::in),
+                                // set arm to transition position (should already be there)
+                                new InstantCommand(arm::toTransition),
+
+                                new WaitCommand(100),
+
+//                                new InstantCommand(intake::out),
+                                new InstantCommand(wrist::toTransition),
+
+                                new WaitCommand(300),
+
+                                // ensure arm isn't in intake anymore
+//                                new WaitUntilCommand(() -> !arm.inIntakeExiting()),
+
+                                // wait for one second
+//                                new WaitCommand(100),
+
+                                // send arm && lift to deposit
+                                new InstantCommand(arm::toDepositHigh),
+                                new InstantCommand(intake::out),
+                                //new LiftToPositionCommand(lift, 100, 25),
+
+                                new WaitCommand(150),
+
+//                                new WaitCommand(100),
+                                new InstantCommand(wrist::tiltToDepositHigh),
+
+                                // wait for .5 seconds for arm to move
+                                new WaitCommand(250),
+
+                                // tilt wrist to deposit
+                                new InstantCommand(intake::stop)
+                        )
+                );
+                break;
             case "dropPurple":
                 currentState = "dropPurple";
                 addCommands(

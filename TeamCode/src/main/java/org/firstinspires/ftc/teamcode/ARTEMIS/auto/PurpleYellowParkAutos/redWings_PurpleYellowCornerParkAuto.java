@@ -179,7 +179,7 @@ public class redWings_PurpleYellowCornerParkAuto extends CommandOpMode {
                 new InstantCommand(() -> leds.setLEDstate("purple")),
                 new FollowTrajectoryCommand(drive, redWings_StartPositionToDecisionPoint),
                 new FollowTrajectoryCommand(drive, redWings_DecisionPointToSpike),
-                new InstantCommand(intake::slowOut),
+                new InstantCommand(intake::superSlowOut),
                 new WaitCommand(500),
                 new InstantCommand(intake::stop),
                 new FollowTrajectoryCommand(drive, redWings_SpikeToDecisionPoint),
@@ -191,7 +191,7 @@ public class redWings_PurpleYellowCornerParkAuto extends CommandOpMode {
                                 new WaitCommand(750),
                                 new FollowTrajectoryCommand(drive, redWings_WaypointToBackdrop)
                         ),
-                        new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit")
+                        new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "depositHigh")
                 ),
                 new WaitCommand(250),
                 new InstantCommand(gripper::releaseRight),
