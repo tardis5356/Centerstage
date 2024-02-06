@@ -22,7 +22,7 @@ public class BotPositions {
     public static double GRIPPER_LEFT_CLOSED = 0.79, GRIPPER_LEFT_OPEN = 0.33, GRIPPER_RIGHT_CLOSED = 0.22, GRIPPER_RIGHT_OPEN = 0.65;
 
     //lift pid variables
-    public static double LIFT_p = 0, LIFT_i = 0, LIFT_d = 0, LIFT_ff = -.09;
+    public static double LIFT_p = 0.02, LIFT_i = 0, LIFT_d = 0, LIFT_ff = -.09;
     public static int LIFT_TOLERANCE = 25;
     public static double DISTANCE_FROM_BACKDROP = 20, DISTANCE_FROM_BACKDROP_TOLERANCE;
 
