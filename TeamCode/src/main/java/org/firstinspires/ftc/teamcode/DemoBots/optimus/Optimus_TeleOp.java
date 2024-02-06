@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -24,6 +25,14 @@ public class Optimus_TeleOp extends LinearOpMode{
     double ArmPosition;
     double PositionDiff;
     boolean FarBack;
+    double LeftstickY;
+    double RightstickX;
+    boolean GripperState = false;
+    double GripperToggle;
+    double GripperEO;
+    double Rabs;
+    double Labs;
+
 // initialization
 
     @Override
@@ -36,57 +45,131 @@ public class Optimus_TeleOp extends LinearOpMode{
         sW = hardwareMap.get(Servo.class, "sW");
         limit = hardwareMap.get(TouchSensor.class, "armLimit");
 
+        Gamepad currentGamepad1 = new Gamepad();
+        Gamepad currentGamepad2 = new Gamepad();
+
+        Gamepad previousGamepad1 = new Gamepad();
+        Gamepad previousGamepad2 = new Gamepad();
+
+
 
 
 // program has startedz
         waitForStart();
 
         while(opModeIsActive())   {
+
+            previousGamepad1.copy(currentGamepad1);
+            previousGamepad2.copy(currentGamepad2);
+
+            currentGamepad1.copy(gamepad1);
+            currentGamepad2.copy(gamepad2);
+
+
             //chasis
+
+            boolean dpU = gamepad1.dpad_up;
+            boolean dpD = gamepad1.dpad_down;
+            boolean dpR1 = gamepad1.dpad_right;
+            boolean dpL1 = gamepad1.dpad_left;
 
             ArmPosition = mA.getCurrentPosition() + PositionDiff;
 
-            double LeftstickY = gamepad1.left_stick_y;
-            double RightstickX = gamepad1.right_stick_x;
+            if(dpU && dpD == false){
+                LeftstickY = -0.8;
+            }
+            else if(dpD && dpU == false){
+                LeftstickY = .8;
+            }
+            else if(dpD == false && dpU == false) {
+                LeftstickY = gamepad1.left_stick_y;
+            }
+            else if(dpD && dpU){
+                LeftstickY = gamepad1.left_stick_y;
+            }
+
+            if(dpR1 && dpL1 == false){
+                RightstickX = .8;
+            }
+            else if(dpL1 && dpR1 == false){
+                RightstickX = -0.8;
+            }
+            else if(dpL1 == false && dpR1 == false) {
+                RightstickX = gamepad1.right_stick_x;
+            }
+            else if(dpL1 && dpR1){
+                RightstickX = gamepad1.right_stick_x;
+            }
+
             mL.setPower((LeftstickY/1.5)-(RightstickX/2));
             mR.setPower((-LeftstickY/1.5)-(RightstickX/2));
 
             //gripper
-            double RightTrigger = gamepad2.right_trigger;
+            boolean RightTrigger = gamepad2.right_bumper;
+            boolean LeftTrigger = gamepad2.left_bumper;
 
-            if (RightTrigger != 0){
-                sG.setPosition(0.35);
-            } else {
-              sG.setPosition(.6);
+            GripperEO = GripperToggle % 2;
+
+            if ((currentGamepad2.left_bumper && !previousGamepad2.left_bumper) || (currentGamepad2.right_bumper && !previousGamepad2.right_bumper)){
+//                sG.setPosition(0.37);
+//                GripperToggle ++;
+                GripperState = !GripperState;
+            }
+//            else if ((RightTrigger || LeftTrigger) && GripperEO != 0){
+//              sG.setPosition(.6);
+//              GripperToggle --;
+//            }
+//            else {
+//            }
+
+            if(GripperState){
+                sG.setPosition(.37);
+            }
+            else if(GripperState == false){
+                sG.setPosition(.6);
             }
 
             //wrist
             boolean rB2 = gamepad2.dpad_down;
             boolean lB2 = gamepad2.dpad_up;
-            boolean dpr2 = gamepad2.dpad_right;
+//            boolean dpr2 = gamepad2.dpad_right;
 
-            if (lB2) {
-                wristPosition = .7;
+            if(ArmPosition > 3650){
+                wristPosition = 1;
             }
+            else {
+                if (lB2) {
+                    wristPosition = 1;
+                }
 //            else if (lB2){
 //                wristPosition = 0;
 //
 //            }
-            else if (rB2){
-                wristPosition = .35;
-            }
-            else if (rB2 == false && lB2 == false){
+                else if (rB2) {
+                    wristPosition = .7;
+                } else if (rB2 == false && lB2 == false) {
 
+                }
             }
-
             sW.setPosition(wristPosition);
 
             //arm
 
             double RightstickY2 = gamepad2.right_stick_y;
+            double LeftstickY2 = gamepad2.left_stick_y;
+
+            Rabs = Math.abs(RightstickY2);
+            Labs = Math.abs(LeftstickY2);
 
             if(limit.isPressed() == false && ArmPosition >= 0){
-                mA.setPower((-RightstickY2)/2);
+                if(Rabs > Labs){
+                    mA.setPower((-RightstickY2)/2);
+                }
+                else {
+                    mA.setPower((-LeftstickY2)/2);
+                }
+//                mA.setPower((-RightstickY2)/2);
+//                mA.setPower((-LeftstickY2)/2);
                 FarBack = false;
             }
             else if(ArmPosition < -100 && limit.isPressed() == false){
@@ -97,19 +180,31 @@ public class Optimus_TeleOp extends LinearOpMode{
                 mA.setPower(.5);
             }
             else if (ArmPosition >= -100 && ArmPosition < 0 && FarBack == false){
-                mA.setPower((-RightstickY2)/2);
+                if(Rabs > Labs){
+                    mA.setPower((-RightstickY2)/2);
+                }
+                else {
+                    mA.setPower((-LeftstickY2)/2);
+                }
+
+//                mA.setPower((-RightstickY2)/2);
+//                mA.setPower((-LeftstickY2)/2);
             }
 //            else if(FarBack = true){
 //                mA.setPower(0.5);
 //            }
-//            else if(ArmPosition >= 0){
+//            else if(ArmPositzion >= 0){
 //                FarBack = false;
 //            }
             else if (limit.isPressed() == true){
-                mA.setPower(-0.5);
+                mA.setPower(-.5);
                 ArmPosition = 3750;
                 PositionDiff = ArmPosition - mA.getCurrentPosition();
             }
+//            if (ArmPosition >= 3850){
+//                mA.setPower(-.5);
+//            }
+
 
 
             telemetry.addData("trigger", gamepad2.right_trigger);
