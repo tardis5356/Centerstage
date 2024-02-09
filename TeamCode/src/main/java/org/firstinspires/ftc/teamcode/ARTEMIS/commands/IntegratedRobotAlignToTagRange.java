@@ -8,14 +8,12 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Webcams;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import org.opencv.core.Mat;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
-public class RobotAlignToTagRange extends CommandBase {
+public class IntegratedRobotAlignToTagRange extends CommandBase {
     Drivetrain drivetrain;
     Webcams webcam;
     // Adjust these numbers to suit your robot.
@@ -44,7 +42,7 @@ public class RobotAlignToTagRange extends CommandBase {
 
     double rangeError, headingError, yawError;
 
-    public RobotAlignToTagRange(Drivetrain drivetrain, Webcams webcams, String active_camera, double desired_range, int target_tag, double tolerance) {
+    public IntegratedRobotAlignToTagRange(Drivetrain drivetrain, Webcams webcams, String active_camera, double desired_range, int target_tag, double tolerance) {
         this.drivetrain = drivetrain;
         this.webcam = webcams;
         this.activeWebcam = active_camera;
