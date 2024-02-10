@@ -96,10 +96,10 @@ public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
                 FarForward = true;
                 mArm.setPower(-1);
             }
-            if(armPosition > 0 && FarForward == true){
-                mArm.setPower(-1);
+            if(armPosition > 250 && FarForward == true){
+                mArm.setPower(-Math.abs(rightY2));
             }
-            if(armPosition <= 0){
+            if(armPosition <= 250){
                 FarForward = false;
             }
             if(armPosition <= -3500 || FarBack == true){
