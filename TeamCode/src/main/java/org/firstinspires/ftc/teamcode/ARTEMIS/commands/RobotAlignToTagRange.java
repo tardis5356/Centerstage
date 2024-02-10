@@ -63,11 +63,11 @@ public class RobotAlignToTagRange extends CommandBase {
         // Initialize the Apriltag Detection process
 
         webcam.setCamera(activeWebcam);
-        try {
-            webcam.setManualExposure(6, 250, activeWebcam);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            webcam.setManualExposure(6, 250, activeWebcam);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
 
 //        setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
 
