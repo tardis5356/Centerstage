@@ -48,8 +48,11 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Webcams;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Winch;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Wrist;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
+
+import java.util.List;
 
 @Config
 @TeleOp(name = "Gen1_TeleOp", group = "Gen1")
@@ -185,7 +188,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         robotToIntakeCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake");
         robotGrabPixelsCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "grab_pixels");
 
-        robotAlignToTagTest = new RobotAlignToTagRange(drivetrain, webcams, "back", 12, 5 , 3);
+        robotAlignToTagTest = new RobotAlignToTagRange(drivetrain, webcams, "back", 12, 5, 3);
 
 //        imu = hardwareMap.get(IMU.class, "imuEx");
 //
@@ -252,7 +255,11 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON))
                 .toggleWhenActive(robotAlignToTagTest)
-                .toggleWhenActive(()->{aTagHomingActive = true;}, ()->{aTagHomingActive = false;});
+                .toggleWhenActive(() -> {
+                    aTagHomingActive = true;
+                }, () -> {
+                    aTagHomingActive = false;
+                });
 //                .whenActive(() -> {
 //                    aTagHomingActive = true;
 //                })
@@ -531,15 +538,32 @@ public class Gen1_TeleOp extends CommandOpMode {
         double mFRPower = FB - LR - Rotation;
         double mBLPower = FB - LR + Rotation;
         double mBRPower = FB + LR - Rotation;
-        if(aTagHomingActive) {
-            telemetry.addData("current detections", webcams.getCurrentDetections(webcams.getAprilTagBackProcessor()));
+        if (aTagHomingActive) {
+            telemetry.addData("active camera", webcams.getActiveCamera());
+//            if(webcams.getAprilTagFrontProcessor().equals())
+//            if (visionPortal.getActiveCamera().equals(webcam1)) {
+//                telemetry.addData("activeCamera", "Webcam 1");
+//                telemetry.addData("Press RightBumper", "to switch to Webcam 2");
+//            } else {
+//                telemetry.addData("activeCamera", "Webcam 2");
+//                telemetry.addData("Press LeftBumper", "to switch to Webcam 1");
+//            }
+            List<Integer> visibleTags = null;
+            for (AprilTagDetection detection : webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor())) {
+//                assert visibleTags != null;
+//                visibleTags.add(detection.id);
+            }
+            telemetry.addData("current detections", visibleTags);
+            telemetry.addData("current detections", webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()));
+            if (webcams.getDesiredTag(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), 5) != null)
+                telemetry.addData("desired tag", webcams.getDesiredTag(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), 5).ftcPose.range);
             telemetry.addData("all powers", robotAlignToTagTest.getDriveStrafeTurnPower());
             telemetry.addLine();
             telemetry.addData("drive power", robotAlignToTagTest.getDriveStrafeTurnPower().get(0));
             telemetry.addData("strafe power", robotAlignToTagTest.getDriveStrafeTurnPower().get(1));
             telemetry.addData("turn power", robotAlignToTagTest.getDriveStrafeTurnPower().get(2));
             telemetry.addLine();
-        }else{
+        } else {
             mFL.setPower(mFLPower * CURRENT_SPEED_MULTIPLIER);
             mFR.setPower(mFRPower * CURRENT_SPEED_MULTIPLIER);
             mBL.setPower(mBLPower * CURRENT_SPEED_MULTIPLIER);

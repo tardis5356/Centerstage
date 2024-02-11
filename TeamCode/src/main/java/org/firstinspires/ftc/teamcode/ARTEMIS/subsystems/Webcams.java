@@ -6,6 +6,8 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
@@ -42,10 +44,12 @@ public class Webcams extends SubsystemBase {
 
     public String activeWebcam = "front";
 
+    public WebcamName frontWebcam, backWebcam;
+
     public Webcams(HardwareMap hardwareMap) {
         // Create the AprilTag processor by using a builder.
         aprilTagFront = new AprilTagProcessor.Builder().build();
-        aprilTagBack = new AprilTagProcessor.Builder().build();
+//        aprilTagBack = new AprilTagProcessor.Builder().build();
 
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
         // eg: Some typical detection data using a Logitech C920 WebCam
@@ -55,20 +59,31 @@ public class Webcams extends SubsystemBase {
         // Decimation = 3 ..  Detect 5" Tag from 10 feet away at 30 Frames Per Second
         // Note: Decimation can be changed on-the-fly to adapt during a match.
         aprilTagFront.setDecimation(2);
+//        aprilTagBack.setDecimation(2);
+
+        frontWebcam = hardwareMap.get(WebcamName.class, "Webcam 1");
+        backWebcam = hardwareMap.get(WebcamName.class, "Webcam 2");
+
+        CameraName switchableCamera = ClassFactory.getInstance()
+                .getCameraManager().nameForSwitchableCamera(frontWebcam, backWebcam);
 
         // Create the vision portal by using a builder.
         visionPortalFront = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
-                .addProcessors(aprilTagFront)
+//                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .setCamera(switchableCamera)
+                .addProcessor(aprilTagFront)
+                .setAutoStopLiveView(true)
                 .enableLiveView(true)
 //                .addProcessor(frontCameraStream)
                 .build();
-        visionPortalBack = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"))
-                .addProcessor(aprilTagBack)
-                .enableLiveView(true)
-//                .addProcessor(backCameraStream)
-                .build();
+
+//        visionPortalBack = new VisionPortal.Builder()
+//                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"))
+//                .addProcessor(aprilTagBack)
+//                .setAutoStopLiveView(true)
+//                .enableLiveView(true)
+////                .addProcessor(backCameraStream)
+//                .build();
     }
 
     public void initialize() throws InterruptedException {
@@ -85,10 +100,11 @@ public class Webcams extends SubsystemBase {
     }
 
 
-    public AprilTagProcessor getAprilTagFrontProcessor(){
+    public AprilTagProcessor getAprilTagFrontProcessor() {
         return aprilTagFront;
     }
-    public AprilTagProcessor getAprilTagBackProcessor(){
+
+    public AprilTagProcessor getAprilTagBackProcessor() {
         return aprilTagBack;
     }
 
@@ -123,14 +139,19 @@ public class Webcams extends SubsystemBase {
         }
     }
 
-    public CameraStreamProcessor getFrontCameraStream(){ return frontCameraStream; }
-    public CameraStreamProcessor getBackCameraStream(){ return backCameraStream; }
+    public CameraStreamProcessor getFrontCameraStream() {
+        return frontCameraStream;
+    }
 
-    public  AprilTagProcessor getActiveAprilTagProcessor() {
-        if(activeWebcam == "front")
+    public CameraStreamProcessor getBackCameraStream() {
+        return backCameraStream;
+    }
+
+    public AprilTagProcessor getActiveAprilTagProcessor() {
+//        if (activeWebcam == "front")
             return getAprilTagFrontProcessor();
-        else
-            return getAprilTagBackProcessor();
+//        else
+//            return getAprilTagBackProcessor();
     }
 
     public List<AprilTagDetection> getCurrentDetections(AprilTagProcessor aprilTagProcessor) {
@@ -168,23 +189,23 @@ public class Webcams extends SubsystemBase {
      Manually set the camera gain and exposure.
      This can only be called AFTER calling initAprilTag(), and only works for Webcams;
     */
-    public void setManualExposure ( int exposureMS, int gain, String webcam) throws
-        InterruptedException {
-            // Wait for the camera to be open, then use the controls
+    public void setManualExposure(int exposureMS, int gain, String webcam) throws
+            InterruptedException {
+        // Wait for the camera to be open, then use the controls
 
-            VisionPortal activePortal;
+        VisionPortal activePortal;
 
-            if (webcam == "front")
-                activePortal = visionPortalFront;
-            else
-                activePortal = visionPortalBack;
+//        if (webcam == "front")
+            activePortal = visionPortalFront;
+//        else
+//            activePortal = visionPortalBack;
 
-            if (activePortal == null) {
-                return;
-            }
+        if (activePortal == null) {
+            return;
+        }
 
-            // Make sure camera is streaming before we try to set the exposure controls
-            if (activePortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+        // Make sure camera is streaming before we try to set the exposure controls
+        if (activePortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
 //            telemetry.addData("Camera", "Waiting");
 //            telemetry.update();
 //            while (!isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
@@ -192,7 +213,7 @@ public class Webcams extends SubsystemBase {
 //            }
 //            telemetry.addData("Camera", "Ready");
 //            telemetry.update();
-            }
+        }
 
 //            try {
 //                // Set camera controls unless we are stopping.
@@ -210,14 +231,22 @@ public class Webcams extends SubsystemBase {
 //            } catch (InterruptedException e) {
 //
 //            }
-        }
+    }
 
-        public void setCamera (String webcam){
-            if (webcam.toLowerCase() == "front") {
-                activeWebcam = "front";
-            } else {
-                // back webcam
-                activeWebcam = "back";
-            }
+    public void setCamera(String webcam) {
+        if (webcam.toLowerCase() == "front") {
+            activeWebcam = "front";
+            visionPortalFront.setActiveCamera(frontWebcam);
+            visionPortalFront.resumeStreaming();
+        } else {
+            // back webcam
+            activeWebcam = "back";
+            visionPortalFront.setActiveCamera(backWebcam);
+            visionPortalFront.resumeStreaming();
         }
     }
+
+    public String getActiveCamera() {
+        return activeWebcam;
+    }
+}
