@@ -32,17 +32,26 @@ public class RobotAlignToTagRange extends CommandBase {
     final double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot) 0.5
     final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot) 0.3
 
-    private static String activeWebcam = "";  // 1 front, 2 back
+    private static String activeWebcam = "back";  // 1 front, 2 back
     private static int DESIRED_TAG_ID = 0;     // Choose the tag you want to approach or set to -1 for ANY tag.
     private VisionPortal visionPortal;               // Used to manage the video source.
     private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
     private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
 
     double drive, strafe, turn;
+    double previousDrive, previousStrafe, previousTurn;
 
     double tolerance;
 
-    double rangeError, headingError, yawError;
+    double rangeError = 0, headingError = 0, yawError = 0;
+
+    boolean homingActive = false;
+
+
+    boolean targetFound     = false;    // Set to true when an AprilTag target is detected
+//    double  drive           = 0;        // Desired forward power/speed (-1 to +1)
+//    double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
+//    double  turn            = 0;        // Desired turning power/speed (-1 to +1)
 
     public RobotAlignToTagRange(Drivetrain drivetrain, Webcams webcams, String active_camera, double desired_range, int target_tag, double tolerance) {
         this.drivetrain = drivetrain;
@@ -55,14 +64,11 @@ public class RobotAlignToTagRange extends CommandBase {
 
     @Override
     public void initialize() { // runs once
-        boolean targetFound     = false;    // Set to true when an AprilTag target is detected
-        double  drive           = 0;        // Desired forward power/speed (-1 to +1)
-        double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
-        double  turn            = 0;        // Desired turning power/speed (-1 to +1)
 
         // Initialize the Apriltag Detection process
 
         webcam.setCamera(activeWebcam);
+        homingActive = true;
 //        try {
 //            webcam.setManualExposure(6, 250, activeWebcam);
 //        } catch (InterruptedException e) {
@@ -82,10 +88,11 @@ public class RobotAlignToTagRange extends CommandBase {
 
     @Override
     public void execute() { // runs continuously
+        desiredTag = null;
         desiredTag = webcam.getDesiredTag(webcam.getCurrentDetections(webcam.getActiveAprilTagProcessor()), DESIRED_TAG_ID);
 
         if(desiredTag != null) {
-            rangeError = (desiredTag.ftcPose.y - DESIRED_DISTANCE);
+            rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
             headingError = desiredTag.ftcPose.bearing;
             yawError = desiredTag.ftcPose.yaw;
 
@@ -94,11 +101,33 @@ public class RobotAlignToTagRange extends CommandBase {
             turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
             strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
 
-            if (activeWebcam != "front")
-                turn *= -1;
+            previousDrive = drive;
+            previousTurn = turn;
+            previousStrafe = strafe;
 
-            drivetrain.driveRobot(drive, strafe, turn);
+            if (activeWebcam != "front") {
+                turn *= 1;
+                strafe *= -1;
+            }
+
+            targetFound = true;
+
+//            drivetrain.driveRobot(drive, strafe, turn);
+        } else {
+//            drive = -previousDrive;
+//            turn = -previousTurn;
+//            strafe = -previousStrafe;
+            targetFound = false;
+
+            drive = 0;
+            turn = 0;
+            strafe = 0;
+//            drivetrain.driveRobot(0, 0, 0);
         }
+    }
+
+    public boolean isTargetFound(){
+        return targetFound;
     }
 
     public List<Double> getDriveStrafeTurnPower() {
@@ -114,6 +143,10 @@ public class RobotAlignToTagRange extends CommandBase {
     @Override
     public void end(boolean interrupted) {
 //        lift.stop();
+        homingActive = false;
     }
 
+    public boolean isActive(){
+        return homingActive;
+    }
 }

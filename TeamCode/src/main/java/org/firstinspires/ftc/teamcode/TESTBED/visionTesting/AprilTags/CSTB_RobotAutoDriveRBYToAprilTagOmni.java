@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode.TESTBED.visionTesting.AprilTags;
 
 import static org.firstinspires.ftc.teamcode.TESTBED.visionTesting.AprilTags.AprilTagGeometries.RBYtoXYT;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -89,7 +90,7 @@ import org.firstinspires.ftc.teamcode.TESTBED.visionTesting.AprilTags.AprilTagGe
  */
 
 @TeleOp(name = "CSTB Omni Drive RBY To AprilTag", group = "Concept")
-//@Disabled
+@Disabled
 public class CSTB_RobotAutoDriveRBYToAprilTagOmni extends LinearOpMode {
     // Adjust these numbers to suit your robot.
     final double DESIRED_Y_OFFSET = 24; //  this is how close the camera should get to the target (inches)

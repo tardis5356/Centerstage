@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.TESTBED.visionTesting.AprilTags;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -89,7 +90,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Config
 @TeleOp(name = "CSTB Omni Drive XY Gain To AprilTag", group = "Concept")
-//@Disabled
+@Disabled
 public class CSTB_RobotAutoDriveXYGainToAprilTagOmni extends LinearOpMode {
 //    Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 

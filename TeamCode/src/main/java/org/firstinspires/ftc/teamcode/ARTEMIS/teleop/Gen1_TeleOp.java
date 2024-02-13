@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.teleop;
 
+import static com.arcrobotics.ftclib.kotlin.extensions.gamepad.GamepadExExtKt.whenActive;
+
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.AngleController;
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
@@ -188,7 +190,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         robotToIntakeCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake");
         robotGrabPixelsCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "grab_pixels");
 
-        robotAlignToTagTest = new RobotAlignToTagRange(drivetrain, webcams, "back", 12, 5, 3);
+        robotAlignToTagTest = new RobotAlignToTagRange(drivetrain, webcams, "back", 4, 5, 3);
 
 //        imu = hardwareMap.get(IMU.class, "imuEx");
 //
@@ -254,16 +256,11 @@ public class Gen1_TeleOp extends CommandOpMode {
  */
 
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON))
-                .toggleWhenActive(robotAlignToTagTest)
-                .toggleWhenActive(() -> {
+                .whileActiveOnce(robotAlignToTagTest)
+                .whenActive(() -> {
                     aTagHomingActive = true;
-                }, () -> {
-                    aTagHomingActive = false;
-                });
-//                .whenActive(() -> {
-//                    aTagHomingActive = true;
-//                })
-//                .whenInactive(() -> aTagHomingActive = false);
+                })
+                .whenInactive(() -> aTagHomingActive = false);
 
         //button map intake commands
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.15 || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.15)
@@ -538,31 +535,37 @@ public class Gen1_TeleOp extends CommandOpMode {
         double mFRPower = FB - LR - Rotation;
         double mBLPower = FB - LR + Rotation;
         double mBRPower = FB + LR - Rotation;
-        if (aTagHomingActive) {
+
+        if (aTagHomingActive) {//robotAlignToTagTest.isActive()
+            telemetry.addData("target found", robotAlignToTagTest.isTargetFound());
             telemetry.addData("active camera", webcams.getActiveCamera());
-//            if(webcams.getAprilTagFrontProcessor().equals())
-//            if (visionPortal.getActiveCamera().equals(webcam1)) {
-//                telemetry.addData("activeCamera", "Webcam 1");
-//                telemetry.addData("Press RightBumper", "to switch to Webcam 2");
-//            } else {
-//                telemetry.addData("activeCamera", "Webcam 2");
-//                telemetry.addData("Press LeftBumper", "to switch to Webcam 1");
-//            }
             List<Integer> visibleTags = null;
             for (AprilTagDetection detection : webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor())) {
 //                assert visibleTags != null;
 //                visibleTags.add(detection.id);
             }
-            telemetry.addData("current detections", visibleTags);
+//            telemetry.addData("current detections", visibleTags);
             telemetry.addData("current detections", webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()));
-            if (webcams.getDesiredTag(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), 5) != null)
+            if (webcams.getDesiredTag(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), 5) != null) {
+//                telemetry.addData("getCurrentRange", robotAlignToTagTest.getCurrentRange());
+//                telemetry.addData("getRangeError", robotAlignToTagTest.getRangeError());
+                telemetry.addLine();
                 telemetry.addData("desired tag", webcams.getDesiredTag(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), 5).ftcPose.range);
+            }
             telemetry.addData("all powers", robotAlignToTagTest.getDriveStrafeTurnPower());
             telemetry.addLine();
             telemetry.addData("drive power", robotAlignToTagTest.getDriveStrafeTurnPower().get(0));
             telemetry.addData("strafe power", robotAlignToTagTest.getDriveStrafeTurnPower().get(1));
             telemetry.addData("turn power", robotAlignToTagTest.getDriveStrafeTurnPower().get(2));
             telemetry.addLine();
+            double tagDrivePower = robotAlignToTagTest.getDriveStrafeTurnPower().get(0);
+            double tagStrafePower = robotAlignToTagTest.getDriveStrafeTurnPower().get(1);
+            double tagTurnPower = robotAlignToTagTest.getDriveStrafeTurnPower().get(2);
+
+            mFL.setPower(tagDrivePower + tagStrafePower + tagTurnPower);
+            mFR.setPower(tagDrivePower - tagStrafePower - tagTurnPower);
+            mBL.setPower(tagDrivePower - tagStrafePower + tagTurnPower);
+            mBR.setPower(tagDrivePower + tagStrafePower - tagTurnPower);
         } else {
             mFL.setPower(mFLPower * CURRENT_SPEED_MULTIPLIER);
             mFR.setPower(mFRPower * CURRENT_SPEED_MULTIPLIER);
