@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleParkAutos;
+package org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleParkAutos;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;

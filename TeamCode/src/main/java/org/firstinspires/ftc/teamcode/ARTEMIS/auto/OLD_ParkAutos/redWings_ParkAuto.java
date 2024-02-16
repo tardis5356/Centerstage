@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos;
+package org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_ParkAutos;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos.Artemis_ParkAutoTrajectories.redWings_DecisionPointToCenterPark;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos.Artemis_ParkAutoTrajectories.redWings_StartPositionToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_ParkAutos.Artemis_ParkAutoTrajectories.redWings_DecisionPointToCenterPark;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_ParkAutos.Artemis_ParkAutoTrajectories.redWings_StartPositionToDecisionPoint;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;

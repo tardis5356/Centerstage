@@ -1,23 +1,21 @@
-package org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos;
+package org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos;
 
-//import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_BackdropToCornerPark;
-
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_CenterSlotsToBackdropWaypoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_CenterSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_DecisionPointToCenterSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_DecisionPointToLeftSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_DecisionPointToRightSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_DecisionPointToSafetyWaypoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_LeftSlotsToBackdropWaypoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_LeftSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_RightSlotsToBackdropWaypoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_RightSpikeToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_SafetyWaypointToBackdropWaypoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_StartPos;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_StartPositionToDecisionPoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_WaypointToCenterSlots;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_WaypointToLeftSlots;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.PurpleYellowParkAutos.Artemis_PurpleYellowParkAutoTrajectories.redWings_WaypointToRightSlots;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_BackdropToCenterPark;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_CenterSpikeToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_DecisionPointToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_DecisionPointToCenterSpike;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_DecisionPointToLeftSpike;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_DecisionPointToRightSpike;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_LeftSpikeToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_RightSpikeToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_StartPos;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_StartPositionToDecisionPoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_CenterSlotsToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_LeftSlotsToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_RightSlotsToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_WaypointToCenterSlots;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_WaypointToLeftSlots;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_PurpleYellowParkAutos.OLD_Artemis_PurpleYellowParkAutoTrajectories.OLD_blueBackstage_WaypointToRightSlots;
 
 import android.util.Size;
 
@@ -29,6 +27,7 @@ import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -45,22 +44,22 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Winch;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Wrist;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.RedPropDetection;
+import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.BluePropDetection;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 import java.util.concurrent.TimeUnit;
 
-//public class CSTB_redWings_Park {
-//@Disabled
-@Autonomous(group = "drive", name = "redWings Purple+WAIT+Yellow+CenterPark")
-public class redWings_PurpleWAITYellowCenterParkAuto extends CommandOpMode {
+//public class CSTB_blueWings_Park {
+@Disabled
+@Autonomous(group = "drive", name = "OLD blueBackstage Purple+Yellow+CenterPark")
+public class OLD_blueBackstage_PurpleYellowCenterParkAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
     private SampleMecanumDrive drive;
     private VisionPortal portal;
-    private RedPropDetection redPropThreshold;
+    private BluePropDetection bluePropThreshold;
     //    private Lift lift;
-    public static TrajectorySequence redWings_DecisionPointToSpike, redWings_SpikeToDecisionPoint, redWings_WaypointToBackdrop, redWings_BackdropToWaypoint;
+    private static TrajectorySequence blueBackstage_DecisionPointToSpike, blueBackstage_SpikeToDecisionPoint, blueBackstage_WaypointToBackdrop, blueBackstage_BackdropToBackdropWaypoint;
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
     private LEDs leds;
@@ -77,15 +76,15 @@ public class redWings_PurpleWAITYellowCenterParkAuto extends CommandOpMode {
 
         ////////‼️‼️⁉️⁉️CAMERA INITIALIZATION/DEFINING ⁉️⁉️⁉️
 //        public void runOpMode () throw InterruptedException {
-        redPropThreshold = new RedPropDetection();
+        bluePropThreshold = new BluePropDetection();
         portal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
-//                .addProcessor(redPropThreshold)
+//                .addProcessor(bluePropThreshold)
                 .setCameraResolution(new Size(640, 480))
 //                .setStreamFormat(VisionPortal.StreamFormat.YUY2)
 //                .enableLiveView(true)
 //                .setCamera()
-                .addProcessor(redPropThreshold)
+                .addProcessor(bluePropThreshold)
                 .build();
 
         if (portal.getCameraState() != VisionPortal.CameraState.STREAMING) {
@@ -112,8 +111,8 @@ public class redWings_PurpleWAITYellowCenterParkAuto extends CommandOpMode {
 
         drive = new SampleMecanumDrive(hardwareMap);
 
-        drive.setPoseEstimate(redWings_StartPos);
-        Artemis_PurpleYellowParkAutoTrajectories.generateTrajectories(drive);
+        drive.setPoseEstimate(OLD_blueBackstage_StartPos);
+        OLD_Artemis_PurpleYellowParkAutoTrajectories.generateTrajectories(drive);
 
         intake = new Intake(hardwareMap);
         leds = new LEDs(hardwareMap);
@@ -129,44 +128,42 @@ public class redWings_PurpleWAITYellowCenterParkAuto extends CommandOpMode {
 
         ////////////////////////////////////DONE DEFINING PARK TRAJECTORIES///////////////////////////////////////
 
-
-
         telemetry.setMsTransmissionInterval(50);
 
         while (!isStarted() && !isStopRequested()) {
-            switch (redPropThreshold.getPropPosition()) {
+            switch (bluePropThreshold.getPropPosition()) {
                 case "left":
-                    redWings_DecisionPointToSpike = redWings_DecisionPointToLeftSpike;
-                    redWings_SpikeToDecisionPoint = redWings_LeftSpikeToDecisionPoint;
+                    blueBackstage_DecisionPointToSpike = OLD_blueBackstage_DecisionPointToLeftSpike;
+                    blueBackstage_SpikeToDecisionPoint = OLD_blueBackstage_LeftSpikeToDecisionPoint;
 
-                    redWings_WaypointToBackdrop = redWings_WaypointToLeftSlots;
-                    redWings_BackdropToWaypoint = redWings_LeftSlotsToBackdropWaypoint;
+                    blueBackstage_WaypointToBackdrop = OLD_blueBackstage_WaypointToLeftSlots;
+                    blueBackstage_BackdropToBackdropWaypoint = OLD_blueBackstage_LeftSlotsToBackdropWaypoint;
 
                     telemetry.addLine("park traj 1");
                     break;
                 default:
                 case "center":
-                    redWings_DecisionPointToSpike = redWings_DecisionPointToCenterSpike;
-                    redWings_SpikeToDecisionPoint = redWings_CenterSpikeToDecisionPoint;
+                    blueBackstage_DecisionPointToSpike = OLD_blueBackstage_DecisionPointToCenterSpike;
+                    blueBackstage_SpikeToDecisionPoint = OLD_blueBackstage_CenterSpikeToDecisionPoint;
 
-                    redWings_WaypointToBackdrop = redWings_WaypointToCenterSlots;
-                    redWings_BackdropToWaypoint = redWings_CenterSlotsToBackdropWaypoint;
+                    blueBackstage_WaypointToBackdrop = OLD_blueBackstage_WaypointToCenterSlots;
+                    blueBackstage_BackdropToBackdropWaypoint = OLD_blueBackstage_CenterSlotsToBackdropWaypoint;
 
                     telemetry.addLine("park traj 2");
                     break;
                 case "right":
-                    redWings_DecisionPointToSpike = redWings_DecisionPointToRightSpike;
-                    redWings_SpikeToDecisionPoint = redWings_RightSpikeToDecisionPoint;
+                    blueBackstage_DecisionPointToSpike = OLD_blueBackstage_DecisionPointToRightSpike;
+                    blueBackstage_SpikeToDecisionPoint = OLD_blueBackstage_RightSpikeToDecisionPoint;
 
-                    redWings_WaypointToBackdrop = redWings_WaypointToRightSlots;
-                    redWings_BackdropToWaypoint = redWings_RightSlotsToBackdropWaypoint;
+                    blueBackstage_WaypointToBackdrop = OLD_blueBackstage_WaypointToRightSlots;
+                    blueBackstage_BackdropToBackdropWaypoint = OLD_blueBackstage_RightSlotsToBackdropWaypoint;
 
                     telemetry.addLine("park traj 3");
                     break;
             }
 
             telemetry.addLine("waitForStart");
-            telemetry.addData("Prop Position", redPropThreshold.getPropPosition());
+            telemetry.addData("Prop Position", bluePropThreshold.getPropPosition());
             telemetry.update();
             sleep(20);
         }
@@ -175,20 +172,18 @@ public class redWings_PurpleWAITYellowCenterParkAuto extends CommandOpMode {
         telemetry.update();
         schedule(new SequentialCommandGroup(
                 new InstantCommand(() -> leds.setLEDstate("purple")),
-                new FollowTrajectoryCommand(drive, redWings_StartPositionToDecisionPoint),
-                new FollowTrajectoryCommand(drive, redWings_DecisionPointToSpike),
+                new FollowTrajectoryCommand(drive, OLD_blueBackstage_StartPositionToDecisionPoint),
+                new FollowTrajectoryCommand(drive, blueBackstage_DecisionPointToSpike),
                 new InstantCommand(intake::superSlowOut),
                 new WaitCommand(500),
                 new InstantCommand(intake::stop),
-                new FollowTrajectoryCommand(drive, redWings_SpikeToDecisionPoint),
+                new FollowTrajectoryCommand(drive, blueBackstage_SpikeToDecisionPoint),
                 new InstantCommand(() -> leds.setLEDstate("yellow")),
-                new WaitCommand(8000),
-                new FollowTrajectoryCommand(drive, redWings_DecisionPointToSafetyWaypoint),
-                new FollowTrajectoryCommand(drive, redWings_SafetyWaypointToBackdropWaypoint),
+                new FollowTrajectoryCommand(drive, OLD_blueBackstage_DecisionPointToBackdropWaypoint),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
                                 new WaitCommand(750),
-                                new FollowTrajectoryCommand(drive, redWings_WaypointToBackdrop)
+                                new FollowTrajectoryCommand(drive, blueBackstage_WaypointToBackdrop)
                         ),
                         new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "depositHigh")
                 ),
@@ -197,9 +192,9 @@ public class redWings_PurpleWAITYellowCenterParkAuto extends CommandOpMode {
                 new WaitCommand(500),
                 new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
-                                new FollowTrajectoryCommand(drive, redWings_BackdropToWaypoint),
-                                new InstantCommand(() -> leds.setLEDstate("idle"))//,
-//                                new FollowTrajectoryCommand(drive, redWings_BackdropToCenterPark)
+                                new FollowTrajectoryCommand(drive, blueBackstage_BackdropToBackdropWaypoint),
+                                new InstantCommand(() -> leds.setLEDstate("idle")),
+                                new FollowTrajectoryCommand(drive, OLD_blueBackstage_BackdropToCenterPark)
                         ),
                         new SequentialCommandGroup(
                                 new WaitCommand(500),

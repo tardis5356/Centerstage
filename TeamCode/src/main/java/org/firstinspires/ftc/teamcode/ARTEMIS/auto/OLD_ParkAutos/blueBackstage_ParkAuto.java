@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos;
+package org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_ParkAutos;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos.Artemis_ParkAutoTrajectories.blueBackstage_StartPositionToCornerPark;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_ParkAutos.Artemis_ParkAutoTrajectories.blueBackstage_StartPositionToCornerPark;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
