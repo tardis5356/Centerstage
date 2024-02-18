@@ -8,14 +8,12 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Webcams;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import org.opencv.core.Mat;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
-public class RobotAlignToTagRange extends CommandBase {
+public class IntegratedRobotAlignToTagRange extends CommandBase {
     Drivetrain drivetrain;
     Webcams webcam;
     // Adjust these numbers to suit your robot.
@@ -32,28 +30,19 @@ public class RobotAlignToTagRange extends CommandBase {
     final double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot) 0.5
     final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot) 0.3
 
-    private static String activeWebcam = "back";  // 1 front, 2 back
+    private static String activeWebcam = "";  // 1 front, 2 back
     private static int DESIRED_TAG_ID = 0;     // Choose the tag you want to approach or set to -1 for ANY tag.
     private VisionPortal visionPortal;               // Used to manage the video source.
     private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
     private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
 
     double drive, strafe, turn;
-    double previousDrive, previousStrafe, previousTurn;
 
     double tolerance;
 
-    double rangeError = 0, headingError = 0, yawError = 0;
+    double rangeError, headingError, yawError;
 
-    boolean homingActive = false;
-
-
-    boolean targetFound     = false;    // Set to true when an AprilTag target is detected
-//    double  drive           = 0;        // Desired forward power/speed (-1 to +1)
-//    double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
-//    double  turn            = 0;        // Desired turning power/speed (-1 to +1)
-
-    public RobotAlignToTagRange(Drivetrain drivetrain, Webcams webcams, String active_camera, double desired_range, int target_tag, double tolerance) {
+    public IntegratedRobotAlignToTagRange(Drivetrain drivetrain, Webcams webcams, String active_camera, double desired_range, int target_tag, double tolerance) {
         this.drivetrain = drivetrain;
         this.webcam = webcams;
         this.activeWebcam = active_camera;
@@ -64,16 +53,19 @@ public class RobotAlignToTagRange extends CommandBase {
 
     @Override
     public void initialize() { // runs once
+        boolean targetFound     = false;    // Set to true when an AprilTag target is detected
+        double  drive           = 0;        // Desired forward power/speed (-1 to +1)
+        double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
+        double  turn            = 0;        // Desired turning power/speed (-1 to +1)
 
         // Initialize the Apriltag Detection process
 
         webcam.setCamera(activeWebcam);
-        homingActive = true;
-//        try {
-//            webcam.setManualExposure(6, 250, activeWebcam);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            webcam.setManualExposure(6, 250, activeWebcam);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
 //        setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
 
@@ -88,11 +80,10 @@ public class RobotAlignToTagRange extends CommandBase {
 
     @Override
     public void execute() { // runs continuously
-        desiredTag = null;
         desiredTag = webcam.getDesiredTag(webcam.getCurrentDetections(webcam.getActiveAprilTagProcessor()), DESIRED_TAG_ID);
 
         if(desiredTag != null) {
-            rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
+            rangeError = (desiredTag.ftcPose.y - DESIRED_DISTANCE);
             headingError = desiredTag.ftcPose.bearing;
             yawError = desiredTag.ftcPose.yaw;
 
@@ -101,33 +92,11 @@ public class RobotAlignToTagRange extends CommandBase {
             turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
             strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
 
-            previousDrive = drive;
-            previousTurn = turn;
-            previousStrafe = strafe;
+            if (activeWebcam != "front")
+                turn *= -1;
 
-            if (activeWebcam != "front") {
-                turn *= 1;
-                strafe *= -1;
-            }
-
-            targetFound = true;
-
-//            drivetrain.driveRobot(drive, strafe, turn);
-        } else {
-//            drive = -previousDrive;
-//            turn = -previousTurn;
-//            strafe = -previousStrafe;
-            targetFound = false;
-
-            drive = 0;
-            turn = 0;
-            strafe = 0;
-//            drivetrain.driveRobot(0, 0, 0);
+            drivetrain.driveRobot(drive, strafe, turn);
         }
-    }
-
-    public boolean isTargetFound(){
-        return targetFound;
     }
 
     public List<Double> getDriveStrafeTurnPower() {
@@ -143,10 +112,6 @@ public class RobotAlignToTagRange extends CommandBase {
     @Override
     public void end(boolean interrupted) {
 //        lift.stop();
-        homingActive = false;
     }
 
-    public boolean isActive(){
-        return homingActive;
-    }
 }

@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.TESTBED.visionTesting.AprilTags;
 
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -87,7 +88,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @TeleOp(name = "CSTB XY Drive To AprilTag", group = "Concept")
-//@Disabled
+@Disabled
 public class CSTB_RobotAutoDriveXYToAprilTagOmni extends LinearOpMode {
     // Adjust these numbers to suit your robot.
     final double DESIRED_DISTANCE = 7; //  this is how close the camera should get to the target (inches)

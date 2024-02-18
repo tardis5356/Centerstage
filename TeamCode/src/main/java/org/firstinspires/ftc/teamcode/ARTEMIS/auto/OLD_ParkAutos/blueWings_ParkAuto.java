@@ -1,9 +1,7 @@
-package org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos;
+package org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_ParkAutos;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos.Artemis_ParkAutoTrajectories.blueWings_DecisionPointToCenterPark;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos.Artemis_ParkAutoTrajectories.blueWings_StartPositionToDecisionPoint;
-
-import android.util.Size;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_ParkAutos.Artemis_ParkAutoTrajectories.blueWings_DecisionPointToCenterPark;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_ParkAutos.Artemis_ParkAutoTrajectories.blueWings_StartPositionToDecisionPoint;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
@@ -12,11 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.ARTEMIS.auto.FollowTrajectoryCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
-
-import java.util.concurrent.TimeUnit;
 
 @Autonomous(group = "drive", name = "A BlueWings PARK")
 public class blueWings_ParkAuto extends CommandOpMode {

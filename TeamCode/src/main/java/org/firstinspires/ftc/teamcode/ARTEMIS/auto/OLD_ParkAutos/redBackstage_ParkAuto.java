@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos;
+package org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_ParkAutos;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.ParkAutos.Artemis_ParkAutoTrajectories.redBackstage_StartPositionToCornerPark;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.OLD_ParkAutos.Artemis_ParkAutoTrajectories.redBackstage_StartPositionToCornerPark;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ARTEMIS.auto.FollowTrajectoryCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.TESTBED.auto.CSTB_AutoTrajectories;
 
 @Autonomous(group = "drive", name = "A RedBackstage PARK")
 public class redBackstage_ParkAuto extends CommandOpMode {

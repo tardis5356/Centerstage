@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.teleop;
 
+import static com.arcrobotics.ftclib.kotlin.extensions.gamepad.GamepadExExtKt.whenActive;
+
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.AngleController;
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
@@ -30,6 +32,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.IntakeInCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.IntakeOutCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.LiftToPositionCommand;
@@ -47,8 +50,11 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Webcams;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Winch;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Wrist;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
+
+import java.util.List;
 
 @Config
 @TeleOp(name = "Gen1_TeleOp", group = "Gen1")
@@ -120,6 +126,8 @@ public class Gen1_TeleOp extends CommandOpMode {
 
     public boolean aTagHomingActive = false;
 
+    public RobotAlignToTagRange robotAlignToTagTest;
+
     private DcMotorEx mW;
 
     IMU imu;
@@ -178,22 +186,24 @@ public class Gen1_TeleOp extends CommandOpMode {
         //init the drone servo
         sDroneLauncher = hardwareMap.get(Servo.class, "sDL");
 
-        robotToDepositCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "dropPurple");
+        robotToDepositCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit");
         robotToIntakeCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake");
         robotGrabPixelsCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "grab_pixels");
 
-        imu = hardwareMap.get(IMU.class, "imuEx");
+        robotAlignToTagTest = new RobotAlignToTagRange(drivetrain, webcams, "back", 4, 5, 3);
 
-        imu.initialize(
-                new IMU.Parameters(
-                        new RevHubOrientationOnRobot(
-                                RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
-                                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
-                        )
-                )
-        );
-
-        imu.resetYaw();
+//        imu = hardwareMap.get(IMU.class, "imuEx");
+//
+//        imu.initialize(
+//                new IMU.Parameters(
+//                        new RevHubOrientationOnRobot(
+//                                RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
+//                                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+//                        )
+//                )
+//        );
+//
+//        imu.resetYaw();
 
         if (arm.inIntakeEntering()) {
             arm.toIntake();
@@ -246,10 +256,9 @@ public class Gen1_TeleOp extends CommandOpMode {
  */
 
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON))
-                .toggleWhenActive(new RobotAlignToTagRange(drivetrain, webcams, "front", 12, 7, 3))
+                .whileActiveOnce(robotAlignToTagTest)
                 .whenActive(() -> {
                     aTagHomingActive = true;
-                    telemetry.addData("current detections", webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()));
                 })
                 .whenInactive(() -> aTagHomingActive = false);
 
@@ -263,14 +272,14 @@ public class Gen1_TeleOp extends CommandOpMode {
                 }));
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.15 || driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.15)
                 .cancelWhenActive(intakeInCommand)
-                .whenActive(intakeOutCommand)
-                .whenActive(
-                        new ParallelCommandGroup(
-                                new InstantCommand(() -> {
-//                                    robotState = RobotState.INTAKE;
-                                })
-                        )
-                );
+                .whenActive(intakeOutCommand);
+//                .whenActive(
+//                        new ParallelCommandGroup(
+//                                new InstantCommand(() -> {
+////                                    robotState = RobotState.INTAKE;
+//                                })
+//                        )
+//                );
 //                .whenActive(
 //                        new SequentialCommandGroup(
 //                                new InstantCommand(intake::out),
@@ -481,14 +490,14 @@ public class Gen1_TeleOp extends CommandOpMode {
         //lift always runs with manual control tied to gamepads unless stated otherwise
         lift.manualControl(cubicScaling(gamepad2.left_stick_y), gamepad2.right_stick_y);
 
-        double currentTheta = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+//        double currentTheta = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
 //        PIDController thetaController = new PIDController(theta_p, theta_i, theta_d);
 
-        telemetry.addData("theta pid active", thetaPIDActive);
-        telemetry.addData("target theta", AngleUnit.normalizeDegrees(targetTheta));
-        telemetry.addData("current theta", Math.toDegrees(AngleUnit.normalizeDegrees(currentTheta)));
-        telemetry.addData("error", Math.toDegrees(AngleUnit.normalizeDegrees(targetTheta) - Math.toRadians(currentTheta)));
+//        telemetry.addData("theta pid active", thetaPIDActive);
+//        telemetry.addData("target theta", AngleUnit.normalizeDegrees(targetTheta));
+//        telemetry.addData("current theta", Math.toDegrees(AngleUnit.normalizeDegrees(currentTheta)));
+//        telemetry.addData("error", Math.toDegrees(AngleUnit.normalizeDegrees(targetTheta) - Math.toRadians(currentTheta)));
 
         //map drive vars to inputs
         //fb is forward backward movement
@@ -526,12 +535,46 @@ public class Gen1_TeleOp extends CommandOpMode {
         double mFRPower = FB - LR - Rotation;
         double mBLPower = FB - LR + Rotation;
         double mBRPower = FB + LR - Rotation;
-        if(!aTagHomingActive) {
+
+        if (aTagHomingActive) {//robotAlignToTagTest.isActive()
+            telemetry.addData("target found", robotAlignToTagTest.isTargetFound());
+            telemetry.addData("active camera", webcams.getActiveCamera());
+            List<Integer> visibleTags = null;
+            for (AprilTagDetection detection : webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor())) {
+//                assert visibleTags != null;
+//                visibleTags.add(detection.id);
+            }
+//            telemetry.addData("current detections", visibleTags);
+            telemetry.addData("current detections", webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()));
+            if (webcams.getDesiredTag(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), 5) != null) {
+//                telemetry.addData("getCurrentRange", robotAlignToTagTest.getCurrentRange());
+//                telemetry.addData("getRangeError", robotAlignToTagTest.getRangeError());
+                telemetry.addLine();
+                telemetry.addData("desired tag", webcams.getDesiredTag(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), 5).ftcPose.range);
+            }
+            telemetry.addData("all powers", robotAlignToTagTest.getDriveStrafeTurnPower());
+            telemetry.addLine();
+            telemetry.addData("drive power", robotAlignToTagTest.getDriveStrafeTurnPower().get(0));
+            telemetry.addData("strafe power", robotAlignToTagTest.getDriveStrafeTurnPower().get(1));
+            telemetry.addData("turn power", robotAlignToTagTest.getDriveStrafeTurnPower().get(2));
+            telemetry.addLine();
+            double tagDrivePower = robotAlignToTagTest.getDriveStrafeTurnPower().get(0);
+            double tagStrafePower = robotAlignToTagTest.getDriveStrafeTurnPower().get(1);
+            double tagTurnPower = robotAlignToTagTest.getDriveStrafeTurnPower().get(2);
+
+            mFL.setPower(tagDrivePower + tagStrafePower + tagTurnPower);
+            mFR.setPower(tagDrivePower - tagStrafePower - tagTurnPower);
+            mBL.setPower(tagDrivePower - tagStrafePower + tagTurnPower);
+            mBR.setPower(tagDrivePower + tagStrafePower - tagTurnPower);
+        } else {
             mFL.setPower(mFLPower * CURRENT_SPEED_MULTIPLIER);
             mFR.setPower(mFRPower * CURRENT_SPEED_MULTIPLIER);
             mBL.setPower(mBLPower * CURRENT_SPEED_MULTIPLIER);
             mBR.setPower(mBRPower * CURRENT_SPEED_MULTIPLIER);
         }
+
+//        FtcDashboard.getInstance().startCameraStream(webcams.getBackCameraStream(), 0);
+
 //        }
 
         if (gamepad1.back) { //&& gametime.seconds() > 90){
@@ -551,12 +594,12 @@ public class Gen1_TeleOp extends CommandOpMode {
         telemetry.addData("touchLift", lift.getLiftTargetPosition());
         telemetry.addData("inIntakeEntering", arm.inIntakeEntering());
         telemetry.addData("inIntakeExiting", arm.inIntakeExiting());
-        telemetry.addData("inIntake", lift.manualActive);
+        telemetry.addData("lift manual active", lift.manualActive);
         telemetry.addData("liftPower", lift.getLiftPower());
 
         telemetry.addData("\nlift target", lift.getLiftTargetPosition());
         telemetry.addData("lift position", lift.getLiftPosition());
-        telemetry.addData("lift position", lift.getLiftPower());
+        telemetry.addData("lift power", lift.getLiftPower());
         telemetry.addData("pid out", lift.getLiftPID());
 
 //        telemetry.addData("distanceBackLeft", lift.getDistanceBackLeft());
