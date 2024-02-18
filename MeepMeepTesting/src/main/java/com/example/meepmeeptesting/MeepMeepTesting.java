@@ -15,7 +15,17 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class MeepMeepTesting {
-    public static final Pose2d redWings_StartPos = new Pose2d(36.5, 64.5, Math.toRadians(270));
+    //BLUE BACKSTAGE
+    public static final Pose2d blueBackstage_StartPos = new Pose2d(-8.5, -64.5, Math.toRadians(90));
+
+    //BLUE WINGS
+    public static final Pose2d blueWings_StartPos = new Pose2d(36.5, -64.5, Math.toRadians(90));
+
+    //RED BACKSTAGE
+    public static final Pose2d redBackstage_StartPos = new Pose2d(-8, 62, Math.toRadians(270));
+
+    //RED WINGS
+    public static final Pose2d redWings_StartPos = new Pose2d(32, 62, Math.toRadians(270));
 
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(400);
@@ -26,34 +36,60 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(
                         drive ->
                                 //startToLeftSpike
-                                drive.trajectorySequenceBuilder(redWings_StartPos)
+                                drive.trajectorySequenceBuilder(redBackstage_StartPos)
+                                        //redWings
+        /*
                                         // left spike
 //                                        .splineToLinearHeading(new Pose2d(35, 32, Math.toRadians(10)), 180) // left spike
 //                                        .waitSeconds(0.5)
 //                                        .splineToSplineHeading(new Pose2d(60, 30, 0), 0)
 
                                         // center spike
-                                        .splineToLinearHeading(new Pose2d(43, 27, Math.toRadians(10)), 180) // center spike
-                                        .waitSeconds(0.5)
-                                        .splineToSplineHeading(new Pose2d(60, 30, 0), 0)
+//                                        .splineToLinearHeading(new Pose2d(43, 27, Math.toRadians(10)), 180) // center spike
+//                                        .waitSeconds(0.5)
+//                                        .splineToSplineHeading(new Pose2d(60, 30, 0), 0)
 
                                         // right spike
-//                                        .splineToSplineHeading(new Pose2d(60, 30, 0), 0)
+                                        .splineToSplineHeading(new Pose2d(60, 30, 0), 0)
 
                                         // grab from stack
                                         .strafeLeft(4)
                                         .back(4)
                                         .waitSeconds(0.5)
+                                        .setReversed(true)
 
-                                        // general move from stack through door
-                                        .lineToLinearHeading(new Pose2d(56, 12, Math.toRadians(0)))
-                                        .lineToLinearHeading(new Pose2d(-48, 12, Math.toRadians(0)))
+                                        // general move from stack through door to backdrop
+//                                        .lineToLinearHeading(new Pose2d(56, 12, Math.toRadians(0)))
+//                                        .lineToLinearHeading(new Pose2d(-18, 12, Math.toRadians(0)))
+//                                        .splineToSplineHeading(new Pose2d(-40, 22, Math.toRadians(-40)), Math.toRadians(140))
 
-                                        // general move from stack through truss
+                                        // general move from stack through truss to backdrop
+                                        .lineToLinearHeading(new Pose2d(56, 59, Math.toRadians(0)))
+                                        .lineToLinearHeading(new Pose2d(-18, 59, Math.toRadians(0)))
+                                        .splineToSplineHeading(new Pose2d(-40, 49, Math.toRadians(40)), Math.toRadians(220))
+
+                                        // general move from stack through door to backstage
+//                                        .lineToLinearHeading(new Pose2d(56, 12, Math.toRadians(0)))
+//                                        .lineToLinearHeading(new Pose2d(-48, 12, Math.toRadians(0)))
+
+                                        // general move from stack through truss to backstage
 //                                        .lineToLinearHeading(new Pose2d(56, 59, Math.toRadians(0)))
 //                                        .lineToLinearHeading(new Pose2d(-48, 59, Math.toRadians(0)))
+*/
+                                        //redBackstage
+                                        // left spike
+                                        .splineToLinearHeading(new Pose2d(-12, 30, Math.toRadians(180)), Math.toRadians(290))
+//                                        .waitSeconds(0.5) // NOT NECESSARY
+//                                        .splineToSplineHeading(new Pose2d(-35, 34, Math.toRadians(180)), Math.toRadians(180)) // NOT NECESSARY
+
+                                        // center spike
+//                                        .splineToLinearHeading(new Pose2d(-25, 27, Math.toRadians(160)), 180) // center spike
+
+                                        // right spike
+//                                        .splineToSplineHeading(new Pose2d(-35, 34, Math.toRadians(180)), Math.toRadians(180)) // left spike
 
                                         .build()
+
                         /*drive ->
                         drive.trajectorySequenceBuilder(redBackstage_StartPos)
                                 .splineTo(blueBackstage_DecisionPointPos.vec(), 90)
