@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ARTEMIS.commands;
+package org.firstinspires.ftc.teamcode.ARTEMIS.commands.intakeCommands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;

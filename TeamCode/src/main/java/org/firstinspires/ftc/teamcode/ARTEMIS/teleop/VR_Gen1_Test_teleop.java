@@ -19,8 +19,8 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Gripper;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.LEDs;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.IntakeInCommand;
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.IntakeOutCommand;
+import org.firstinspires.ftc.teamcode.ARTEMIS.commands.intakeCommands.IntakeInCommand;
+import org.firstinspires.ftc.teamcode.ARTEMIS.commands.intakeCommands.IntakeOutCommand;
 
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Winch;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.WinchDeployCommand;
