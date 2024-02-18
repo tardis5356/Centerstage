@@ -5,6 +5,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
@@ -13,14 +14,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.DemoBots.megatron.Base_Mega;
-@Disabled
+//@Disabled
 @TeleOp(name="Mega_FieldC(Outreach)")
 
 
 public class Mega_Gyro extends Base_Mega {
 
-    CRServo sL;
-    CRServo sR;
+    Servo sL;
+//    CRServo sR;
 
     double AngleOffset = 0;
 
@@ -31,8 +32,8 @@ public class Mega_Gyro extends Base_Mega {
 
         defineComponents();
 
-        sL = hardwareMap.get(CRServo.class, "sL");
-        sR = hardwareMap.get(CRServo.class, "sR");
+        sL = hardwareMap.get(Servo.class, "sL");
+//        sR = hardwareMap.get(CRServo.class, "sR");
 
         Mega_drivetrain mD = new Mega_drivetrain(mFL, mFR, mBL, mBR);
 
@@ -47,7 +48,7 @@ public class Mega_Gyro extends Base_Mega {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu = hardwareMap.get(BNO055IMU.class, "adafruitIMU");
         imu.initialize(parameters);
-          Mega_Gripper mG = new Mega_Gripper(sL, sR);
+//          Mega_Gripper mG = new Mega_Gripper(sL, sR);
 
         Mega_Lift mL = new Mega_Lift(mLift, mBL);
 
@@ -98,8 +99,8 @@ public class Mega_Gyro extends Base_Mega {
 
             Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
-            telemetry.addData("sL power", sL.getPower());
-            telemetry.addData("sR power", sR.getPower());
+//            telemetry.addData("sL power", sL.getPower());
+//            telemetry.addData("sR power", sR.getPower());
             telemetry.addData("lift Position", mL.getLiftPosition());
             telemetry.addData("touch ye?", tS.isPressed());
 
@@ -147,19 +148,19 @@ public class Mega_Gyro extends Base_Mega {
 
 
 
-            if(gP1Bl == true){
-                sL.setPower(1);
-                sR.setPower(-1);
+            if(gP1Bl || gP1Br){
+                sL.setPosition(.3);
+//                sR.setPower(-1);
             }
-            else if(gP1Br == true){
-                sL.setPower(-1);
-                sR.setPower(1);
+            else{
+                sL.setPosition(.5);
+//                sR.setPower(1);
             }
-            else {
-                sL.setPower(0);
-                sR.setPower(0);
-
-            }
+//            else {
+//                sL.setPower(0);
+//                sR.setPower(0);
+//
+//            }
 
 
 

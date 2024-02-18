@@ -7,12 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.DemoBots.megatron.Base_Mega;
-@Disabled
+//@Disabled
 @TeleOp(name="Mega_BotC")
 public class Megatron_Tele extends Base_Mega {
 
-    CRServo sL;
-    CRServo sR;
+    Servo sL;
+//    Servo sR;
 
 
 
@@ -21,12 +21,12 @@ public class Megatron_Tele extends Base_Mega {
 
         defineComponents();
 
-        sL = hardwareMap.get(CRServo.class, "sL");
-        sR = hardwareMap.get(CRServo.class, "sR");
+        sL = hardwareMap.get(Servo.class, "sL");
+//        sR = hardwareMap.get(Servo.class, "sR");
 
         Mega_drivetrain mD = new Mega_drivetrain(mFL, mFR, mBL, mBR);
 
-      //  Mega_Gripper mG = new Mega_Gripper(sL, sR);
+//        Mega_Gripper mG = new Mega_Gripper(sL, sR);
 
         Mega_Lift mL = new Mega_Lift(mLift, mBL);
 
@@ -39,6 +39,8 @@ public class Megatron_Tele extends Base_Mega {
             double gP1sLy = -gamepad1.left_stick_y;
             double gP1sLx = gamepad1.left_stick_x;
             double gP1sRx = gamepad1.right_stick_x;
+            boolean gP2dPU = gamepad1.dpad_up;
+            boolean gP2dPD = gamepad1.dpad_down;
 
             boolean gP1dPU = gamepad2.dpad_up;
             boolean gP1dPD = gamepad2.dpad_down;
@@ -60,8 +62,8 @@ public class Megatron_Tele extends Base_Mega {
             mL.setToZero(true);
         }
 
-            telemetry.addData("sL power", sL.getPower());
-            telemetry.addData("sR power", sR.getPower());
+//            telemetry.addData("sL power", sL.getPower());
+//            telemetry.addData("sR power", sR.getPower());
             telemetry.addData("lift Position", mL.getLiftPosition());
             telemetry.addData("touch ye?", tS.isPressed());
             telemetry.update();
@@ -88,19 +90,18 @@ public class Megatron_Tele extends Base_Mega {
 
 
 
-            if(gP1Bl == true){
-                sL.setPower(1);
-                sR.setPower(-1);
+            if(gP1Bl || gP1Br){
+                sL.setPosition(.3);
+//                sR.setPower(-1);
             }
-            else if(gP1Br == true){
-               sL.setPower(-1);
-               sR.setPower(1);
+            else{
+               sL.setPosition(.5);
+//               sR.setPower(1);
             }
-            else {
-                sL.setPower(0);
-                sR.setPower(0);
-
-            }
+//            else {
+//                sL.setPower(0);
+//                sR.setPower(0);
+//          }
 
 
 
