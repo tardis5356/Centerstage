@@ -13,6 +13,7 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -35,32 +36,35 @@ public class StartPoseContinuityTest extends CommandOpMode {
 
     @Override
     public void initialize() {
-        previousGamepad.copy(currentGamepad);
-        currentGamepad.copy(gamepad1);
         drive = new SampleMecanumDrive(hardwareMap);
+        currentGamepad = new Gamepad();
+        previousGamepad = new Gamepad();
 
         EXCCMP_AutoTrajectories.generateTrajectories(drive);
 
         telemetry.setMsTransmissionInterval(50);
 
         while (!isStarted() && !isStopRequested()) {
+            previousGamepad.copy(currentGamepad);
+            currentGamepad.copy(gamepad1);
+
             telemetry.addLine("Press DPAD UP to cycle starting position");
             if (currentGamepad.dpad_up && !previousGamepad.dpad_up)
                 path++;
 
-            if(path == 0){
+            if (path == 0) {
                 testTraj = RedWings_StartToOrigin;
                 drive.setPoseEstimate(redWings_StartPos);
                 telemetry.addData("Starting: RedWings", redWings_StartPos);
-            } else if(path == 1){
+            } else if (path == 1) {
                 testTraj = RedBackstage_StartToOrigin;
                 drive.setPoseEstimate(redBackstage_StartPos);
                 telemetry.addData("Starting: RedBackstage", redBackstage_StartPos);
-            } else if(path == 2){
+            } else if (path == 2) {
                 testTraj = BlueWings_StartToOrigin;
                 drive.setPoseEstimate(blueWings_StartPos);
                 telemetry.addData("Starting: BlueWings", blueWings_StartPos);
-            } else if(path == 3){
+            } else if (path == 3) {
                 testTraj = BlueBackstage_StartToOrigin;
                 drive.setPoseEstimate(blueBackstage_StartPos);
                 telemetry.addData("Starting: BlueBackstage", blueBackstage_StartPos);
@@ -76,7 +80,7 @@ public class StartPoseContinuityTest extends CommandOpMode {
         telemetry.update();
         // drop purple
         schedule(new SequentialCommandGroup(
-           new FollowTrajectoryCommand(drive, testTraj)
+                new FollowTrajectoryCommand(drive, testTraj)
         ));
     }
 }

@@ -14,7 +14,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import java.util.concurrent.TimeUnit;
 
 @Autonomous(name = "Vision Test")
-//@Disabled
+@Disabled
 public class VisionPortalRedBlueDetection extends LinearOpMode {
 
     private VisionPortal portal;
