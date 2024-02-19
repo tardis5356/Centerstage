@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.DemoBots.optimus;
+package org.firstinspires.ftc.teamcode.DemoBots.primus;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -15,39 +15,42 @@ import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusStopDrivi
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusTurnIMUCommand;
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusTurnLeftCommand;
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusTurnRightCommand;
+import org.firstinspires.ftc.teamcode.DemoBots.primus.Primus_subsystems.PrimusDrive;
+import org.firstinspires.ftc.teamcode.DemoBots.primus.commands.PrimusDriveForwardCommand;
+import org.firstinspires.ftc.teamcode.DemoBots.primus.commands.PrimusTurnIMUCommand;
 
-@Autonomous(name = "OptimusAuto")
-public class OptimusCampTardisAuto extends CommandOpMode {
+@Autonomous(name = "PrimusAuto")
+public class PrimusCampTARDISAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
-    private OptimusDrive drivetrain;
+    private PrimusDrive drivetrain;
 
     @Override
     public void initialize() {
-        drivetrain = new OptimusDrive(hardwareMap);
+        drivetrain = new PrimusDrive(hardwareMap);
 
         waitForStart();
 
         schedule(new SequentialCommandGroup(
-                new OptimusDriveForwardCommand(drivetrain),
+                new PrimusDriveForwardCommand(drivetrain),
                 new WaitCommand(300),
 
-                new OptimusTurnIMUCommand(drivetrain, 90, 2),
+                new PrimusTurnIMUCommand(drivetrain, 90, 2),
 
-                new OptimusDriveForwardCommand(drivetrain),
+                new PrimusDriveForwardCommand(drivetrain),
                 new WaitCommand(300),
 
-                new OptimusTurnIMUCommand(drivetrain, 180, 2),
+                new PrimusTurnIMUCommand(drivetrain, 180, 2),
 
-                new OptimusDriveForwardCommand(drivetrain),
+                new PrimusDriveForwardCommand(drivetrain),
                 new WaitCommand(300),
 
-                new OptimusTurnIMUCommand(drivetrain, 270, 2),
+                new PrimusTurnIMUCommand(drivetrain, 270, 2),
 
-                new OptimusDriveForwardCommand(drivetrain),
+                new PrimusDriveForwardCommand(drivetrain),
                 new WaitCommand(300),
 
-                new OptimusTurnIMUCommand(drivetrain, 0, 2)
+                new PrimusTurnIMUCommand(drivetrain, 0, 2)
         ));
     }
 }

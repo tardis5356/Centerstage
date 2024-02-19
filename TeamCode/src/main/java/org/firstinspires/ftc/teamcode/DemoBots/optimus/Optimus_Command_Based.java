@@ -7,7 +7,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.RobotToIntakePositionCommand;
+import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusRobotToIntakePositionCommand;
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.Optimus_subsystems.Gripper;
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.Optimus_subsystems.Wrist;
 
@@ -19,7 +19,7 @@ public class Optimus_Command_Based extends CommandOpMode {
     private Wrist wrist;
     private Gripper gripper;
 
-    private RobotToIntakePositionCommand robotToIntakePositionCommand;
+    private OptimusRobotToIntakePositionCommand robotToIntakePositionCommand;
 
     @Override
     public void initialize() {
@@ -28,7 +28,7 @@ public class Optimus_Command_Based extends CommandOpMode {
         gripper = new Gripper(hardwareMap);
         wrist = new Wrist(hardwareMap);
 
-        robotToIntakePositionCommand = new RobotToIntakePositionCommand(gripper, wrist);
+        robotToIntakePositionCommand = new OptimusRobotToIntakePositionCommand(gripper, wrist);
 
         new Trigger(() -> driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
                 .whenActive(robotToIntakePositionCommand);

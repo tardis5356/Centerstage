@@ -7,9 +7,9 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.Optimus_subsystems.Gripper;
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.Optimus_subsystems.Wrist;
 
-public class RobotToIntakePositionCommand extends SequentialCommandGroup {
+public class OptimusRobotToIntakePositionCommand extends SequentialCommandGroup {
 
-    public RobotToIntakePositionCommand(Gripper gripper, Wrist wrist){
+    public OptimusRobotToIntakePositionCommand(Gripper gripper, Wrist wrist){
         addCommands(
                 new InstantCommand(gripper::open),
                 new WaitCommand(500),

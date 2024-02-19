@@ -5,10 +5,10 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.Optimus_subsystems.OptimusDrive;
 
-public class TurnLeftCommand extends SequentialCommandGroup {
-    public TurnLeftCommand(OptimusDrive drive){
+public class OptimusAdjustRightCommand extends SequentialCommandGroup {
+    public OptimusAdjustRightCommand(OptimusDrive drive){
         addCommands(
-                new InstantCommand(drive :: TurnLeft)
+                new InstantCommand(drive :: adjustRight)
 
         );
     }

@@ -4,20 +4,15 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.Optimus_subsystems.OptimusDrive;
-import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusAdjustLeftCommand;
-import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusAdjustRightCommand;
-import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusDriveBackwardsCommand;
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusDriveForwardCommand;
-import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusStopDrivingCommand;
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusTurnIMUCommand;
-import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusTurnLeftCommand;
-import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusTurnRightCommand;
-
-@Autonomous(name = "OptimusAuto")
-public class OptimusCampTardisAuto extends CommandOpMode {
+//@Disabled
+@Autonomous(name = "OptimusAuto2")
+public class OptimusCampTardisAuto2 extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
     private OptimusDrive drivetrain;

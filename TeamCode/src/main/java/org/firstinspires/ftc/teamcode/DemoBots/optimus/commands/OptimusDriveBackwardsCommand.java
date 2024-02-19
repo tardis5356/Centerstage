@@ -5,10 +5,10 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.Optimus_subsystems.OptimusDrive;
 
-public class StopDrivingCommand extends SequentialCommandGroup {
-    public StopDrivingCommand(OptimusDrive drive){
+public class OptimusDriveBackwardsCommand extends SequentialCommandGroup {
+    public OptimusDriveBackwardsCommand(OptimusDrive drive){
         addCommands(
-                new InstantCommand(drive :: stopDriving)
+                new InstantCommand(drive :: DriveBackward)
 
         );
     }
