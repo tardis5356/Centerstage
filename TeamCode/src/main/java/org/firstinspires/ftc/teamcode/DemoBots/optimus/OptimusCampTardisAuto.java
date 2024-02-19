@@ -28,26 +28,28 @@ public class OptimusCampTardisAuto extends CommandOpMode {
 
         waitForStart();
 
-        schedule(new SequentialCommandGroup(
-                new OptimusDriveForwardCommand(drivetrain),
-                new WaitCommand(300),
-
-                new OptimusTurnIMUCommand(drivetrain, 90, 2),
-
-                new OptimusDriveForwardCommand(drivetrain),
-                new WaitCommand(300),
-
-                new OptimusTurnIMUCommand(drivetrain, 180, 2),
-
-                new OptimusDriveForwardCommand(drivetrain),
-                new WaitCommand(300),
-
-                new OptimusTurnIMUCommand(drivetrain, 270, 2),
-
-                new OptimusDriveForwardCommand(drivetrain),
-                new WaitCommand(300),
-
-                new OptimusTurnIMUCommand(drivetrain, 0, 2)
-        ));
+        schedule(
+                new SequentialCommandGroup(
+                        new OptimusDriveForwardCommand(drivetrain),
+                        new WaitCommand(2000),
+                        new OptimusStopDrivingCommand(drivetrain)
+//
+//                        new OptimusTurnIMUCommand(drivetrain, 90, 2),
+//
+//                        new OptimusDriveForwardCommand(drivetrain),
+//                        new WaitCommand(1000),
+//
+//                        new OptimusTurnIMUCommand(drivetrain, 180, 2),
+//
+//                        new OptimusDriveForwardCommand(drivetrain),
+//                        new WaitCommand(1000),
+//
+//                        new OptimusTurnIMUCommand(drivetrain, 270, 2),
+//
+//                        new OptimusDriveForwardCommand(drivetrain),
+//                        new WaitCommand(1000),
+//
+//                        new OptimusTurnIMUCommand(drivetrain, 0, 2)
+                ));
     }
 }

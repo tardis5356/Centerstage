@@ -27,6 +27,9 @@ public class OptimusDrive extends SubsystemBase {
         LeftDrive = hardwareMap.get(DcMotor.class, "mL");
         RightDrive = hardwareMap.get(DcMotor.class, "mR");
 
+        LeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         imu.initialize(new BNO055IMU.Parameters());
