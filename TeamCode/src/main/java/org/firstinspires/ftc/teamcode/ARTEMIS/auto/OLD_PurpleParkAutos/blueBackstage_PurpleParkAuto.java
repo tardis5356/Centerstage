@@ -18,6 +18,7 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -33,7 +34,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import java.util.concurrent.TimeUnit;
 
 //public class CSTB_redWings_Park {
-//@Disabled
+@Disabled
 @Autonomous(group = "drive", name = "blueBackstage Purple+Park")
 public class blueBackstage_PurpleParkAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();

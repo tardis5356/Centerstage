@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ARTEMIS.commands;
+package org.firstinspires.ftc.teamcode.ARTEMIS.commands.intakeCommands;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -6,12 +6,11 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Intake;
 
-public class IntakeOutCommand extends SequentialCommandGroup {
-    public IntakeOutCommand(Intake intake) {
+public class IntakeOutSlowCommand extends SequentialCommandGroup {
+    public IntakeOutSlowCommand(Intake intake) {
         addCommands(
-                new InstantCommand(intake::up),
-                new InstantCommand(intake::out),
-                new WaitCommand(1500),
+                new InstantCommand(intake::slowOut),
+                new WaitCommand(750),
                 new InstantCommand(intake::stop)
         );
     }

@@ -79,6 +79,12 @@ public class LEDs extends SubsystemBase {
             case "green":
                 blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GREEN);
                 break;
+            case "white":
+                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+                break;
+            case "plaid":
+                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_END_TO_END_BLEND_TO_BLACK);
+                break;
         }
     }
 
