@@ -15,7 +15,7 @@ public class EXCCMP_AutoTrajectories {
 
     public static final TrajectoryVelocityConstraint
             velConstraint70in = SampleMecanumDrive.getVelocityConstraint(70, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-            velConstraint40in = SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+            velConstraint40in = SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
             velConstraint20in = SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
             velConstraint10in = SampleMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
     public static final TrajectoryAccelerationConstraint
@@ -58,25 +58,25 @@ public class EXCCMP_AutoTrajectories {
                         .splineToLinearHeading(new Pose2d(35, 32, Math.toRadians(10)), 180) // left spike
                         .build();
 
-        RedWings_LeftSpikeToStack =
-                drive.trajectorySequenceBuilder(RedWings_StartToLeftSpike.end())
-                        .splineToSplineHeading(new Pose2d(60, 30, 0), 0)
-                        .build();
-
         RedWings_StartToCenterSpike =
                 drive.trajectorySequenceBuilder(redWings_StartPos)
-                        .splineToLinearHeading(new Pose2d(43, 27, Math.toRadians(10)), 180) // center spike
-                        .build();
-
-        // redwings 🟥🪽 spike 🌵 to stack 🥞
-        RedWings_CenterSpikeToStack =
-                drive.trajectorySequenceBuilder(RedWings_StartToCenterSpike.end())
-                        .splineToSplineHeading(new Pose2d(60, 30, 0), 0)
+                        .splineToLinearHeading(new Pose2d(43, 24, Math.toRadians(10)), 180, velConstraint40in, accelConstraint70in) // center spike
                         .build();
 
         RedWings_StartToRightSpike =
                 drive.trajectorySequenceBuilder(redWings_StartPos)
-                        .splineToSplineHeading(new Pose2d(60, 30, 0), 0)
+                        .splineToSplineHeading(new Pose2d(58, 30, 0), 0)
+                        .build();
+
+        // redwings 🟥🪽 spike 🌵 to stack 🥞
+        RedWings_LeftSpikeToStack =
+                drive.trajectorySequenceBuilder(RedWings_StartToLeftSpike.end())
+                        .splineToSplineHeading(new Pose2d(58, 30, 0), 0)
+                        .build();
+
+        RedWings_CenterSpikeToStack =
+                drive.trajectorySequenceBuilder(RedWings_StartToCenterSpike.end())
+                        .splineToSplineHeading(new Pose2d(58, 30, 0), 0, velConstraint20in, accelConstraint40in)
                         .build();
 
         RedWings_RightSpikeToStack = drive.trajectorySequenceBuilder(RedWings_StartToRightSpike.end())
@@ -86,7 +86,7 @@ public class EXCCMP_AutoTrajectories {
         // redWings 🟥🪽 stack pickup 🥞🥞
         RedWings_StackPickupSequence = drive.trajectorySequenceBuilder(RedWings_StartToRightSpike.end())
                 .setConstraints(velConstraint10in, accelConstraint40in)
-                .strafeLeft(4)
+                .strafeLeft(6)
                 .waitSeconds(0.5)
                 .back(4)
                 .setConstraints(velConstraint70in, accelConstraint70in)
@@ -94,10 +94,12 @@ public class EXCCMP_AutoTrajectories {
 
         // redWings 🟥🪽 transit to back 🎭
         RedWings_TransitToBackdropViaDoor = drive.trajectorySequenceBuilder(RedWings_StackPickupSequence.end())
-                .lineToLinearHeading(new Pose2d(56, 12, Math.toRadians(0)))
-                .lineToLinearHeading(new Pose2d(-18, 12, Math.toRadians(0)))
-                .splineToSplineHeading(new Pose2d(-40, 22, Math.toRadians(-40)), Math.toRadians(140))
-                .build();
+                .lineToLinearHeading(new Pose2d(54, 10, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-18, 10, Math.toRadians(0)), velConstraint40in, accelConstraint40in)
+                .splineToSplineHeading(new Pose2d(-40, 22, Math.toRadians(-40)), Math.toRadians(140), velConstraint40in, accelConstraint40in)
+                .lineToLinearHeading(new Pose2d(-44, 38, Math.toRadians(0)), velConstraint20in, accelConstraint40in)
+                .build();//-49 x
+
         RedWings_TransitToBackdropViaDoorWait = drive.trajectorySequenceBuilder(RedWings_StackPickupSequence.end())
                 .lineToLinearHeading(new Pose2d(56, 12, Math.toRadians(0)))
                 .waitSeconds(10)
@@ -121,7 +123,7 @@ public class EXCCMP_AutoTrajectories {
                 .lineToLinearHeading(new Pose2d(56, 12, Math.toRadians(0)))
                 .lineToLinearHeading(new Pose2d(-48, 12, Math.toRadians(0)))
                 .build();
-        RedWings_TransitToBackstageViaDoor = drive.trajectorySequenceBuilder(RedWings_StackPickupSequence.end())
+        RedWings_TransitToBackstageViaDoorWait = drive.trajectorySequenceBuilder(RedWings_StackPickupSequence.end())
                 .lineToLinearHeading(new Pose2d(56, 12, Math.toRadians(0)))
                 .waitSeconds(10)
                 .lineToLinearHeading(new Pose2d(-48, 12, Math.toRadians(0)))

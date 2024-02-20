@@ -12,6 +12,10 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterSpikeToStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_LeftSpikeToStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_RightSpikeToStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackdropViaDoor;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackdropViaDoorWait;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackdropViaTruss;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackdropViaTrussWait;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackstageViaDoor;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackstageViaDoorWait;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackstageViaTruss;
@@ -20,33 +24,21 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropToStackViaTruss;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackstageToStackViaDoor;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackstageToStackViaTruss;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.accelConstraint40in;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.redWings_StartPos;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.velConstraint10in;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.velConstraint20in;
 
 import android.util.Size;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
-import org.firstinspires.ftc.teamcode.ARTEMIS.auto.FollowTrajectoryCommand;
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.autoCommands.AutoBackdropDepositCommand;
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.intakeCommands.IntakeInCommand;
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.intakeCommands.IntakeOutCommand;
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.LiftToPositionCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.RobotAlignToTagRange;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.RobotToStateCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
@@ -92,17 +84,20 @@ public class RedAuto extends CommandOpMode {
     private Gamepad currentGamepad, previousGamepad;
 
     private String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", parkIn = "center";
-    private boolean cycle = false, wait = false;
+    private boolean deliverYellow = true, cycle = false, wait = false;
 
     private static RobotToStateCommand robotToDropPurple, robotToDeposit, robotToIntake;
 
-    private static TrajectorySequence StartToSpike, SpikeToStack, StackToBack, BackToStack;
+    private static TrajectorySequence StartToSpike, SpikeToStack, StackToBack, BackToStack, SpikeToBackdrop, StackPickupSequence;
 
     private static RobotAlignToTagRange robotAlignToLeftTag, robotAlignToCenterTag, robotAlignToRightTag;
 
     private static AprilTagMetadata targetBackdropTag;
 
     private boolean commandsScheduled = false;
+
+    AutoGenerator autoGenerator;
+    private SequentialCommandGroup autoCommands;
 
     @Override
     public void initialize() {
@@ -146,9 +141,10 @@ public class RedAuto extends CommandOpMode {
 //            waitForStart();
 //        }
 
+        autoCommands = new SequentialCommandGroup();
+        autoGenerator = new AutoGenerator();
+
         drive = new SampleMecanumDrive(hardwareMap);
-
-
 //        drive.setPoseEstimate();
         EXCCMP_AutoTrajectories.generateTrajectories(drive);
 
@@ -162,11 +158,8 @@ public class RedAuto extends CommandOpMode {
         drivetrain = new Drivetrain(hardwareMap);
         webcam = new Webcams(hardwareMap);
 
-        robotToDropPurple = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "dropPurple");
-        robotToDeposit = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit");
-        robotToIntake = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake");
-
         gripper.grabRight();
+        gripper.grabLeft();
         intake.up();
 
         telemetry.setMsTransmissionInterval(50);
@@ -184,18 +177,24 @@ public class RedAuto extends CommandOpMode {
                 targetBackdropTag = tags.lookupTag(5);
             telemetry.addLine("target backdrop tag: " + targetBackdropTag.name);
 
-            telemetry.addData("Press DPAD LEFT ⬅️ for WINGS and DPAD RIGHT ➡️ for BACKSTAGE ", startingSide);
-            if (currentGamepad.dpad_left)
-                startingSide = "wing";
-            if (currentGamepad.dpad_right)
-                startingSide = "backstage";
+            // red blue 🔵🟥
 
-            telemetry.addData("Press DPAD UP to change cycle: ", cycle);
+            //
+
+            telemetry.addData("⬅️ LEFT | startingSide: ", startingSide);
+            if (currentGamepad.dpad_left && !previousGamepad.dpad_left) {
+                if (startingSide != "wing")
+                    startingSide = "wing";
+                else
+                    startingSide = "backstage";
+            }
+
+            telemetry.addData("UP | cycle y/n: ", cycle);
             if (currentGamepad.dpad_up && !previousGamepad.dpad_up)
                 cycle = !cycle;
 
             if (!cycle) {
-                telemetry.addData("Press X to change park target: ", parkIn);
+                telemetry.addData("X | park target: ", parkIn);
                 if (currentGamepad.x && !previousGamepad.x)
                     if (parkIn != "center")
                         parkIn = "center";
@@ -203,19 +202,23 @@ public class RedAuto extends CommandOpMode {
                         parkIn = "corner";
             }
 
-            telemetry.addData("Press B to change wait: ", wait);
+            telemetry.addData("B | wait: ", wait);
             if (currentGamepad.b && !previousGamepad.b)
                 wait = !wait;
 
-            telemetry.addData("TRANSIT: Y for DOOR or A for TRUSS", transitVia);
-            if (currentGamepad.y) {
-                transitVia = "door";
-            }
-            if (currentGamepad.a) {
-                transitVia = "truss";
+            telemetry.addData("A | deliverYellow: ", deliverYellow);
+            if (currentGamepad.a && !previousGamepad.a)
+                deliverYellow = !deliverYellow;
+
+            telemetry.addData("Y | TRANSIT: ", transitVia);
+            if (currentGamepad.y && !previousGamepad.y) {
+                if (transitVia != "door")
+                    transitVia = "door";
+                else
+                    transitVia = "truss";
             }
 
-            telemetry.addData("Press DPAD_DOWN ⬇️ to change cycle target: ", cycleTarget);
+            telemetry.addData("⬇️ DOWN | CYCLE TARGET: ", cycleTarget);
             if (currentGamepad.dpad_down && !previousGamepad.dpad_down)
                 if (cycleTarget != "backstage")
                     cycleTarget = "backstage";
@@ -257,9 +260,15 @@ public class RedAuto extends CommandOpMode {
             }
             if (transitVia == "door") {
                 if (wait)
-                    StackToBack = RedWings_TransitToBackstageViaDoorWait;
+                    if (deliverYellow)
+                        StackToBack = RedWings_TransitToBackdropViaDoorWait;
+                    else
+                        StackToBack = RedWings_TransitToBackstageViaDoorWait;
                 else
-                    StackToBack = RedWings_TransitToBackstageViaDoor;
+                    if(deliverYellow)
+                        StackToBack = RedWings_TransitToBackdropViaDoor;
+                    else
+                        StackToBack = RedWings_TransitToBackstageViaDoor;
 
                 if (cycleTarget == "backdrop")
                     BackToStack = Red_BackdropToStackViaDoor;
@@ -267,9 +276,15 @@ public class RedAuto extends CommandOpMode {
                     BackToStack = Red_BackstageToStackViaDoor;
             } else { // transiting via truss
                 if (wait)
-                    StackToBack = RedWings_TransitToBackstageViaTrussWait;
+                    if(deliverYellow)
+                        StackToBack = RedWings_TransitToBackdropViaTrussWait;
+                    else
+                        StackToBack = RedWings_TransitToBackstageViaTrussWait;
                 else
-                    StackToBack = RedWings_TransitToBackstageViaTruss;
+                    if(deliverYellow)
+                        StackToBack = RedWings_TransitToBackdropViaTruss;
+                    else
+                        StackToBack = RedWings_TransitToBackstageViaTruss;
 
                 if (cycleTarget == "backstage")
                     BackToStack = Red_BackstageToStackViaTruss;
@@ -277,126 +292,54 @@ public class RedAuto extends CommandOpMode {
                     BackToStack = Red_BackdropToStackViaTruss;
             }
 
+            StackPickupSequence = RedWings_StackPickupSequence;
+            SpikeToBackdrop = RedBackstage_SpikeToBackdrop;
+
             telemetry.addLine("waitForStart");
             telemetry.addData("Prop Position", bluePropThreshold.getPropPosition());
             telemetry.update();
             sleep(20);
         }
 
+        if(isStopRequested()){
+            portal.close();
+            return;
+        }
+
         if (isStarted() && !commandsScheduled) {
             // drop purple
-            schedule(new SequentialCommandGroup(
-                    new InstantCommand(() -> leds.setLEDstate("green")),
-                    new ParallelCommandGroup(
-                            new FollowTrajectoryCommand(drive, StartToSpike),
-                            new SequentialCommandGroup(
-                                    new WaitCommand(1000),
-                                    robotToDropPurple
-                            )
-                    ),
-                    new WaitCommand(100),
-                    new InstantCommand(gripper::releaseLeft)
-            ));
+            /*
+            GenerateAutoCommands passes these parameters
 
-            // get extra pixel on first cycle (start: spike, end: back)
-            if (startingSide == "wing") {
-                schedule(new SequentialCommandGroup(
-                        new InstantCommand(() -> leds.setLEDstate("white")),
-                        new ParallelCommandGroup(
-                                new FollowTrajectoryCommand(drive, SpikeToStack),
-                                new SequentialCommandGroup(
-                                        new WaitCommand(200),
-                                        robotToIntake
-                                )
-                        ),
-                        new WaitCommand(300),
-                        new ParallelCommandGroup(
-                                new IntakeInCommand(intake, leds),
-                                new FollowTrajectoryCommand(drive, RedWings_StackPickupSequence)
-                        ),
-                        new ParallelCommandGroup(
-                                new InstantCommand(() -> leds.setLEDstate("yellow")),
-                                new SequentialCommandGroup(
-                                        new InstantCommand(gripper::grabLeft),
-                                        new InstantCommand(gripper::grabRight),
-                                        new WaitCommand(200),
-                                        new IntakeOutCommand(intake)
-                                ),
-                                new FollowTrajectoryCommand(drive, StackToBack)
-                        )
-                ));
-            } else {
-                schedule(new SequentialCommandGroup( // turn bot around to align with backdrop
-                        new FollowTrajectoryCommand(drive, RedBackstage_SpikeToBackdrop)
-                ));
-            }
+            Arm arm, Wrist wrist, Gripper gripper, Lift lift, Intake intake, Winch winch, LEDs leds,
+            Drivetrain drivetrain, Webcams webcam, AprilTagMetadata targetBackdropTag,
+            SampleMecanumDrive drive,
+            TrajectorySequence StartToSpike, TrajectorySequence SpikeToStack, TrajectorySequence StackToBack,
+            TrajectorySequence BackToStack, TrajectorySequence SpikeToBackdrop, TrajectorySequence StackPickupSequence,
+            String startingSide, String cycleTarget, String transitVia, String parkIn, boolean cycle, boolean wait
 
-            // align to atag and deposit sequence
-            schedule(new SequentialCommandGroup(
-                    new AutoBackdropDepositCommand(arm, wrist, gripper, lift, intake, winch, leds, drivetrain, webcam, drive, targetBackdropTag)
-            ));
+            */
 
-            if (cycle) {
-                schedule(new SequentialCommandGroup(
-                        // back to intake to back AutoBackToStackToBackCommand
-                        new InstantCommand(() -> leds.setLEDstate("plaid")),
-                        new FollowTrajectoryCommand(drive, BackToStack),
-                        // intake in sequence
-                        new ParallelCommandGroup(
-                                new IntakeInCommand(intake, leds),
-                                new FollowTrajectoryCommand(drive, RedWings_StackPickupSequence)
-                        ),
-                        new ParallelCommandGroup(
-                                new InstantCommand(() -> leds.setLEDstate("yellow")),
-                                new SequentialCommandGroup(
-                                        new InstantCommand(gripper::grabLeft),
-                                        new InstantCommand(gripper::grabRight),
-                                        new WaitCommand(200),
-                                        new IntakeOutCommand(intake)
-                                ),
-                                new FollowTrajectoryCommand(drive, StackToBack)
-                        )
-
-                ));
-
-                // deposit dequence
-                if (cycleTarget == "backdrop") {
-                    schedule(new SequentialCommandGroup(
-                            new AutoBackdropDepositCommand(arm, wrist, gripper, lift, intake, winch, leds, drivetrain, webcam, drive, targetBackdropTag)
-                    ));
-                } else {
-                    schedule(new SequentialCommandGroup(
-                            new ParallelCommandGroup(
-                                    new InstantCommand(() -> leds.setLEDstate("white")),
-                                    new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "dropPurple")
-                            ),
-                            new FollowTrajectoryCommand(drive, drive.trajectorySequenceBuilder(drive.getPoseEstimate()).setReversed(true).forward(2, velConstraint10in, accelConstraint40in).build()),
-                            new InstantCommand(gripper::releaseRight),
-                            new InstantCommand(gripper::releaseLeft),
-                            new WaitCommand(100),
-                            new FollowTrajectoryCommand(drive, drive.trajectorySequenceBuilder(drive.getPoseEstimate()).setReversed(true).back(2, velConstraint10in, accelConstraint40in).build()),
-                            new InstantCommand(() -> leds.setLEDstate("purple")),
-                            new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake")
-                    ));
-                }
-                // cycle code
-                // park in middle code
-            } else {
-                //park code
-                if (parkIn == "corner") {
-                    schedule(new SequentialCommandGroup(
-                            new FollowTrajectoryCommand(drive, drive.trajectorySequenceBuilder(drive.getPoseEstimate()).setReversed(true).strafeRight(24, velConstraint20in, accelConstraint40in).build()),
-                            new FollowTrajectoryCommand(drive, drive.trajectorySequenceBuilder(drive.getPoseEstimate()).setReversed(true).back(24, velConstraint20in, accelConstraint40in).build())
-                    ));
-                } else {
-                    schedule(new SequentialCommandGroup(
-                            new FollowTrajectoryCommand(drive, drive.trajectorySequenceBuilder(drive.getPoseEstimate()).setReversed(true).strafeLeft(24, velConstraint20in, accelConstraint40in).build()),
-                            new FollowTrajectoryCommand(drive, drive.trajectorySequenceBuilder(drive.getPoseEstimate()).setReversed(true).back(24, velConstraint20in, accelConstraint40in).build())
-                    ));
-                }
-            }
+            schedule(
+                    autoGenerator.generateAutoCommands(
+                            arm, wrist, gripper, lift, intake, winch, leds, drivetrain, webcam,
+                            targetBackdropTag, webcam.getActiveAprilTagProcessor(),
+                            drive, StartToSpike, SpikeToStack, StackToBack, BackToStack, SpikeToBackdrop, StackPickupSequence,
+                            "red", startingSide, cycleTarget, transitVia, parkIn, cycle, wait, deliverYellow
+                    )
+            );
+//            portal.stopLiveView();
+//            portal.stopStreaming();
+            portal.close();
             commandsScheduled = true;
+//            CommandScheduler.getInstance().run();
+        }
+
+        while(opModeIsActive()){
             CommandScheduler.getInstance().run();
+            telemetry.addData("liftBase", lift.getLiftBase());
+            telemetry.addData("liftBase", drive.getPoseEstimate());
+            telemetry.update();
         }
 
         telemetry.update();

@@ -62,6 +62,44 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                         )
                 );
                 break;
+            case "intakenorelease":
+                currentState = "intake";
+                addCommands(
+                        new ParallelDeadlineGroup(
+                                new SequentialCommandGroup(
+
+                                        // send lift to fully retracted, wait for it to reach that position (via isFinished)
+                                        new InstantCommand(intake::stop),
+                                        // make sure arm isn't already in intake
+//                                        new WaitUntilCommand(() -> !arm.inIntakeEntering()),
+
+                                        // open grippers & send wrist to transition position
+                                        new InstantCommand(wrist::toTransition),
+
+                                        // wait 1 second for servos to move
+                                        new WaitCommand(250),
+
+                                        // move arm to transition position
+                                        new InstantCommand(arm::toTransition),
+
+                                        // wait for arm to reach transition position
+//                                        new WaitUntilCommand(() -> arm.inIntakeEntering()),
+//                                new WaitUntilCommand(() -> arm.fullIntake()),
+                                        new WaitCommand(400),
+
+                                        // send wrist to intake position
+                                        new InstantCommand(wrist::tiltToIntake),
+
+                                        // wait for wrist to catch up
+                                        new WaitCommand(50),
+
+                                        // send arm to intake position
+                                        new InstantCommand(arm::toIntake)
+                                ),
+                                new LiftToPositionCommand(lift, -10, 25)
+                        )
+                );
+                break;
             case "grab_pixels":
                 currentState = "grab_pixels";
                 addCommands(

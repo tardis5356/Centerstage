@@ -24,13 +24,13 @@ public class RobotAlignToTagRange extends CommandBase {
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
     //  applied to the drive motors to correct the error.
     //  Drive = Error * Gain    Make these values smaller for smoother control, or larger for a more aggressive response.
-    final double SPEED_GAIN  =  0.028  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
-    final double STRAFE_GAIN =  0.028 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
-    final double TURN_GAIN   =  0.02  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
+    final double SPEED_GAIN  =  0.035  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)  // 0.28
+    final double STRAFE_GAIN =  0.035 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0) // 0.28
+    final double TURN_GAIN   =  0.03  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0) // 0.2
 
-    final double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot) 0.5
-    final double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot) 0.5
-    final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot) 0.3
+    final double MAX_AUTO_SPEED = 0.2;   //  Clip the approach speed to this max value (adjust for your robot) 0.5
+    final double MAX_AUTO_STRAFE= 0.2;   //  Clip the approach speed to this max value (adjust for your robot) 0.5
+    final double MAX_AUTO_TURN  = 0.2;   //  Clip the turn speed to this max value (adjust for your robot) 0.3
 
     private static String activeWebcam = "back";  // 1 front, 2 back
     private static int DESIRED_TAG_ID = 0;     // Choose the tag you want to approach or set to -1 for ANY tag.
@@ -47,19 +47,21 @@ public class RobotAlignToTagRange extends CommandBase {
 
     boolean homingActive = false;
 
+    boolean auto = false;
 
     boolean targetFound     = false;    // Set to true when an AprilTag target is detected
 //    double  drive           = 0;        // Desired forward power/speed (-1 to +1)
 //    double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
 //    double  turn            = 0;        // Desired turning power/speed (-1 to +1)
 
-    public RobotAlignToTagRange(Drivetrain drivetrain, Webcams webcams, String active_camera, double desired_range, int target_tag, double tolerance) {
+    public RobotAlignToTagRange(Drivetrain drivetrain, Webcams webcams, String active_camera, double desired_range, int target_tag, double tolerance, boolean auto) {
         this.drivetrain = drivetrain;
         this.webcam = webcams;
         this.activeWebcam = active_camera;
         this.DESIRED_DISTANCE = desired_range;
         this.DESIRED_TAG_ID = target_tag;
         this.tolerance = tolerance;
+        this.auto = auto;
     }
 
     @Override
@@ -112,7 +114,6 @@ public class RobotAlignToTagRange extends CommandBase {
 
             targetFound = true;
 
-//            drivetrain.driveRobot(drive, strafe, turn);
         } else {
 //            drive = -previousDrive;
 //            turn = -previousTurn;
@@ -124,6 +125,8 @@ public class RobotAlignToTagRange extends CommandBase {
             strafe = 0;
 //            drivetrain.driveRobot(0, 0, 0);
         }
+        if(auto)
+            drivetrain.driveRobot(drive, strafe, turn);
     }
 
     public boolean isTargetFound(){

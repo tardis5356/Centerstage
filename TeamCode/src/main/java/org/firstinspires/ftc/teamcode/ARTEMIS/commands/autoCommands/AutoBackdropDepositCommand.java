@@ -29,7 +29,7 @@ public class AutoBackdropDepositCommand extends SequentialCommandGroup {
         addCommands(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> leds.setLEDstate("yellow")),
-                        new RobotAlignToTagRange(drivetrain, webcam, "back", 4, targetBackdropTag.id, 3),
+                        new RobotAlignToTagRange(drivetrain, webcam, "back", 4, targetBackdropTag.id, 3, true),
                         new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
                         new SequentialCommandGroup(
                                 new WaitCommand(500),

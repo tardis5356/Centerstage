@@ -178,7 +178,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         robotToIntakeCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake");
         robotGrabPixelsCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "grab_pixels");
 
-        robotAlignToTagTest = new RobotAlignToTagRange(drivetrain, webcams, "back", 4, 5, 3);
+        robotAlignToTagTest = new RobotAlignToTagRange(drivetrain, webcams, "back", 4, 5, 3, false);
 
 //        imu = hardwareMap.get(IMU.class, "imuEx");
 //
@@ -244,7 +244,7 @@ public class Gen1_TeleOp extends CommandOpMode {
  */
 
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON))
-                .whileActiveOnce(robotAlignToTagTest)
+                .whenActive(robotAlignToTagTest)
                 .whenActive(() -> {
                     aTagHomingActive = true;
                 })
