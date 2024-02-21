@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
 
 
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.localize;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_SpikeToBackdrop;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToCenterSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToLeftSpike;
@@ -61,7 +62,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import java.util.concurrent.TimeUnit;
 
 //@Disabled
-@Autonomous(group = "drive", name = "\uD83D\uDFE5 RedAuto") //
+@Autonomous(group = "drive", name = "\uD83D\uDFE5 RedAuto") // , preselectTeleOp="Gen1_TeleOp"
 public class RedAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
@@ -161,6 +162,8 @@ public class RedAuto extends CommandOpMode {
         gripper.grabRight();
         gripper.grabLeft();
         intake.up();
+
+        drivetrain.getImu().
 
         telemetry.setMsTransmissionInterval(50);
 
@@ -338,7 +341,11 @@ public class RedAuto extends CommandOpMode {
         while(opModeIsActive()){
             CommandScheduler.getInstance().run();
             telemetry.addData("liftBase", lift.getLiftBase());
-            telemetry.addData("liftBase", drive.getPoseEstimate());
+            telemetry.addData("heading degs", drivetrain.getYawDegrees());
+            telemetry.addData("heading rads", drivetrain.getYawRadians());
+            telemetry.addData("poseEstimate", drive.getPoseEstimate());
+            telemetry.addData("aTagEstimate", localize(webcam.getActiveAprilTagProcessor().getDetections(), drivetrain.getYawRadians()));
+            telemetry.addData("detections", webcam.getActiveAprilTagProcessor().getDetections().size());
             telemetry.update();
         }
 

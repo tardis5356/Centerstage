@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.DemoBots.primus.commands.BotToIntake;
 import org.firstinspires.ftc.teamcode.DemoBots.primus.Primus_subsystems.Gripper;
 import org.firstinspires.ftc.teamcode.DemoBots.primus.commands.CloseGripper;
 @Disabled
-@TeleOp (name="Primus_Command_Based")
+@TeleOp (name="Primus_Command_Based", group="demo")
 public class primus_command_based extends CommandOpMode{
     private GamepadEx driver;
     private Gripper left;

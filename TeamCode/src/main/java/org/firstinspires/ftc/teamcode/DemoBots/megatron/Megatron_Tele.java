@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.DemoBots.megatron.Base_Mega;
 //@Disabled
-@TeleOp(name="Mega_BotC")
+@TeleOp(name="Mega_BotC", group="demo")
 public class Megatron_Tele extends Base_Mega {
 
     Servo sL;

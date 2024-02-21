@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusTurnIMUCo
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusTurnLeftCommand;
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusTurnRightCommand;
 
-@Autonomous(name = "OptimusAuto")
+@Autonomous(name = "OptimusAuto", group="demo")
 public class OptimusCampTardisAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 

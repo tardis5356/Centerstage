@@ -47,6 +47,7 @@ public class EXCCMP_AutoTrajectories {
     public static TrajectorySequence RedBackstage_SpikeToBackdrop;
 
     public static TrajectorySequence Red_BackdropToStackViaTruss, Red_BackdropToStackViaDoor, Red_BackstageToStackViaTruss, Red_BackstageToStackViaDoor;
+    public static TrajectorySequence Red_DoorTransitWaypointToBackdrop;
 
 
     public static void generateTrajectories(SampleMecanumDrive drive) {
@@ -97,8 +98,11 @@ public class EXCCMP_AutoTrajectories {
                 .lineToLinearHeading(new Pose2d(54, 10, Math.toRadians(0)))
                 .lineToLinearHeading(new Pose2d(-18, 10, Math.toRadians(0)), velConstraint40in, accelConstraint40in)
                 .splineToSplineHeading(new Pose2d(-40, 22, Math.toRadians(-40)), Math.toRadians(140), velConstraint40in, accelConstraint40in)
-                .lineToLinearHeading(new Pose2d(-44, 38, Math.toRadians(0)), velConstraint20in, accelConstraint40in)
                 .build();//-49 x
+
+        Red_DoorTransitWaypointToBackdrop = drive.trajectorySequenceBuilder(RedWings_TransitToBackdropViaDoor.end())
+                .lineToLinearHeading(new Pose2d(-44, 38, Math.toRadians(0)), velConstraint20in, accelConstraint40in)
+                .build();
 
         RedWings_TransitToBackdropViaDoorWait = drive.trajectorySequenceBuilder(RedWings_StackPickupSequence.end())
                 .lineToLinearHeading(new Pose2d(56, 12, Math.toRadians(0)))

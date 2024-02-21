@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 //@Disabled
-@TeleOp(name = "Primus_TeleOp", group = "Linear Opmode")
+@TeleOp(name = "Primus_TeleOp", group="demo")
 public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();

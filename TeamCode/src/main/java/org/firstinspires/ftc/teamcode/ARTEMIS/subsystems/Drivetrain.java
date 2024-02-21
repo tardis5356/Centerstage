@@ -1,15 +1,14 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.subsystems;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.teleop.Gen1_TeleOp.highArmPosition;
-
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class Drivetrain extends SubsystemBase {
     private DcMotor mFL;
@@ -17,11 +16,17 @@ public class Drivetrain extends SubsystemBase {
     private DcMotor mBL;
     private DcMotor mBR;
 
+    BNO055IMU imu;
+
     public Drivetrain(HardwareMap hardwareMap) {
         mFL = hardwareMap.get(DcMotor.class, "mFL");
         mFR = hardwareMap.get(DcMotor.class, "mFR");
         mBL = hardwareMap.get(DcMotor.class, "mBL");
         mBR = hardwareMap.get(DcMotor.class, "mBR");
+
+        imu = hardwareMap.get(BNO055IMU.class, "imuEx");
+
+        imu.initialize(new BNO055IMU.Parameters());
     }
 
     @Override
@@ -53,6 +58,21 @@ public class Drivetrain extends SubsystemBase {
         mBR.setPower(rightBackPower);
     }
 
+    public BNO055IMU getImu() {
+        return imu;
+    }
+
+    public Orientation getIMUOrientation(){
+        return imu.getAngularOrientation();
+    }
+
+    public double getYawRadians(){
+        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle+Math.toRadians(270);
+    }
+
+    public double getYawDegrees(){
+        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle+(270);
+    }
 
     // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
     // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.

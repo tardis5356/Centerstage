@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-@TeleOp(name="Optimus_Centerstage_TeleOp")
+@TeleOp(name="Optimus_Centerstage_TeleOp", group="demo")
 public class Optimus_CenterStage extends LinearOpMode{
 
 

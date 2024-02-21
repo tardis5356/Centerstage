@@ -45,7 +45,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import java.util.List;
 
 @Config
-@TeleOp(name = "Gen1_TeleOp", group = "Gen1")
+@TeleOp(name = "Gen1_TeleOp", group = "AGen1")
 public class Gen1_TeleOp extends CommandOpMode {
     //gamepads
     private GamepadEx driver1, driver2;

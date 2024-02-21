@@ -22,7 +22,7 @@ public class Lift extends SubsystemBase {
 
     private TouchSensor liftBase;
 
-    private DistanceSensor distanceBackRight, distanceBackLeft;
+    private DistanceSensor distanceBackRight, distanceBackLeft; /// back right i2c 0 of exphub, back left port 1
 
     public static double p = BotPositions.LIFT_p, i = BotPositions.LIFT_i, d = BotPositions.LIFT_d;
     public static double ff = BotPositions.LIFT_ff;

@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.DemoBots.primus.Primus_subsystems.PrimusDr
 import org.firstinspires.ftc.teamcode.DemoBots.primus.commands.PrimusDriveForwardCommand;
 import org.firstinspires.ftc.teamcode.DemoBots.primus.commands.PrimusTurnIMUCommand;
 
-@Autonomous(name = "PrimusAuto")
+@Autonomous(name = "PrimusAuto", group="demo")
 public class PrimusCampTARDISAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 

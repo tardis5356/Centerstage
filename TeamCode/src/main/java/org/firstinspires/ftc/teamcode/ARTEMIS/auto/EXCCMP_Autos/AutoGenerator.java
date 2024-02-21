@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
 
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_SpikeToBackdrop;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StackPickupSequence;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorTransitWaypointToBackdrop;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.accelConstraint40in;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.velConstraint10in;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.velConstraint20in;
@@ -115,7 +116,8 @@ public class AutoGenerator {
 
                     new InstantCommand(() -> leds.setLEDstate("yellow")),
 //                    new RobotAlignToTagRange(drivetrain, webcam, "back", 4, targetBackdropTag.id, 3, true),
-                    new RelocalizeFromTagCommand(drive, aprilTagProcessor),
+                    new RelocalizeFromTagCommand(drive, drivetrain, aprilTagProcessor),
+                    new FollowTrajectoryCommand(drive, Red_DoorTransitWaypointToBackdrop),
                     new ParallelCommandGroup(
                             new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
                             new SequentialCommandGroup(

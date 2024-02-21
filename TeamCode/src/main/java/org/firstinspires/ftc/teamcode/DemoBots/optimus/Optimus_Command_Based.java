@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.DemoBots.optimus.Optimus_subsystems.Grippe
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.Optimus_subsystems.Wrist;
 
 @Disabled
-@TeleOp(name="Optimus_Command_Based")
+@TeleOp(name="Optimus_Command_Based", group="demo")
 public class Optimus_Command_Based extends CommandOpMode {
     private GamepadEx driver;
 
