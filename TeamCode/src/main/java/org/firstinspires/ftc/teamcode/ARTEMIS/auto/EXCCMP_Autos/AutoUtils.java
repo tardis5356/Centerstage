@@ -9,31 +9,79 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions;
+import org.firstinspires.ftc.teamcode.DemoBots.primus.Pose;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AutoUtils {
-    public static double[] XYTTtoRBY(double x, double y, double botTheta, double tagTheta){
+    public static double[] XYTTtoRBY(double x, double y, double botTheta, double tagTheta) {
         double range = Math.sqrt(x * x + y * y);
-        double bearing = Math.toDegrees(Math.atan2(-x,y));
+        double bearing = Math.toDegrees(Math.atan2(-x, y));
         double yaw = botTheta - tagTheta;
         return new double[]{range, bearing, yaw};
     }
 
-    public static double[] RBYtoXYT(double range, double bearing, double yaw, double tagTheta){
-        double x = -range*Math.sin(Math.toRadians(bearing));
-        double y = range*Math.cos(Math.toRadians(bearing));
+    public static double[] RBYtoXYT(double range, double bearing, double yaw, double tagTheta) {
+        double x = -range * Math.sin(Math.toRadians(bearing));
+        double y = range * Math.cos(Math.toRadians(bearing));
         double t = yaw + tagTheta;
         return new double[]{x, y, t};
     }
 
-    public static Pose2d relocalize(List<AprilTagDetection> detections, double headingRad) {
-//        List<AprilTagDetection> detections = getAprilTagDetections();
+    /**
+     * tardis
+     *
+     * @param detections
+     * @param headingRad
+     * @return
+     */
 
+    public static Pose2d relocalize(List<AprilTagDetection> detections, double headingRad) {
+        List<Double> x = new ArrayList<>();
+        List<Double> y = new ArrayList<>();
+        List<Double> t = new ArrayList<>();
+
+        if (detections != null) {
+            for (AprilTagDetection detection : detections) {
+                x.add(AutoUtils.RBYtoXYT(detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.yaw, 180)[0] + detection.metadata.fieldPosition.get(0));
+                y.add(AutoUtils.RBYtoXYT(detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.yaw, 180)[0] + detection.metadata.fieldPosition.get(1));
+                t.add(AutoUtils.RBYtoXYT(detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.yaw, 180)[0] + quaternionToHeading(detection.metadata.fieldOrientation)); //+2*Math.acos(detection.metadata.fieldOrientation.y)); //Math.atan2(2.0*(q.y*q.z + q.w*q.x), q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z
+            }
+
+            double xAvg = 0;
+            double yAvg = 0;
+            double tAvg = 0;
+
+            for (int i = 0; i < detections.size(); i++) {
+                xAvg += x.get(i);
+                yAvg += y.get(i);
+//                tAvg += t.get(i);
+            }
+
+            xAvg /= x.size();
+            yAvg /= x.size();
+//            tAvg /= x.size();
+
+            return new Pose2d(xAvg, yAvg, (headingRad));
+        }
+        return null;
+    }
+
+    /**
+     * vector
+     *
+     * @param detections
+     * @param headingRad
+     * @return
+     */
+
+    public static Pose2d relocalize2(List<AprilTagDetection> detections, double headingRad) {
         if (detections.size() == 0) return null;
 
         double xSum = 0;
@@ -61,17 +109,21 @@ public class AutoUtils {
         return new Pose2d(xSum / detections.size(), ySum / detections.size(), headingRad);
     }
 
-    public static Pose2d relocalize2(List<AprilTagDetection> detections, double headingRad){
+    /**
+     * using escapve velocity
+     *
+     * @param detections
+     * @param headingRad
+     * @return
+     */
+
+    public static Pose2d relocalize3(List<AprilTagDetection> detections, double headingRad) {
         List<Double> x = new ArrayList<>();
         List<Double> y = new ArrayList<>();
         List<Double> t = new ArrayList<>();
 
         if (detections != null) {
             for (AprilTagDetection detection : detections) {
-//                x.add(AutoUtils.RBYtoXYT(detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.yaw, 180)[0] + detection.metadata.fieldPosition.get(0));
-//                y.add(AutoUtils.RBYtoXYT(detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.yaw, 180)[0] + detection.metadata.fieldPosition.get(1));
-////                Quaternion q = detection.metadata.fieldOrientation;
-//                t.add(AutoUtils.RBYtoXYT(detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.yaw, 180)[0] + quaternionToHeading(detection.metadata.fieldOrientation)); //+2*Math.acos(detection.metadata.fieldOrientation.y)); //Math.atan2(2.0*(q.y*q.z + q.w*q.x), q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z
                 x.add(getFCPosition(detection, headingRad).getX());
                 y.add(getFCPosition(detection, headingRad).getY());
             }
@@ -83,12 +135,10 @@ public class AutoUtils {
             for (int i = 0; i < detections.size(); i++) {
                 xAvg += x.get(i);
                 yAvg += y.get(i);
-//                tAvg += t.get(i);
             }
 
             xAvg /= x.size();
             yAvg /= x.size();
-//            tAvg /= x.size();
 
             return new Pose2d(xAvg, yAvg, (headingRad));
 //            return new Pose2d(x.get(0), y.get(0), (headingRad));
@@ -97,28 +147,100 @@ public class AutoUtils {
     }
 
     /**
-     * @param botheading In Radians.
-     * @return FC Pose of bot.
+     * escape velocity
      */
-    public static Pose2d getFCPosition(AprilTagDetection detection, double botheading) {
+    public static Pose2d getFCPosition(AprilTagDetection detection, double botheading) { //heading in radians
         AprilTagLibrary tags = AprilTagGameDatabase.getCurrentGameTagLibrary();
 
         // get coordinates of the robot in RC coordinates
         // ensure offsets are RC
-        double x = detection.ftcPose.x-BACK_WEBCAM_X_OFFSET;
-        double y = detection.ftcPose.y-BACK_WEBCAM_Y_OFFSET;
+        double x = detection.ftcPose.x - BACK_WEBCAM_X_OFFSET;
+        double y = detection.ftcPose.y - BACK_WEBCAM_Y_OFFSET;
 
         // invert heading to correct properly
         botheading = -botheading;
 
         // rotate RC coordinates to be field-centric
-        double x2 = x*Math.cos(botheading)+y*Math.sin(botheading);
-        double y2 = x*-Math.sin(botheading)+y*Math.cos(botheading);
+        double x2 = x * Math.cos(botheading) + y * Math.sin(botheading);
+        double y2 = x * -Math.sin(botheading) + y * Math.cos(botheading);
 
         // add FC coordinates to apriltag position
         // tags is just the CS apriltag library
         VectorF tagpose = tags.lookupTag(detection.id).fieldPosition;
-        return new Pose2d(tagpose.get(0)+y2,tagpose.get(1)-x2, -botheading); // new Rotation2d(-botheading)
+        return new Pose2d(tagpose.get(0) + y2, tagpose.get(1) - x2, -botheading); // new Rotation2d(-botheading)
+    }
+
+
+    public Pose2d relocalize4(List<AprilTagDetection> detections, double headingRad) {
+        List<Double> x = new ArrayList<>();
+        List<Double> y = new ArrayList<>();
+
+        for (AprilTagDetection detection : detections) {
+            /*
+            x is backdrop to wing, y is alliance to alliance
+
+            blue wing (red alliance side) is (+,+) on rr coordinate system
+            blue backstage is (+,+) on ftc coordinate system
+
+            bot heading must be flipped
+
+            after calculations, both x and y signs need to be flipped to transpose from ftc to rr coord systems
+            */
+
+            Pose2d tagPose = vectorFToPose2d(detection.metadata.fieldPosition);
+            AprilTagPoseFtc ftcPose = detection.ftcPose;
+
+            // get hypoteneuse of bot center to atag center (not the same as camera center + offset to atag center)
+            double hyp = Math.sqrt(
+                    (ftcPose.x + BACK_WEBCAM_X_OFFSET) * (ftcPose.x + BACK_WEBCAM_X_OFFSET) +
+                            (ftcPose.y + BACK_WEBCAM_Y_OFFSET) * (ftcPose.y + BACK_WEBCAM_Y_OFFSET));
+
+            // trig to get bot x-y position of bot relative to atag
+            double x_botToTag = hyp * Math.cos(-headingRad);
+            double y_botToTag = hyp * Math.sin(-headingRad);
+
+            // still in ftc coordinate system, get position of bot relative to atag
+            double newBotX = tagPose.getX() - x_botToTag;
+            double newBotY = tagPose.getY() - y_botToTag;
+
+            x.add(newBotX);
+            y.add(newBotY);
+        }
+
+        double xVal = 0;
+        double yVal = 0;
+
+        if (detections.size() % 2 == 0) {
+            for (int i = 0; i < detections.size(); i++) {
+                xVal += x.get(i);
+                yVal += y.get(i);
+            }
+            xVal /= detections.size();
+            yVal /= detections.size();
+        } else {
+            ArrayList<Double> sortedX = new ArrayList<>(x);
+
+            // sort the duplicate list
+            Collections.sort(sortedX);
+
+            // find the median value
+            int middleIndex1 = sortedX.size() / 2 - 1;
+            int middleIndex2 = sortedX.size() / 2;
+            double medianValue = (sortedX.get(middleIndex1) + sortedX.get(middleIndex2)) / 2.0;
+
+            // find the index of the median value in the original list
+            int medianIndex = x.indexOf(medianValue);
+
+            // get the median values
+            xVal = x.get(medianIndex);
+            yVal = y.get(medianIndex);
+        }
+
+        // convert to rr coords and take avg of all calculated positions
+        double xRR = -xVal;
+        double yRR = -yVal;
+
+        return new Pose2d(xRR, yRR, headingRad);
     }
 
     private static Pose2d vectorFToPose2d(VectorF vector) {
@@ -126,6 +248,6 @@ public class AutoUtils {
     }
 
     public static double quaternionToHeading(Quaternion q) {
-        return Math.atan2(2.0*(q.y*q.z + q.w*q.x), q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z);
+        return Math.atan2(2.0 * (q.y * q.z + q.w * q.x), q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z);
     }
 }

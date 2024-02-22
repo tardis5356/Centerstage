@@ -37,5 +37,5 @@ public class BotPositions {
     //drone servo positions
     public static double DRONE_LATCHED = 0.33, DRONE_UNLATCHED = 0.27;
 
-    public static double BACK_WEBCAM_X_OFFSET = 0, BACK_WEBCAM_Y_OFFSET = -7.5;
+    public static double BACK_WEBCAM_Y_OFFSET = 0, BACK_WEBCAM_X_OFFSET = 7.5; // x is front to back, y is side to side
 }
