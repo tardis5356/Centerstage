@@ -63,11 +63,10 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                 );
                 break;
             case "intakenorelease":
-                currentState = "intake";
+                currentState = "intakenorelease";
                 addCommands(
                         new ParallelDeadlineGroup(
                                 new SequentialCommandGroup(
-
                                         // send lift to fully retracted, wait for it to reach that position (via isFinished)
                                         new InstantCommand(intake::stop),
                                         // make sure arm isn't already in intake

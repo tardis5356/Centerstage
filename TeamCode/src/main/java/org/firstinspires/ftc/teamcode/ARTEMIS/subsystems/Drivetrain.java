@@ -18,6 +18,9 @@ public class Drivetrain extends SubsystemBase {
 
     BNO055IMU imu;
 
+    double startingErrorRads = 0;
+    double startingOffsetRads = 0;
+    
     public Drivetrain(HardwareMap hardwareMap) {
         mFL = hardwareMap.get(DcMotor.class, "mFL");
         mFR = hardwareMap.get(DcMotor.class, "mFR");
@@ -66,12 +69,23 @@ public class Drivetrain extends SubsystemBase {
         return imu.getAngularOrientation();
     }
 
+    public void setStartingError(){
+        startingErrorRads = AngleUnit.normalizeDegrees(-imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle);
+    }
+    public void setStartingOffsetDegs(int offsetDeg){
+        startingOffsetRads = Math.toRadians(offsetDeg);
+    }
+
     public double getYawRadians(){
-        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle+Math.toRadians(270);
+        return AngleUnit.normalizeRadians(-imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS).thirdAngle-startingErrorRads+startingOffsetRads);
     }
 
     public double getYawDegrees(){
-        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle+(270);
+        return AngleUnit.normalizeDegrees(-imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle-Math.toDegrees(startingErrorRads)+Math.toDegrees(startingOffsetRads));
+    }
+
+    public double getRawYawDegrees(){
+        return AngleUnit.normalizeDegrees(-imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle);
     }
 
     // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.

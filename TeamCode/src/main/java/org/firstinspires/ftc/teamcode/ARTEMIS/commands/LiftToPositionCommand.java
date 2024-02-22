@@ -24,14 +24,17 @@ public class LiftToPositionCommand extends CommandBase {
 
     @Override
     public void execute() { // runs continuously
-      //  lift.setTolerance(tolerance);
+        //  lift.setTolerance(tolerance);
         lift.setTargetPosition(targetPosition);
-      //  lift.updatePIDValues();
+        //  lift.updatePIDValues();
     }
 
     @Override
     public boolean isFinished() { // returns true when finished
-        return Math.abs(lift.getLiftPosition() - targetPosition) < tolerance;
+        if (targetPosition == -10)
+            return true;
+        else
+            return Math.abs(lift.getLiftPosition() - targetPosition) < tolerance;
     }
 
     @Override

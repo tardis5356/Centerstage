@@ -13,6 +13,7 @@ import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ARTEMIS.auto.FollowTrajectoryCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.LiftToPositionCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.RobotAlignToTagRange;
@@ -39,7 +40,7 @@ public class AutoGenerator {
 
     private SequentialCommandGroup autoCommands = new SequentialCommandGroup();
 
-    public SequentialCommandGroup generateAutoCommands(Arm arm, Wrist wrist, Gripper gripper, Lift lift, Intake intake, Winch winch, LEDs leds, Drivetrain drivetrain, Webcams webcam, AprilTagMetadata targetBackdropTag, AprilTagProcessor aprilTagProcessor, SampleMecanumDrive drive, TrajectorySequence StartToSpike, TrajectorySequence SpikeToStack, TrajectorySequence StackToBack, TrajectorySequence BackToStack, TrajectorySequence SpikeToBackdrop, TrajectorySequence StackPickupSequence, String alliance, String startingSide, String cycleTarget, String transitVia, String parkIn, boolean cycle, boolean wait, boolean deliverYellow) {
+    public SequentialCommandGroup generateAutoCommands(Arm arm, Wrist wrist, Gripper gripper, Lift lift, Intake intake, Winch winch, LEDs leds, Drivetrain drivetrain, Webcams webcam, AprilTagMetadata targetBackdropTag, AprilTagProcessor aprilTagProcessor, SampleMecanumDrive drive, TrajectorySequence StartToSpike, TrajectorySequence SpikeToStack, TrajectorySequence StackToBack, TrajectorySequence BackToStack, TrajectorySequence SpikeToBackdrop, TrajectorySequence StackPickupSequence, String alliance, String startingSide, String cycleTarget, String transitVia, String parkIn, boolean cycle, boolean wait, boolean deliverYellow, Telemetry telemetry) {
         autoCommands.addCommands(new SequentialCommandGroup(
                 new InstantCommand(() -> leds.setLEDstate("green")),
                 new ParallelCommandGroup(
@@ -58,18 +59,18 @@ public class AutoGenerator {
         if (startingSide == "wing") {
             autoCommands.addCommands(new SequentialCommandGroup(
                     new InstantCommand(() -> leds.setLEDstate("white")),
-                    new WaitCommand(150),
+//                    new WaitCommand(150),
                     new ParallelCommandGroup(
                             new FollowTrajectoryCommand(drive, SpikeToStack),
-                            new SequentialCommandGroup(
-                                    new WaitCommand(200),
-                                    new ParallelDeadlineGroup(
-                                            new WaitCommand(1000),
-                                            new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds,
-                                                    "intakeNoRelease")
-                                    )
-//                                    new InstantCommand(() -> leds.setLEDstate("purple"))
+//                            new SequentialCommandGroup(
+//                                    new WaitCommand(200),
+                            new ParallelDeadlineGroup(
+                                    new WaitCommand(1500), //TODO:fix this bad command isFinished
+                                    new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds,
+                                            "intakeNoRelease")
                             )
+////                                    new InstantCommand(() -> leds.setLEDstate("purple"))
+//                            )
                     ),
 //                    new InstantCommand(() -> leds.setLEDstate("yellow")),
                     new WaitCommand(100),
@@ -78,11 +79,11 @@ public class AutoGenerator {
                     new ParallelCommandGroup(
                             new FollowTrajectoryCommand(drive, StackPickupSequence),
                             new SequentialCommandGroup(
-                                    new WaitCommand(500),
+                                    new WaitCommand(1000),
                                     new InstantCommand(intake::out),
                                     new WaitCommand(200),
                                     new InstantCommand(intake::in),
-                                    new WaitCommand(500),
+                                    new WaitCommand(1000),
                                     new InstantCommand(intake::out)
                             )
                     ),
@@ -116,7 +117,7 @@ public class AutoGenerator {
 
                     new InstantCommand(() -> leds.setLEDstate("yellow")),
 //                    new RobotAlignToTagRange(drivetrain, webcam, "back", 4, targetBackdropTag.id, 3, true),
-                    new RelocalizeFromTagCommand(drive, drivetrain, aprilTagProcessor),
+                    new RelocalizeFromTagCommand(drive, drivetrain, aprilTagProcessor, telemetry),
                     new FollowTrajectoryCommand(drive, Red_DoorTransitWaypointToBackdrop),
                     new ParallelCommandGroup(
                             new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
@@ -135,62 +136,135 @@ public class AutoGenerator {
                                     .build()
                     ),
                     new InstantCommand(() -> leds.setLEDstate("purple")),
-                    new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake")
+                    new ParallelDeadlineGroup(
+                            new WaitCommand(1200),
+                            new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake")
+                    ),
+                    new InstantCommand(() -> leds.setLEDstate("yellow"))
 //                new AutoBackdropDepositCommand(arm, wrist, gripper, lift, intake, winch, leds, drivetrain, webcam, drive, targetBackdropTag)
             ));
-        else // don't deliver yellow
+        else {
+            // don't deliver yellow
+        }
 //            if(cycle)
 //                //tbd
 //                else
 
 
-            if (cycle) {
-                autoCommands.addCommands(new SequentialCommandGroup(
-                        // back to intake to back AutoBackToStackToBackCommand
-                        new InstantCommand(() -> leds.setLEDstate("plaid")),
-                        new FollowTrajectoryCommand(drive, BackToStack),
-                        // intake in sequence
-                        new ParallelCommandGroup(
-                                new IntakeInCommand(intake, leds),
-                                new FollowTrajectoryCommand(drive, StackPickupSequence)
-                        ),
-                        new ParallelCommandGroup(
-                                new InstantCommand(() -> leds.setLEDstate("yellow")),
-                                new SequentialCommandGroup(
-                                        new InstantCommand(gripper::grabLeft),
-                                        new InstantCommand(gripper::grabRight),
-                                        new WaitCommand(200),
-                                        new IntakeOutCommand(intake)
-                                ),
-                                new FollowTrajectoryCommand(drive, StackToBack)
-                        )
+        if (cycle) {
+            autoCommands.addCommands(new SequentialCommandGroup(
+                    // back to intake to back AutoBackToStackToBackCommand
+                    new InstantCommand(() -> leds.setLEDstate("plaid")),
+                    new FollowTrajectoryCommand(drive, BackToStack),
+                    // intake in sequence
+//                    new ParallelCommandGroup(
+//                            new IntakeInCommand(intake, leds),
+//                            new FollowTrajectoryCommand(drive, StackPickupSequence)
+//                    ),
+//                    new ParallelCommandGroup(
+//                            new InstantCommand(() -> leds.setLEDstate("yellow")),
+//                            new SequentialCommandGroup(
+//                                    new InstantCommand(gripper::grabLeft),
+//                                    new InstantCommand(gripper::grabRight),
+//                                    new WaitCommand(200),
+//                                    new IntakeOutCommand(intake)
+//                            ),
+//                            new FollowTrajectoryCommand(drive, StackToBack)
+//                    ),
 
-                ));
+                    //temp code
 
-                // deposit dequence
-                if (cycleTarget == "backdrop") {
-                    autoCommands.addCommands(new SequentialCommandGroup(
-                            new AutoBackdropDepositCommand(arm, wrist, gripper, lift, intake, winch, leds, drivetrain, webcam, drive, targetBackdropTag)
-                    ));
-                } else {
-                    autoCommands.addCommands(new SequentialCommandGroup(
-                            new ParallelCommandGroup(
-                                    new InstantCommand(() -> leds.setLEDstate("white")),
-                                    new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "dropPurple")
+                    new WaitCommand(100),
+                    new InstantCommand(intake::in),
+                    new InstantCommand(intake::down),
+                    new ParallelCommandGroup(
+                            new FollowTrajectoryCommand(drive, StackPickupSequence),
+                            new SequentialCommandGroup(
+                                    new WaitCommand(1000),
+                                    new InstantCommand(intake::out),
+                                    new WaitCommand(200),
+                                    new InstantCommand(intake::in),
+                                    new WaitCommand(1000),
+                                    new InstantCommand(intake::out)
+                            )
+                    ),
+//                    new ParallelCommandGroup(
+//                            new IntakeInCommand(intake, leds),
+//                            new FollowTrajectoryCommand(drive, StackPickupSequence)
+//                    ),
+                    new ParallelCommandGroup(
+                            new InstantCommand(() -> leds.setLEDstate("yellow")),
+                            new SequentialCommandGroup(
+                                    new InstantCommand(gripper::grabLeft),
+                                    new InstantCommand(gripper::grabRight),
+                                    new InstantCommand(intake::up),
+                                    new WaitCommand(150),
+//                                    new IntakeOutCommand(intake)
+                                    new InstantCommand(intake::out)
                             ),
-                            new FollowTrajectoryCommand(drive, drive.trajectorySequenceBuilder(drive.getPoseEstimate()).setReversed(true).forward(2, velConstraint10in, accelConstraint40in).build()),
-                            new InstantCommand(gripper::releaseRight),
-                            new InstantCommand(gripper::releaseLeft),
-                            new WaitCommand(100),
-                            new FollowTrajectoryCommand(drive, drive.trajectorySequenceBuilder(drive.getPoseEstimate()).setReversed(true).back(2, velConstraint10in, accelConstraint40in).build()),
-                            new InstantCommand(() -> leds.setLEDstate("purple")),
+                            new FollowTrajectoryCommand(drive, StackToBack)
+                    )
+
+            ));
+
+
+            autoCommands.addCommands(new SequentialCommandGroup(
+                    new InstantCommand(intake::stop),
+
+                    new InstantCommand(() -> leds.setLEDstate("yellow")),
+//                    new RobotAlignToTagRange(drivetrain, webcam, "back", 4, targetBackdropTag.id, 3, true),
+                    new RelocalizeFromTagCommand(drive, drivetrain, aprilTagProcessor, telemetry),
+                    new FollowTrajectoryCommand(drive, Red_DoorTransitWaypointToBackdrop),
+                    new ParallelCommandGroup(
+                            new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
+                            new SequentialCommandGroup(
+                                    new WaitCommand(250),
+                                    new LiftToPositionCommand(lift, 200, 10)
+                            )
+                    ),
+                    new InstantCommand(gripper::releaseRight),
+                    new WaitCommand(100),
+                    new InstantCommand(gripper::releaseLeft),
+                    new WaitCommand(100),
+                    new FollowTrajectoryCommand(drive,
+                            drive.trajectorySequenceBuilder(SpikeToBackdrop.end())
+                                    .back(2, velConstraint10in, accelConstraint40in)
+                                    .build()
+                    ),
+                    new InstantCommand(() -> leds.setLEDstate("purple")),
+                    new ParallelDeadlineGroup(
+                            new WaitCommand(1200),
                             new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake")
-                    ));
-                }
-                // cycle code
-                // park in middle code
-            } else {
-                //park code
+                    ),
+                    new InstantCommand(() -> leds.setLEDstate("yellow"))
+//                new AutoBackdropDepositCommand(arm, wrist, gripper, lift, intake, winch, leds, drivetrain, webcam, drive, targetBackdropTag)
+            ));
+
+            // deposit dequence
+//                if (cycleTarget == "backdrop") {
+//                    autoCommands.addCommands(new SequentialCommandGroup(
+////                            new AutoBackdropDepositCommand(arm, wrist, gripper, lift, intake, winch, leds, drivetrain, webcam, drive, targetBackdropTag)
+//                    ));
+//                } else {
+            /*
+            autoCommands.addCommands(new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                            new InstantCommand(() -> leds.setLEDstate("white")),
+                            new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "dropPurple")
+                    ),
+                    new FollowTrajectoryCommand(drive, drive.trajectorySequenceBuilder(drive.getPoseEstimate()).setReversed(true).forward(2, velConstraint10in, accelConstraint40in).build()),
+                    new InstantCommand(gripper::releaseRight),
+                    new InstantCommand(gripper::releaseLeft),
+                    new WaitCommand(100),
+                    new FollowTrajectoryCommand(drive, drive.trajectorySequenceBuilder(drive.getPoseEstimate()).setReversed(true).back(2, velConstraint10in, accelConstraint40in).build()),
+                    new InstantCommand(() -> leds.setLEDstate("purple")),
+                    new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake")
+            ));*/
+//                }
+            // cycle code
+            // park in middle code
+        } else {
+            //park code
 //                if (parkIn == "corner") {
 //                    autoCommands.addCommands(new SequentialCommandGroup(
 //                            new FollowTrajectoryCommand(drive, drive.trajectorySequenceBuilder(drive.getPoseEstimate()).setReversed(true).strafeRight(24, velConstraint20in, accelConstraint40in).build()),
@@ -202,7 +276,7 @@ public class AutoGenerator {
 //                            new FollowTrajectoryCommand(drive, drive.trajectorySequenceBuilder(drive.getPoseEstimate()).setReversed(true).back(24, velConstraint20in, accelConstraint40in).build())
 //                    ));
 //                }
-            }
+        }
 
         return autoCommands;
     }

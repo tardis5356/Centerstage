@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.BluePropDetection;
+import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.RedPropDetection;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -33,15 +35,20 @@ public class Webcams extends SubsystemBase {
     private AprilTagProcessor aprilTagProcessor, aprilTagBack;              // Used for managing the AprilTag detection process.
     private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
 
+    private BluePropDetection bluePropThreshold;
+    private RedPropDetection redPropThreshold;
+
     private CameraStreamProcessor frontCameraStream, backCameraStream;
 
-    public String activeWebcam = "back";
+    public String activeWebcam = "back", activeProcessor = "apriltag";
 
     public WebcamName frontWebcam, backWebcam;
 
     public Webcams(HardwareMap hardwareMap) {
         // Create the AprilTag processor by using a builder.
         aprilTagProcessor = new AprilTagProcessor.Builder().build();
+        bluePropThreshold = new BluePropDetection();
+        redPropThreshold = new RedPropDetection();
 //        aprilTagBack = new AprilTagProcessor.Builder().build();
 
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
@@ -64,7 +71,7 @@ public class Webcams extends SubsystemBase {
         visionPortal = new VisionPortal.Builder()
 //                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .setCamera(switchableCamera)
-                .addProcessor(aprilTagProcessor)
+                .addProcessors(aprilTagProcessor, redPropThreshold, bluePropThreshold)
                 .setAutoStopLiveView(true)
                 .enableLiveView(true)
 //                .addProcessor(frontCameraStream)
@@ -144,6 +151,34 @@ public class Webcams extends SubsystemBase {
         return aprilTagProcessor.getDetections();
     }
 
+    public void setActiveProcessor(String processor){
+        if(processor == "apriltag") {
+            visionPortal.setProcessorEnabled(aprilTagProcessor, true);
+            visionPortal.setProcessorEnabled(bluePropThreshold, false);
+            visionPortal.setProcessorEnabled(redPropThreshold, false);
+            activeProcessor = "apriltag";
+        } else if(processor == "redProp") {
+            visionPortal.setProcessorEnabled(aprilTagProcessor, false);
+            visionPortal.setProcessorEnabled(bluePropThreshold, false);
+            visionPortal.setProcessorEnabled(redPropThreshold, true);
+            activeProcessor = "redProp";
+        } else if(processor == "blueProp") {
+            visionPortal.setProcessorEnabled(aprilTagProcessor, false);
+            visionPortal.setProcessorEnabled(bluePropThreshold, true);
+            visionPortal.setProcessorEnabled(redPropThreshold, false);
+            activeProcessor = "blueProp";
+        }
+    }
+
+    public String getPropPosition(){
+        if(activeProcessor == "redProp"){
+            return redPropThreshold.getPropPosition();
+        } else if(activeProcessor == "blueProp"){
+            return bluePropThreshold.getPropPosition();
+        }
+        return null;
+    }
+
     public AprilTagDetection getDesiredTag(List<AprilTagDetection> currentDetections, int desiredTagID) {
         boolean targetFound;
         for (AprilTagDetection detection : currentDetections) {
@@ -216,12 +251,12 @@ public class Webcams extends SubsystemBase {
         if (webcam.toLowerCase() == "front") {
             activeWebcam = "front";
             visionPortal.setActiveCamera(frontWebcam);
-            visionPortal.resumeStreaming();
+//            visionPortal.resumeStreaming();
         } else {
             // back webcam
             activeWebcam = "back";
             visionPortal.setActiveCamera(backWebcam);
-            visionPortal.resumeStreaming();
+//            visionPortal.resumeStreaming();
         }
     }
 

@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
 
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.localize;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_SpikeToBackdrop;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToCenterSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToLeftSpike;
@@ -67,8 +67,8 @@ public class RedAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
     private SampleMecanumDrive drive;
-    private VisionPortal portal;
-    private BluePropDetection bluePropThreshold;
+//    private VisionPortal portal;
+//    private BluePropDetection bluePropThreshold;
     private static AprilTagLibrary tags = AprilTagGameDatabase.getCurrentGameTagLibrary();
     FtcDashboard dashboard = FtcDashboard.getInstance();
 
@@ -84,7 +84,7 @@ public class RedAuto extends CommandOpMode {
 
     private Gamepad currentGamepad, previousGamepad;
 
-    private String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", parkIn = "center";
+    private String startingSide = "backstage", cycleTarget = "backdrop", transitVia = "door", parkIn = "center";
     private boolean deliverYellow = true, cycle = false, wait = false;
 
     private static RobotToStateCommand robotToDropPurple, robotToDeposit, robotToIntake;
@@ -109,33 +109,33 @@ public class RedAuto extends CommandOpMode {
 
         ////////‼️‼️⁉️⁉️CAMERA INITIALIZATION/DEFINING ⁉️⁉️⁉️
 //        public void runOpMode () throw InterruptedException {
-        bluePropThreshold = new BluePropDetection();
-        portal = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+//        bluePropThreshold = new BluePropDetection();
+//        portal = new VisionPortal.Builder()
+//                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+////                .addProcessor(bluePropThreshold)
+//                .setCameraResolution(new Size(640, 480))
+////                .setStreamFormat(VisionPortal.StreamFormat.YUY2)
+////                .enableLiveView(true)
+////                .setCamera()
 //                .addProcessor(bluePropThreshold)
-                .setCameraResolution(new Size(640, 480))
-//                .setStreamFormat(VisionPortal.StreamFormat.YUY2)
-//                .enableLiveView(true)
-//                .setCamera()
-                .addProcessor(bluePropThreshold)
-                .build();
+//                .build();
 
-        if (portal.getCameraState() != VisionPortal.CameraState.STREAMING) {
-            telemetry.addData("Camera", "Waiting");
-            telemetry.update();
-            while (!isStopRequested() && (portal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
-                sleep(20);
-            }
-            telemetry.addData("Camera", "Ready");
-            telemetry.update();
-        }
-
-        ExposureControl exposureControl = portal.getCameraControl(ExposureControl.class);
-        GainControl gainControl = portal.getCameraControl(GainControl.class);
-
-        boolean wasExposureSet = exposureControl.setMode(ExposureControl.Mode.Manual);
-        exposureControl.setExposure(50, TimeUnit.MILLISECONDS);
-        gainControl.setGain(0);
+//        if (portal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+//            telemetry.addData("Camera", "Waiting");
+//            telemetry.update();
+//            while (!isStopRequested() && (portal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
+//                sleep(20);
+//            }
+//            telemetry.addData("Camera", "Ready");
+//            telemetry.update();
+//        }
+//
+//        ExposureControl exposureControl = portal.getCameraControl(ExposureControl.class);
+//        GainControl gainControl = portal.getCameraControl(GainControl.class);
+//
+//        boolean wasExposureSet = exposureControl.setMode(ExposureControl.Mode.Manual);
+//        exposureControl.setExposure(50, TimeUnit.MILLISECONDS);
+//        gainControl.setGain(0);
 
 //      everything above is included in the previous comment, this order needs to be maintained.
 
@@ -163,18 +163,28 @@ public class RedAuto extends CommandOpMode {
         gripper.grabLeft();
         intake.up();
 
-        drivetrain.getImu().
+        drivetrain.setStartingOffsetDegs(270);
+        drivetrain.setStartingError();
+
+//        webcam.setCamera("back");
+        webcam.setCamera("front");
+        webcam.setActiveProcessor("redProp");
 
         telemetry.setMsTransmissionInterval(50);
 
         while (!isStarted() && !isStopRequested()) {
+
+            telemetry.addData("raw imu degs: ", drivetrain.getRawYawDegrees());
+            telemetry.addData("converted imu degs: ", drivetrain.getYawDegrees());
+//            telemetry.addData("raw imu degs: ", drivetrain.getRawYawDegrees());
+
             previousGamepad.copy(currentGamepad);
             currentGamepad.copy(gamepad1);
 
             // determine target backdrop tag
-            if (bluePropThreshold.getPropPosition() == "left")
+            if (webcam.getPropPosition() == "left")
                 targetBackdropTag = tags.lookupTag(4);
-            else if (bluePropThreshold.getPropPosition() == "right")
+            else if (webcam.getPropPosition() == "right")
                 targetBackdropTag = tags.lookupTag(6);
             else
                 targetBackdropTag = tags.lookupTag(5);
@@ -233,12 +243,12 @@ public class RedAuto extends CommandOpMode {
                 drive.setPoseEstimate(redWings_StartPos);
 
                 //determine wing trajectories
-                if (bluePropThreshold.getPropPosition() == "left") {
+                if (webcam.getPropPosition() == "left") {
                     StartToSpike = RedWings_StartToLeftSpike;
                     SpikeToStack = RedWings_LeftSpikeToStack;
 
                     telemetry.addLine("left spike traj");
-                } else if (bluePropThreshold.getPropPosition() == "right") {
+                } else if (webcam.getPropPosition() == "right") {
                     StartToSpike = RedWings_StartToRightSpike;
                     SpikeToStack = RedWings_RightSpikeToStack;
 
@@ -250,10 +260,10 @@ public class RedAuto extends CommandOpMode {
                     telemetry.addLine("center spike traj");
                 }
             } else {
-                if (bluePropThreshold.getPropPosition() == "left") {
+                if (webcam.getPropPosition() == "left") {
                     StartToSpike = RedBackstage_StartToLeftSpike;
                     telemetry.addLine("left spike traj");
-                } else if (bluePropThreshold.getPropPosition() == "right") {
+                } else if (webcam.getPropPosition() == "right") {
                     StartToSpike = RedBackstage_StartToRightSpike;
                     telemetry.addLine("right spike traj");
                 } else {
@@ -261,17 +271,19 @@ public class RedAuto extends CommandOpMode {
                     telemetry.addLine("center spike traj");
                 }
             }
+
             if (transitVia == "door") {
                 if (wait)
                     if (deliverYellow)
                         StackToBack = RedWings_TransitToBackdropViaDoorWait;
                     else
                         StackToBack = RedWings_TransitToBackstageViaDoorWait;
-                else
-                    if(deliverYellow)
+                else {
+                    if (deliverYellow)
                         StackToBack = RedWings_TransitToBackdropViaDoor;
                     else
                         StackToBack = RedWings_TransitToBackstageViaDoor;
+                }
 
                 if (cycleTarget == "backdrop")
                     BackToStack = Red_BackdropToStackViaDoor;
@@ -279,15 +291,16 @@ public class RedAuto extends CommandOpMode {
                     BackToStack = Red_BackstageToStackViaDoor;
             } else { // transiting via truss
                 if (wait)
-                    if(deliverYellow)
+                    if (deliverYellow)
                         StackToBack = RedWings_TransitToBackdropViaTrussWait;
                     else
                         StackToBack = RedWings_TransitToBackstageViaTrussWait;
-                else
-                    if(deliverYellow)
+                else {
+                    if (deliverYellow)
                         StackToBack = RedWings_TransitToBackdropViaTruss;
                     else
                         StackToBack = RedWings_TransitToBackstageViaTruss;
+                }
 
                 if (cycleTarget == "backstage")
                     BackToStack = Red_BackstageToStackViaTruss;
@@ -299,13 +312,13 @@ public class RedAuto extends CommandOpMode {
             SpikeToBackdrop = RedBackstage_SpikeToBackdrop;
 
             telemetry.addLine("waitForStart");
-            telemetry.addData("Prop Position", bluePropThreshold.getPropPosition());
+            telemetry.addData("Prop Position", webcam.getPropPosition());
             telemetry.update();
             sleep(20);
         }
 
-        if(isStopRequested()){
-            portal.close();
+        if (isStopRequested()) {
+//            portal.close();
             return;
         }
 
@@ -328,24 +341,31 @@ public class RedAuto extends CommandOpMode {
                             arm, wrist, gripper, lift, intake, winch, leds, drivetrain, webcam,
                             targetBackdropTag, webcam.getActiveAprilTagProcessor(),
                             drive, StartToSpike, SpikeToStack, StackToBack, BackToStack, SpikeToBackdrop, StackPickupSequence,
-                            "red", startingSide, cycleTarget, transitVia, parkIn, cycle, wait, deliverYellow
+                            "red", startingSide, cycleTarget, transitVia, parkIn, cycle, wait, deliverYellow, telemetry
                     )
             );
 //            portal.stopLiveView();
 //            portal.stopStreaming();
-            portal.close();
+//            portal.close(); /////
+            webcam.setCamera("back");
+            webcam.setActiveProcessor("apriltag");
             commandsScheduled = true;
 //            CommandScheduler.getInstance().run();
         }
 
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
             CommandScheduler.getInstance().run();
             telemetry.addData("liftBase", lift.getLiftBase());
+            telemetry.addLine();
             telemetry.addData("heading degs", drivetrain.getYawDegrees());
+            telemetry.addData("converted heading ", (drivetrain.getYawDegrees() + 360) % 360);
+            telemetry.addLine();
             telemetry.addData("heading rads", drivetrain.getYawRadians());
+            telemetry.addLine();
             telemetry.addData("poseEstimate", drive.getPoseEstimate());
-            telemetry.addData("aTagEstimate", localize(webcam.getActiveAprilTagProcessor().getDetections(), drivetrain.getYawRadians()));
-            telemetry.addData("detections", webcam.getActiveAprilTagProcessor().getDetections().size());
+            telemetry.addData("aTagEstimate", relocalize(webcam.getActiveAprilTagProcessor().getDetections(), drivetrain.getYawRadians()));
+//            telemetry.addData("detections", webcam.getActiveAprilTagProcessor().getDetections().size());
+//            telemetry.addData("processor", webcam.getActiveAprilTagProcessor());
             telemetry.update();
         }
 

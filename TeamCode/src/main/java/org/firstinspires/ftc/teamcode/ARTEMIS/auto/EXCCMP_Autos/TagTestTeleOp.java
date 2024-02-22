@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.localize;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize2;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.AngleController;
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
@@ -228,7 +229,9 @@ public class TagTestTeleOp extends CommandOpMode {
         double mBRPower = FB + LR - Rotation;
 
 
-        telemetry.addData("localize", localize(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), drivetrain.getYawRadians()));
+        telemetry.addData("localize", relocalize(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), drivetrain.getYawRadians()));
+
+        telemetry.addData("localize2", relocalize2(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), drivetrain.getYawRadians()));
 
         telemetry.addData("detections: ", webcams.getActiveAprilTagProcessor().getDetections().size());
 
