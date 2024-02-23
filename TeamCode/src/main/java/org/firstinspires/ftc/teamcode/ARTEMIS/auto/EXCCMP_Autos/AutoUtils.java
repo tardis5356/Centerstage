@@ -276,18 +276,20 @@ public class AutoUtils {
         double finalX = 0;
         double finalY = 0;
 
-        headingRad = -headingRad;
-
+//        headingRad = -headingRad;
 
         // 2. Calculate bot vs camera
         double x_botToCamera = -BACK_WEBCAM_X_OFFSET*Math.cos(headingRad);
-        double y_botToCamera = -BACK_WEBCAM_X_OFFSET*Math.sin(headingRad);
+        double y_botToCamera = BACK_WEBCAM_X_OFFSET*Math.sin(headingRad); //removed negative on beginning here
 
         telemetry.addData("x_botToCamera", x_botToCamera);
         telemetry.addData("y_botToCamera", y_botToCamera);
 
-
         for (AprilTagDetection detection : detections) {
+            if(detection.metadata.fieldOrientation.x == 0){ // if tag is on wall
+
+            }
+
             Pose2d tagPose = vectorFToPose2d(detection.metadata.fieldPosition);
             AprilTagPoseFtc ftcPose = detection.ftcPose;
 
