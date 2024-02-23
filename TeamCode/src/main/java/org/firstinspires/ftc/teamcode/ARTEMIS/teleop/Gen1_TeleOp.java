@@ -403,13 +403,13 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         new Trigger(() -> leds.checkLeftPixel() == true)
                 .whenActive(new SequentialCommandGroup(
-                        new WaitCommand(50),
+                        new WaitCommand(250),
                         new InstantCommand(gripper::grabLeft)
                 ));
 
         new Trigger(() -> leds.checkRightPixel() == true)
                 .whenActive(new SequentialCommandGroup(
-                        new WaitCommand(50),
+                        new WaitCommand(250),
                         new InstantCommand(gripper::grabRight)
                 ));
 
@@ -420,16 +420,16 @@ public class Gen1_TeleOp extends CommandOpMode {
                             robotState = RobotState.TRANSITION;
                             leds.setLEDstate("green");
                         }),
-                        new WaitCommand(250),
+                        new WaitCommand(600),
                         new InstantCommand(intake::out),
-                        new WaitCommand(100),
+//                        new WaitCommand(100),
                         new InstantCommand(arm::toTransition),
                         new InstantCommand(wrist::toTransition),
                         new WaitCommand(100),
                         new InstantCommand(() -> {
                             leds.setLEDstate("purple");
-                            gamepad1.rumbleBlips(3);
-                            gamepad2.rumbleBlips(3);
+                            gamepad1.rumbleBlips(2);
+                            gamepad2.rumbleBlips(2);
                         }),
                         new WaitCommand(500),
                         new InstantCommand(intake::up),
