@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.BAC
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions;
@@ -171,7 +172,7 @@ public class AutoUtils {
     }
 
 
-    public Pose2d relocalize4(List<AprilTagDetection> detections, double headingRad) {
+    public static Pose2d relocalize4(List<AprilTagDetection> detections, double headingRad, Telemetry telemetry) {
         List<Double> x = new ArrayList<>();
         List<Double> y = new ArrayList<>();
 
@@ -203,6 +204,16 @@ public class AutoUtils {
             double newBotX = tagPose.getX() - x_botToTag;
             double newBotY = tagPose.getY() - y_botToTag;
 
+            telemetry.addData("Tag Heading Rad: ", Math.toRadians(quaternionToHeading(detection.metadata.fieldOrientation)));
+            telemetry.addData("Tag Heading Deg: ", (quaternionToHeading(detection.metadata.fieldOrientation)));
+
+            telemetry.addData("hyp", hyp);
+            telemetry.addData("tagX", tagPose.getX());
+            telemetry.addData("x_botToTag", x_botToTag);
+            telemetry.addData("y_botToTag", y_botToTag);
+            telemetry.addData("newBotX", newBotX);
+            telemetry.addData("newBotY", newBotY);
+
             x.add(newBotX);
             y.add(newBotY);
         }
@@ -210,37 +221,109 @@ public class AutoUtils {
         double xVal = 0;
         double yVal = 0;
 
-        if (detections.size() % 2 == 0) {
-            for (int i = 0; i < detections.size(); i++) {
-                xVal += x.get(i);
-                yVal += y.get(i);
-            }
-            xVal /= detections.size();
-            yVal /= detections.size();
-        } else {
-            ArrayList<Double> sortedX = new ArrayList<>(x);
-
-            // sort the duplicate list
-            Collections.sort(sortedX);
-
-            // find the median value
-            int middleIndex1 = sortedX.size() / 2 - 1;
-            int middleIndex2 = sortedX.size() / 2;
-            double medianValue = (sortedX.get(middleIndex1) + sortedX.get(middleIndex2)) / 2.0;
-
-            // find the index of the median value in the original list
-            int medianIndex = x.indexOf(medianValue);
-
-            // get the median values
-            xVal = x.get(medianIndex);
-            yVal = y.get(medianIndex);
+//        if (detections.size() % 2 == 0) {
+        for (int i = 0; i < detections.size(); i++) {
+            xVal += x.get(i);
+            yVal += y.get(i);
         }
+        xVal /= detections.size();
+        yVal /= detections.size();
+//        } else {
+//            ArrayList<Double> sortedX = new ArrayList<>(x);
+//
+//            // sort the duplicate list
+//            Collections.sort(sortedX);
+//
+//            // find the median value
+//            int middleIndex1 = sortedX.size() / 2 - 1;
+//            int middleIndex2 = sortedX.size() / 2;
+//            double medianValue = (sortedX.get(middleIndex1) + sortedX.get(middleIndex2)) / 2.0;
+//
+//            // find the index of the median value in the original list
+//            int medianIndex = x.indexOf(medianValue);
+//
+//            // get the median values
+//            xVal = x.get(medianIndex);
+//            yVal = y.get(medianIndex);
+//        }
 
         // convert to rr coords and take avg of all calculated positions
         double xRR = -xVal;
         double yRR = -yVal;
 
         return new Pose2d(xRR, yRR, headingRad);
+    }
+
+
+    public static Pose2d relocalize5(List<AprilTagDetection> detections, double headingRad, Telemetry telemetry) {
+        List<Double> x = new ArrayList<>();
+        List<Double> y = new ArrayList<>();
+
+        /*
+
+        **ALL POSITIONS ARE TO CENTERS OF ELEMENTS**
+
+        1. Calculate camera vs. tag
+        2. Calculate bot vs camera
+        3. Calculate bot vs tag
+        4. Get tag vs field
+        5. Calculate bot vs field
+
+        TODO: fix bad sign on rotation, make case to flip x axis when quaternion x is 0 (for audience wall tags)
+
+         */
+
+        double finalX = 0;
+        double finalY = 0;
+
+        headingRad = -headingRad;
+
+
+        // 2. Calculate bot vs camera
+        double x_botToCamera = -BACK_WEBCAM_X_OFFSET*Math.cos(headingRad);
+        double y_botToCamera = -BACK_WEBCAM_X_OFFSET*Math.sin(headingRad);
+
+        telemetry.addData("x_botToCamera", x_botToCamera);
+        telemetry.addData("y_botToCamera", y_botToCamera);
+
+
+        for (AprilTagDetection detection : detections) {
+            Pose2d tagPose = vectorFToPose2d(detection.metadata.fieldPosition);
+            AprilTagPoseFtc ftcPose = detection.ftcPose;
+
+            // 1. Calculate camera vs. tag
+            double x_cameraToTag = ftcPose.x;
+            double y_cameraToTag = ftcPose.y;
+
+            telemetry.addData("x_cameraToTag", x_cameraToTag);
+            telemetry.addData("y_cameraToTag", y_cameraToTag);
+
+            // 3. Calculate bot vs tag
+            // y-tag is outwards from tag, but x-bot is outwards from camera
+            double x_botToTag = y_cameraToTag + -x_botToCamera;
+            double y_botToTag = x_cameraToTag + y_botToCamera;
+
+            telemetry.addData("x_botToTag", x_botToTag);
+            telemetry.addData("y_botToTag", y_botToTag);
+
+            // 4. Get tag vs field
+            double x_tagInRR = -tagPose.getX();
+            double y_tagInRR = -tagPose.getY();
+
+            telemetry.addData("x_tagInRR", x_tagInRR);
+            telemetry.addData("y_tagInRR", y_tagInRR);
+
+            // 5. Calculate bot vs field
+            double x_botToField = x_botToTag + x_tagInRR;
+            double y_botToField = y_botToTag + y_tagInRR;
+
+            telemetry.addData("x_botToField", x_botToField);
+            telemetry.addData("y_botToField", y_botToField);
+
+            finalX = x_botToField;
+            finalY = y_botToField;
+        }
+        return new Pose2d(finalX, finalY);
     }
 
     private static Pose2d vectorFToPose2d(VectorF vector) {

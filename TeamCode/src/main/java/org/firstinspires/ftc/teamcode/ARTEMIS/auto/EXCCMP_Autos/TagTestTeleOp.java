@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
 
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize2;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize3;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize4;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.AngleController;
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
@@ -229,11 +231,15 @@ public class TagTestTeleOp extends CommandOpMode {
         double mBRPower = FB + LR - Rotation;
 
 
-        telemetry.addData("localize", relocalize(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), drivetrain.getYawRadians()));
+//        telemetry.addData("localize", relocalize(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), drivetrain.getYawRadians()));
+//
+//        telemetry.addData("localize2", relocalize2(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), drivetrain.getYawRadians()));
+//
+//        telemetry.addData("localize3", relocalize3(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), drivetrain.getYawRadians()));
 
-        telemetry.addData("localize2", relocalize2(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), drivetrain.getYawRadians()));
+        telemetry.addData("localize4", relocalize4(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), drivetrain.getYawRadians(), telemetry));
 
-        telemetry.addData("detections: ", webcams.getActiveAprilTagProcessor().getDetections().size());
+        telemetry.addData("# of detections: ", webcams.getActiveAprilTagProcessor().getDetections().size());
 
 //        if(webcams.getActiveAprilTagProcessor().getDetections().size() != 0) {
 //            List<Double> x = new ArrayList<>();
