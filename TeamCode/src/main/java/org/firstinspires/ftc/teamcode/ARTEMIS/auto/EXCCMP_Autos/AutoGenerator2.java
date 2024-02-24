@@ -29,7 +29,7 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySeque
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-public class AutoGenerator {
+public class AutoGenerator2 {
 /*
 
 TrajectorySequence StartToSpike,
@@ -43,11 +43,13 @@ TrajectorySequence BackdropToBackdropWaypoint,
 TrajectorySequence BackdropWaypointToStackWaypoint,
 TrajectorySequence StackWaypointToStack,
 
-
  */
     private SequentialCommandGroup autoCommands = new SequentialCommandGroup();
 
     public SequentialCommandGroup generateAutoCommands(Arm arm, Wrist wrist, Gripper gripper, Lift lift, Intake intake, Winch winch, LEDs leds, Drivetrain drivetrain, Webcams webcam, AprilTagMetadata targetBackdropTag, AprilTagProcessor aprilTagProcessor, SampleMecanumDrive drive, TrajectorySequence StartToSpike, TrajectorySequence SpikeToStack, TrajectorySequence StackToBack, TrajectorySequence BackToStack, TrajectorySequence SpikeToBackdrop, TrajectorySequence StackPickupSequence, String alliance, String startingSide, String cycleTarget, String transitVia, String parkIn, boolean cycle, boolean wait, boolean deliverYellow, Telemetry telemetry) {
+        /**
+         * deliver pixel
+         */
         autoCommands.addCommands(new SequentialCommandGroup(
                 new InstantCommand(() -> leds.setLEDstate("green")),
                 new ParallelCommandGroup(
@@ -62,6 +64,11 @@ TrajectorySequence StackWaypointToStack,
                 new WaitCommand(200)
         ));
 
+        /**
+         * get extra pixel on first cycle if wing
+         * start: Spike
+         * end: BackWaypoint
+         */
         // get extra pixel on first cycle (start: spike, end: back)
         if (startingSide == "wing") {
             autoCommands.addCommands(new SequentialCommandGroup(

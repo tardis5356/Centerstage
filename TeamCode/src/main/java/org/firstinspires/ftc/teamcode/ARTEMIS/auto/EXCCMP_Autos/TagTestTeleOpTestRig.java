@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize4;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize5;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize6;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.AngleController;
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
@@ -110,9 +110,11 @@ public class TagTestTeleOpTestRig extends CommandOpMode {
 
         double currentThetaRads = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-        telemetry.addData("localize5", relocalize5(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), currentThetaRads, telemetry));
-
         telemetry.addData("# of detections: ", webcams.getActiveAprilTagProcessor().getDetections().size());
+
+        telemetry.addLine();
+
+        telemetry.addData("localize6", relocalize6(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), currentThetaRads, telemetry));
 
         telemetry.update();
     }
