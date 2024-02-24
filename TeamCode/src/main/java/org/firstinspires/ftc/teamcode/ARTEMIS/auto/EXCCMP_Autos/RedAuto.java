@@ -6,14 +6,14 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToCenterSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToRightSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StackPickupSequence;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterStackToDoorWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToCenterSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToRightSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterSpikeToStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_LeftSpikeToStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_RightSpikeToStack;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackdropViaDoor;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_DoorStackTransitWaypointToBackdropViaDoor;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackdropViaDoorWait;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackdropViaTruss;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackdropViaTrussWait;
@@ -27,8 +27,6 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackstageToStackViaTruss;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.redWings_StartPos;
 
-import android.util.Size;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -37,9 +35,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.RobotAlignToTagRange;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.RobotToStateCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
@@ -53,13 +48,9 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Webcams;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Winch;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Wrist;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.BluePropDetection;
-import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
-
-import java.util.concurrent.TimeUnit;
 
 //@Disabled
 @Autonomous(group = "drive", name = "\uD83D\uDFE5 RedAuto") // , preselectTeleOp="Gen1_TeleOp"
@@ -84,12 +75,12 @@ public class RedAuto extends CommandOpMode {
 
     private Gamepad currentGamepad, previousGamepad;
 
-    private String startingSide = "backstage", cycleTarget = "backdrop", transitVia = "door", parkIn = "center";
+    private String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", parkIn = "center";
     private boolean deliverYellow = true, cycle = false, wait = false;
 
     private static RobotToStateCommand robotToDropPurple, robotToDeposit, robotToIntake;
 
-    private static TrajectorySequence StartToSpike, SpikeToStack, StackToBack, BackToStack, SpikeToBackdrop, StackPickupSequence;
+    private static TrajectorySequence StartToSpike, SpikeToStack, StackWaypointToBack, BackWaypointToStack, SpikeToBackdrop, StackToWaypoint;
 
     private static RobotAlignToTagRange robotAlignToLeftTag, robotAlignToCenterTag, robotAlignToRightTag;
 
@@ -275,40 +266,40 @@ public class RedAuto extends CommandOpMode {
             if (transitVia == "door") {
                 if (wait)
                     if (deliverYellow)
-                        StackToBack = RedWings_TransitToBackdropViaDoorWait;
+                        StackWaypointToBack = RedWings_TransitToBackdropViaDoorWait;
                     else
-                        StackToBack = RedWings_TransitToBackstageViaDoorWait;
+                        StackWaypointToBack = RedWings_TransitToBackstageViaDoorWait;
                 else {
                     if (deliverYellow)
-                        StackToBack = RedWings_TransitToBackdropViaDoor;
+                        StackWaypointToBack = RedWings_DoorStackTransitWaypointToBackdropViaDoor;
                     else
-                        StackToBack = RedWings_TransitToBackstageViaDoor;
+                        StackWaypointToBack = RedWings_TransitToBackstageViaDoor;
                 }
 
                 if (cycleTarget == "backdrop")
-                    BackToStack = Red_BackdropToStackViaDoor;
+                    BackWaypointToStack = Red_BackdropToStackViaDoor;
                 else
-                    BackToStack = Red_BackstageToStackViaDoor;
+                    BackWaypointToStack = Red_BackstageToStackViaDoor;
             } else { // transiting via truss
                 if (wait)
                     if (deliverYellow)
-                        StackToBack = RedWings_TransitToBackdropViaTrussWait;
+                        StackWaypointToBack = RedWings_TransitToBackdropViaTrussWait;
                     else
-                        StackToBack = RedWings_TransitToBackstageViaTrussWait;
+                        StackWaypointToBack = RedWings_TransitToBackstageViaTrussWait;
                 else {
                     if (deliverYellow)
-                        StackToBack = RedWings_TransitToBackdropViaTruss;
+                        StackWaypointToBack = RedWings_TransitToBackdropViaTruss;
                     else
-                        StackToBack = RedWings_TransitToBackstageViaTruss;
+                        StackWaypointToBack = RedWings_TransitToBackstageViaTruss;
                 }
 
                 if (cycleTarget == "backstage")
-                    BackToStack = Red_BackstageToStackViaTruss;
+                    BackWaypointToStack = Red_BackstageToStackViaTruss;
                 else
-                    BackToStack = Red_BackdropToStackViaTruss;
+                    BackWaypointToStack = Red_BackdropToStackViaTruss;
             }
 
-            StackPickupSequence = RedWings_StackPickupSequence;
+            StackToWaypoint = RedWings_CenterStackToDoorWaypoint;
             SpikeToBackdrop = RedBackstage_SpikeToBackdrop;
 
             telemetry.addLine("waitForStart");
@@ -340,7 +331,7 @@ public class RedAuto extends CommandOpMode {
                     autoGenerator.generateAutoCommands(
                             arm, wrist, gripper, lift, intake, winch, leds, drivetrain, webcam,
                             targetBackdropTag, webcam.getActiveAprilTagProcessor(),
-                            drive, StartToSpike, SpikeToStack, StackToBack, BackToStack, SpikeToBackdrop, StackPickupSequence,
+                            drive, StartToSpike, SpikeToStack, StackWaypointToBack, BackWaypointToStack, SpikeToBackdrop, StackToWaypoint,
                             "red", startingSide, cycleTarget, transitVia, parkIn, cycle, wait, deliverYellow, telemetry
                     )
             );

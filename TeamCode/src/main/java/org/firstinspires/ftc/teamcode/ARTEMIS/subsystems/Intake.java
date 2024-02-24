@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.subsystems;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.INTAKE_DOWN;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.INTAKE_DOWN_FIFTH_PIXEL;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.INTAKE_DOWN_FIRST_PIXEL;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.INTAKE_DOWN_FOURTH_PIXEL;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.INTAKE_DOWN_SECOND_PIXEL;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.INTAKE_DOWN_TELEOP;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.INTAKE_DOWN_THIRD_PIXEL;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.INTAKE_UP;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -31,8 +36,26 @@ public class Intake extends SubsystemBase {
     public void periodic() {
     }
 
-    public void down() {
-        sIntake.setPosition(INTAKE_DOWN);
+    public void downTeleOp() {
+        sIntake.setPosition(INTAKE_DOWN_TELEOP);
+    }
+
+    public void downFirstPixel() {
+        sIntake.setPosition(INTAKE_DOWN_FIRST_PIXEL);
+    }
+
+    public void downSecondPixel() { sIntake.setPosition(INTAKE_DOWN_SECOND_PIXEL); }
+
+    public void downThirdPixel() {
+        sIntake.setPosition(INTAKE_DOWN_THIRD_PIXEL);
+    }
+
+    public void downFourthPixel() {
+        sIntake.setPosition(INTAKE_DOWN_FOURTH_PIXEL);
+    }
+
+    public void downFifthPixel() {
+        sIntake.setPosition(INTAKE_DOWN_FIFTH_PIXEL);
     }
 
     public void up() {
@@ -50,6 +73,7 @@ public class Intake extends SubsystemBase {
     public void slowOut() {
         mIntake.setPower(BotPositions.INTAKE_MOTOR_OUTWARD_POWER_SLOW);
     }
+
     public void superSlowOut() {
         mIntake.setPower(BotPositions.INTAKE_MOTOR_OUTWARD_POWER_SUPER_SLOW);
     }

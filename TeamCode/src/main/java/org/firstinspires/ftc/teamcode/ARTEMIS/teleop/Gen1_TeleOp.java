@@ -256,7 +256,7 @@ public class Gen1_TeleOp extends CommandOpMode {
                 .whenActive(intakeInCommand)
                 .whenActive(new InstantCommand(() -> {
                     if (intakeStageActive)
-                        intake.down();
+                        intake.downTeleOp();
                 }));
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.15 || driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.15)
                 .cancelWhenActive(intakeInCommand)

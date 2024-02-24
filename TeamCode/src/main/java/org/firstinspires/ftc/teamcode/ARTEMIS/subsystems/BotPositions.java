@@ -16,7 +16,15 @@ public class BotPositions {
 
     //intake powers and positions
     public static double INTAKE_MOTOR_INWARD_POWER = 1, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.25, INTAKE_MOTOR_OUTWARD_POWER_SUPER_SLOW = -.2;
-    public static double INTAKE_DOWN = 0.25, INTAKE_UP = 0.65; // torque: 0.5 down, 0.25 up
+    public static double
+            INTAKE_DOWN_TELEOP = 0.2,
+            INTAKE_DOWN_FIRST_PIXEL = 0.39,
+            INTAKE_DOWN_SECOND_PIXEL = 0.4,
+            INTAKE_DOWN_THIRD_PIXEL = 0.35,
+            INTAKE_DOWN_FOURTH_PIXEL = 0.3,
+            INTAKE_DOWN_FIFTH_PIXEL = 0.25,
+            INTAKE_UP = 0.5; // torque: 0.5 down, 0.25 up // 0.65
+
 
     //gripper positions
     public static double GRIPPER_LEFT_CLOSED = 0.79, GRIPPER_LEFT_OPEN = 0.33, GRIPPER_RIGHT_CLOSED = 0.22, GRIPPER_RIGHT_OPEN = 0.65;
@@ -32,7 +40,7 @@ public class BotPositions {
 //    0.115 = 30º
 
     //arm positions
-    public static double ARM_INTAKE = 0.025, ARM_TRANSITION_POSITION = 0.12,  ARM_DEPOSIT = 0.65, ARM_DEPOSIT_LOW = 0.75, ARM_DROP_PURPLE = 0.9, ARM_GRAB_PIXELS = .025;
+    public static double ARM_INTAKE = 0.025, ARM_TRANSITION_POSITION = 0.12, ARM_DEPOSIT = 0.65, ARM_DEPOSIT_LOW = 0.75, ARM_DROP_PURPLE = 0.9, ARM_GRAB_PIXELS = .025;
 
     //drone servo positions
     public static double DRONE_LATCHED = 0.33, DRONE_UNLATCHED = 0.27;

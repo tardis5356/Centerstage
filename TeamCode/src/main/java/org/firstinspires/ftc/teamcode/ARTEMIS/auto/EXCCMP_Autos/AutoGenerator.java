@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_SpikeToBackdrop;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StackPickupSequence;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorTransitWaypointToBackdropCenter;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorBackdropTransitWaypointToBackdropCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.accelConstraint40in;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.velConstraint10in;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.velConstraint20in;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
@@ -16,12 +13,8 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ARTEMIS.auto.FollowTrajectoryCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.LiftToPositionCommand;
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.RobotAlignToTagRange;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.RobotToStateCommand;
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.autoCommands.AutoBackdropDepositCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.autoCommands.RelocalizeFromTagCommand;
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.intakeCommands.IntakeInCommand;
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.intakeCommands.IntakeOutCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Drivetrain;
@@ -75,7 +68,10 @@ public class AutoGenerator {
 //                    new InstantCommand(() -> leds.setLEDstate("yellow")),
                     new WaitCommand(100),
                     new InstantCommand(intake::in),
-                    new InstantCommand(intake::down),
+                    new InstantCommand(intake::downThirdPixel),
+                    new WaitCommand(250),
+                    new InstantCommand(intake::downFifthPixel),
+                    new WaitCommand(250),
                     new ParallelCommandGroup(
                             new FollowTrajectoryCommand(drive, StackPickupSequence),
                             new SequentialCommandGroup(
@@ -118,7 +114,7 @@ public class AutoGenerator {
                     new InstantCommand(() -> leds.setLEDstate("yellow")),
 //                    new RobotAlignToTagRange(drivetrain, webcam, "back", 4, targetBackdropTag.id, 3, true),
                     new RelocalizeFromTagCommand(drive, drivetrain, aprilTagProcessor, telemetry),
-                    new FollowTrajectoryCommand(drive, Red_DoorTransitWaypointToBackdropCenter),
+                    new FollowTrajectoryCommand(drive, Red_DoorBackdropTransitWaypointToBackdropCenter),
                     new ParallelCommandGroup(
                             new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
                             new SequentialCommandGroup(
@@ -176,7 +172,7 @@ public class AutoGenerator {
 
                     new WaitCommand(100),
                     new InstantCommand(intake::in),
-                    new InstantCommand(intake::down),
+//                    new InstantCommand(intake::down),
                     new ParallelCommandGroup(
                             new FollowTrajectoryCommand(drive, StackPickupSequence),
                             new SequentialCommandGroup(
@@ -214,7 +210,7 @@ public class AutoGenerator {
                     new InstantCommand(() -> leds.setLEDstate("yellow")),
 //                    new RobotAlignToTagRange(drivetrain, webcam, "back", 4, targetBackdropTag.id, 3, true),
                     new RelocalizeFromTagCommand(drive, drivetrain, aprilTagProcessor, telemetry),
-                    new FollowTrajectoryCommand(drive, Red_DoorTransitWaypointToBackdropCenter),
+                    new FollowTrajectoryCommand(drive, Red_DoorBackdropTransitWaypointToBackdropCenter),
                     new ParallelCommandGroup(
                             new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
                             new SequentialCommandGroup(

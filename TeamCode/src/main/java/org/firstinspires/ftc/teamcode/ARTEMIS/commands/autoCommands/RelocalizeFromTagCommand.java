@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.commands.autoCommands;
 
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize5;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandBase;
@@ -38,14 +39,14 @@ public class RelocalizeFromTagCommand extends CommandBase {
 
     @Override
     public void execute() {
-        Pose2d newPose = relocalize(aprilTagProcessor.getDetections(), drivetrain.getYawRadians());
-//        if (newPose != null) {
-//            drive.setPoseEstimate(newPose);
-//            telemetry.addData("relocalized using apriltags ", newPose);
-//        } else {
+        Pose2d newPose = relocalize5(aprilTagProcessor.getDetections(), drivetrain.getYawRadians(), telemetry);
+        if (newPose != null) {
+            drive.setPoseEstimate(newPose);
+            telemetry.addData("relocalized using apriltags ", newPose);
+        } else {
             drive.setPoseEstimate(new Pose2d(drive.getPoseEstimate().getX(), drive.getPoseEstimate().getY(), Math.toRadians((drivetrain.getYawDegrees() + 360) % 360)));
-//            telemetry.addData("relocalized using imu ", (drivetrain.getYawDegrees() + 360) % 360);
-//        }
+            telemetry.addData("relocalized using imu ", (drivetrain.getYawDegrees() + 360) % 360);
+        }
     }
 
     @Override
