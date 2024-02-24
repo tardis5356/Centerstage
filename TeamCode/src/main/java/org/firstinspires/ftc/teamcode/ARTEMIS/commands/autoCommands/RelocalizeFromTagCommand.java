@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.commands.autoCommands;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize5;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;

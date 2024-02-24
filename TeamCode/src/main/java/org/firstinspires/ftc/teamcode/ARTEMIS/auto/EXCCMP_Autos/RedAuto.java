@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
 
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize5;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_SpikeToBackdrop;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToCenterSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToLeftSpike;
@@ -354,7 +354,7 @@ public class RedAuto extends CommandOpMode {
             telemetry.addData("heading rads", drivetrain.getYawRadians());
             telemetry.addLine();
             telemetry.addData("poseEstimate", drive.getPoseEstimate());
-            telemetry.addData("aTagEstimate", relocalize(webcam.getActiveAprilTagProcessor().getDetections(), drivetrain.getYawRadians()));
+//            telemetry.addData("aTagEstimate", relocalize5(webcam.getActiveAprilTagProcessor().getDetections(), drivetrain.getYawRadians()));
 //            telemetry.addData("detections", webcam.getActiveAprilTagProcessor().getDetections().size());
 //            telemetry.addData("processor", webcam.getActiveAprilTagProcessor());
             telemetry.update();
