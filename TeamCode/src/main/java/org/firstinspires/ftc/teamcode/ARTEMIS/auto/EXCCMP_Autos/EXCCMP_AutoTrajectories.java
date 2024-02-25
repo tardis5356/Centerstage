@@ -48,9 +48,9 @@ public class EXCCMP_AutoTrajectories {
     public static final Pose2d Red_DoorBackdropTransitWaypoint = new Pose2d(-40, 22, Math.toRadians(-40));
     public static final Pose2d Red_TrussBackdropTransitWaypoint = new Pose2d(-40, 49, Math.toRadians(40));
 
-    public static final Pose2d Red_BackdropLeftPos = new Pose2d(-32, 29.5, Math.toRadians(0));
-    public static final Pose2d Red_BackdropCenterPos = new Pose2d(-32, 35.5, Math.toRadians(0));
-    public static final Pose2d Red_BackdropRightPos = new Pose2d(-32, 41.5, Math.toRadians(0));
+    public static final Pose2d Red_BackdropLeftPos = new Pose2d(-49, 29.5, Math.toRadians(0));
+    public static final Pose2d Red_BackdropCenterPos = new Pose2d(-49, 35.5, Math.toRadians(0));
+    public static final Pose2d Red_BackdropRightPos = new Pose2d(-49, 41.5, Math.toRadians(0));
 
     public static final Pose2d Red_CenterParkPos = new Pose2d(-50, 12, Math.toRadians(0));
     public static final Pose2d Red_CornerParkPos = new Pose2d(-50, 50, Math.toRadians(0));

@@ -91,6 +91,7 @@ TrajectorySequence StackWaypointToStack,
                             new SequentialCommandGroup(
                                     new WaitCommand(1000),
                                     new InstantCommand(intake::out),
+                                    new InstantCommand(intake::up),
                                     new WaitCommand(200),
                                     new InstantCommand(intake::in),
                                     new WaitCommand(1000),
@@ -128,8 +129,8 @@ TrajectorySequence StackWaypointToStack,
                     new InstantCommand(() -> leds.setLEDstate("yellow")),
 //                    new RobotAlignToTagRange(drivetrain, webcam, "back", 4, targetBackdropTag.id, 3, true),
                     new RelocalizeFromTagCommand(drive, drivetrain, aprilTagProcessor, telemetry),
-                    new FollowTrajectoryCommand(drive, Red_DoorBackdropTransitWaypointToBackdropCenter),
                     new ParallelCommandGroup(
+                            new FollowTrajectoryCommand(drive, Red_DoorBackdropTransitWaypointToBackdropCenter),
                             new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
                             new SequentialCommandGroup(
                                     new WaitCommand(250),
@@ -140,11 +141,11 @@ TrajectorySequence StackWaypointToStack,
                     new WaitCommand(100),
                     new InstantCommand(gripper::releaseLeft),
                     new WaitCommand(100),
-                    new FollowTrajectoryCommand(drive,
-                            drive.trajectorySequenceBuilder(SpikeToBackdrop.end())
-                                    .back(2, velConstraint10in, accelConstraint40in)
-                                    .build()
-                    ),
+//                    new FollowTrajectoryCommand(drive,
+//                            drive.trajectorySequenceBuilder(SpikeToBackdrop.end())
+//                                    .back(2, velConstraint10in, accelConstraint40in)
+//                                    .build()
+//                    ),
                     new InstantCommand(() -> leds.setLEDstate("purple")),
                     new ParallelDeadlineGroup(
                             new WaitCommand(1200),
