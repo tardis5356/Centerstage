@@ -14,7 +14,7 @@ public class EXCCMP_AutoTrajectories {
     // red cycle emojis \uD83D\uDFE5
 
     public static final TrajectoryVelocityConstraint
-            velConstraint70in = SampleMecanumDrive.getVelocityConstraint(70, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+            velConstraint70in = SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),//70
             velConstraint55in = SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
             velConstraint40in = SampleMecanumDrive.getVelocityConstraint(40, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
             velConstraint20in = SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
@@ -22,7 +22,7 @@ public class EXCCMP_AutoTrajectories {
     public static final TrajectoryAccelerationConstraint
             accelConstraint25in = SampleMecanumDrive.getAccelerationConstraint(25),
             accelConstraint40in = SampleMecanumDrive.getAccelerationConstraint(40),
-            accelConstraint70in = SampleMecanumDrive.getAccelerationConstraint(70);
+            accelConstraint70in = SampleMecanumDrive.getAccelerationConstraint(55); //70
 
 
     //BLUE BACKSTAGE
@@ -48,12 +48,12 @@ public class EXCCMP_AutoTrajectories {
     public static final Pose2d Red_DoorBackdropTransitWaypoint = new Pose2d(-40, 22, Math.toRadians(-40));
     public static final Pose2d Red_TrussBackdropTransitWaypoint = new Pose2d(-40, 49, Math.toRadians(40));
 
-    public static final Pose2d Red_BackdropLeftPos = new Pose2d(-49, 29.5, Math.toRadians(0));
-    public static final Pose2d Red_BackdropCenterPos = new Pose2d(-49, 35.5, Math.toRadians(0));
-    public static final Pose2d Red_BackdropRightPos = new Pose2d(-49, 41.5, Math.toRadians(0));
+    public static final Pose2d Red_BackdropLeftPos = new Pose2d(-48, 29.5, Math.toRadians(0));
+    public static final Pose2d Red_BackdropCenterPos = new Pose2d(-48, 35.5, Math.toRadians(0));
+    public static final Pose2d Red_BackdropRightPos = new Pose2d(-48, 41.5, Math.toRadians(0));
 
-    public static final Pose2d Red_CenterParkPos = new Pose2d(-50, 12, Math.toRadians(0));
-    public static final Pose2d Red_CornerParkPos = new Pose2d(-50, 50, Math.toRadians(0));
+    public static final Pose2d Red_CenterParkPos = new Pose2d(-54, 12, Math.toRadians(0));
+    public static final Pose2d Red_CornerParkPos = new Pose2d(-54, 50, Math.toRadians(0));
 
     public static TrajectorySequence RedWings_StartToOrigin, RedBackstage_StartToOrigin, BlueWings_StartToOrigin, BlueBackstage_StartToOrigin;
 
@@ -64,12 +64,15 @@ public class EXCCMP_AutoTrajectories {
     public static TrajectorySequence RedWings_TransitToBackstageViaDoorWait, RedWings_TransitToBackstageViaTrussWait, RedWings_TransitToBackdropViaDoorWait, RedWings_TransitToBackdropViaTrussWait;
 
     public static TrajectorySequence RedBackstage_StartToLeftSpike, RedBackstage_StartToCenterSpike, RedBackstage_StartToRightSpike;
-    public static TrajectorySequence RedBackstage_SpikeToBackdrop;
+    public static TrajectorySequence RedBackstage_LeftSpikeToBackdropLeft, RedBackstage_CenterSpikeToBackdropCenter, RedBackstage_RightSpikeToBackdropRight;
 
     public static TrajectorySequence Red_BackdropToStackViaTruss, Red_BackdropToStackViaDoor, Red_BackstageToStackViaTruss, Red_BackstageToStackViaDoor;
     public static TrajectorySequence Red_DoorBackdropTransitWaypointToBackdropRight, Red_DoorBackdropTransitWaypointToBackdropCenter, Red_DoorBackdropTransitWaypointToBackdropLeft;
     public static TrajectorySequence Red_TrussBackdropTransitWaypointToBackdropRight, Red_TrussBackdropTransitWaypointToBackdropCenter, Red_TrussBackdropTransitWaypointToBackdropLeft;
     public static TrajectorySequence Red_BackdropLeftToBackdropCenter, Red_BackdropLeftToBackdropRight, Red_BackdropCenterToBackdropLeft, Red_BackdropCenterToBackdropRight, Red_BackdropRightToBackdropCenter, Red_BackdropRightToBackdropLeft;
+
+    public static TrajectorySequence Red_BackdropRightToBackdropWaypointDoor, Red_BackdropLeftToBackdropWaypointDoor, Red_BackdropCenterToBackdropWaypointDoor;
+    public static TrajectorySequence Red_BackdropLeftToBackdropWaypointTruss, Red_BackdropRightToBackdropWaypointTruss, Red_BackdropCenterToBackdropWaypointTruss;
 
     public static TrajectorySequence Red_BackdropLeftToCenterPark, Red_BackdropLeftToCornerPark, Red_BackdropCenterToCenterPark, Red_BackdropCenterToCornerPark, Red_BackdropRightToCenterPark, Red_BackdropRightToCornerPark;
 
@@ -81,30 +84,34 @@ public class EXCCMP_AutoTrajectories {
     public static void generateTrajectories(SampleMecanumDrive drive) {
         // redwings 🟥🟥🟥🟥
         // red wings 🟥🪽 start 🏁 to spikes 🌵
-        RedWings_StartToLeftSpike =
+        RedWings_StartToRightSpike =
                 drive.trajectorySequenceBuilder(redWings_StartPos)
-                        .splineToLinearHeading(new Pose2d(37, 32, Math.toRadians(10)), 180, velConstraint70in, accelConstraint40in) // left spike
+                        .splineToLinearHeading(new Pose2d(38, 35, Math.toRadians(10)), 180, velConstraint70in, accelConstraint40in) // left spike
                         .build();
         RedWings_StartToCenterSpike =
                 drive.trajectorySequenceBuilder(redWings_StartPos)
-                        .splineToLinearHeading(new Pose2d(43, 26, Math.toRadians(10)), 180, velConstraint70in, accelConstraint40in) // center spike
+                        .splineToLinearHeading(new Pose2d(54, 25, Math.toRadians(10)), 180, velConstraint70in, accelConstraint40in) // center spike
                         .build();
-        RedWings_StartToRightSpike =
+        RedWings_StartToLeftSpike =
                 drive.trajectorySequenceBuilder(redWings_StartPos)
-                        .splineToSplineHeading(new Pose2d(58, 30, 0), 0, velConstraint70in, accelConstraint40in)
+                        .splineToSplineHeading(new Pose2d(50, 25, Math.toRadians(300)), Math.toRadians(300), velConstraint70in, accelConstraint40in)
+                        .lineToLinearHeading(new Pose2d(55, 27, Math.toRadians(300)), velConstraint70in, accelConstraint40in)
                         .build();
 
         // redwings 🟥🪽 spike 🌵 to stack 🥞
         RedWings_LeftSpikeToStack =
                 drive.trajectorySequenceBuilder(RedWings_StartToLeftSpike.end())
-                        .splineToSplineHeading(Red_CenterStackPos, 0, velConstraint55in, accelConstraint40in)
+//                        .splineToSplineHeading(Red_CenterStackPos, 0, velConstraint55in, accelConstraint40in)
+                        .lineToLinearHeading(Red_CenterStackPos, velConstraint40in, accelConstraint40in)
                         .build();
         RedWings_CenterSpikeToStack =
                 drive.trajectorySequenceBuilder(RedWings_StartToCenterSpike.end())
-                        .splineToSplineHeading(Red_CenterStackPos, 0, velConstraint55in, accelConstraint40in)
+//                        .splineToSplineHeading(Red_CenterStackPos, 0, velConstraint55in, accelConstraint40in)
+                        .lineToLinearHeading(Red_CenterStackPos, velConstraint40in, accelConstraint40in)
                         .build();
         RedWings_RightSpikeToStack = drive.trajectorySequenceBuilder(RedWings_StartToRightSpike.end())
-                .lineTo(Red_CenterStackPos.vec())
+                .lineToLinearHeading(Red_CenterStackPos, velConstraint40in, accelConstraint40in)
+//                .lineTo(Red_CenterStackPos.vec())
                 .build();
 
         // redWings 🟥🪽 stack pickup 🥞🥞
@@ -192,71 +199,97 @@ public class EXCCMP_AutoTrajectories {
 
         // backdrop to backdrop
         Red_BackdropLeftToBackdropCenter = drive.trajectorySequenceBuilder(Red_BackdropLeftPos)
-                .lineToLinearHeading(Red_BackdropCenterPos, velConstraint40in, accelConstraint25in)
+                .lineToLinearHeading(Red_BackdropCenterPos, velConstraint40in, accelConstraint70in)
                 .build();
         Red_BackdropLeftToBackdropRight = drive.trajectorySequenceBuilder(Red_BackdropLeftPos)
-                .lineToLinearHeading(Red_BackdropRightPos, velConstraint40in, accelConstraint25in)
+                .lineToLinearHeading(Red_BackdropRightPos, velConstraint40in, accelConstraint70in)
                 .build();
         Red_BackdropCenterToBackdropLeft = drive.trajectorySequenceBuilder(Red_BackdropCenterPos)
-                .lineToLinearHeading(Red_BackdropLeftPos, velConstraint40in, accelConstraint25in)
+                .lineToLinearHeading(Red_BackdropLeftPos, velConstraint40in, accelConstraint70in)
                 .build();
         Red_BackdropCenterToBackdropRight = drive.trajectorySequenceBuilder(Red_BackdropCenterPos)
-                .lineToLinearHeading(Red_BackdropRightPos, velConstraint40in, accelConstraint25in)
+                .lineToLinearHeading(Red_BackdropRightPos, velConstraint40in, accelConstraint70in)
                 .build();
         Red_BackdropRightToBackdropCenter = drive.trajectorySequenceBuilder(Red_BackdropRightPos)
-                .lineToLinearHeading(Red_BackdropCenterPos, velConstraint40in, accelConstraint25in)
+                .lineToLinearHeading(Red_BackdropCenterPos, velConstraint40in, accelConstraint70in)
                 .build();
         Red_BackdropRightToBackdropLeft = drive.trajectorySequenceBuilder(Red_BackdropRightPos)
-                .lineToLinearHeading(Red_BackdropLeftPos, velConstraint40in, accelConstraint25in)
+                .lineToLinearHeading(Red_BackdropLeftPos, velConstraint40in, accelConstraint70in)
                 .build();
 
         // RED BACKSTAGE 🟥🟥🟥🟥
         // redBackstage 🟥🎭 start 🏁 to spike 🌵
-        RedBackstage_StartToRightSpike = drive.trajectorySequenceBuilder(redBackstage_StartPos)
-                .splineToLinearHeading(new Pose2d(-12, 30, Math.toRadians(180)), Math.toRadians(290), velConstraint70in, accelConstraint40in)
+        RedBackstage_StartToLeftSpike = drive.trajectorySequenceBuilder(redBackstage_StartPos)
+                .splineToLinearHeading(new Pose2d(-14, 35, Math.toRadians(180)), Math.toRadians(290), velConstraint70in, accelConstraint40in)
                 .build();
         RedBackstage_StartToCenterSpike = drive.trajectorySequenceBuilder(redBackstage_StartPos)
-                .splineToLinearHeading(new Pose2d(-25, 27, Math.toRadians(160)), 180, velConstraint70in, accelConstraint40in) // center spike
+                .splineToLinearHeading(new Pose2d(-21, 28, Math.toRadians(160)), 180, velConstraint70in, accelConstraint40in) // center spike
                 .build();
-        RedBackstage_StartToLeftSpike = drive.trajectorySequenceBuilder(redBackstage_StartPos)
-                .splineToSplineHeading(new Pose2d(-35, 34, Math.toRadians(180)), Math.toRadians(180), velConstraint70in, accelConstraint40in) // left spike
+        RedBackstage_StartToRightSpike = drive.trajectorySequenceBuilder(redBackstage_StartPos)
+                .splineToSplineHeading(new Pose2d(-33, 34, Math.toRadians(180)), Math.toRadians(180), velConstraint70in, accelConstraint40in) // left spike
                 .build();
 
-        // redBackstage 🟥🎭 spike 🌵 to backdrop 🎭 //TODO: fix
-//        RedBackstage_SpikeToBackdropLeft = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-//                .lineToLinearHeading(new Pose2d(-40, 34, Math.toRadians(0)))
-//                .build();
-//        RedBackstage_SpikeToBackdropCenter = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-//                .lineToLinearHeading(new Pose2d(-40, 34, Math.toRadians(0)))
-//                .build();
-//        RedBackstage_SpikeToBackdropRight = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-//                .lineToLinearHeading(new Pose2d(-40, 34, Math.toRadians(0)))
-//                .build();
+        // redBackstage 🟥🎭 spike 🌵 to backdrop 🎭
+        RedBackstage_LeftSpikeToBackdropLeft = drive.trajectorySequenceBuilder(RedBackstage_StartToLeftSpike.end())
+                .lineToLinearHeading(Red_BackdropLeftPos, velConstraint40in, accelConstraint25in)
+                .build();
+        RedBackstage_CenterSpikeToBackdropCenter = drive.trajectorySequenceBuilder(RedBackstage_StartToCenterSpike.end())
+                .lineToLinearHeading(Red_BackdropCenterPos, velConstraint40in, accelConstraint25in)
+                .build();
+        RedBackstage_RightSpikeToBackdropRight = drive.trajectorySequenceBuilder(RedBackstage_StartToRightSpike.end())
+                .lineToLinearHeading(Red_BackdropRightPos, velConstraint40in, accelConstraint25in)
+                .build();
 
         // RED PARK
         Red_BackdropLeftToCenterPark = drive.trajectorySequenceBuilder(Red_BackdropLeftPos)
-                .lineTo(new Pose2d(Red_CenterParkPos.getX() - 18, Red_CenterParkPos.getY(), Math.toRadians(0)).vec())
+                .forward(4)
+                .lineTo(new Pose2d(Red_CenterParkPos.getX() + 6, Red_CenterParkPos.getY(), Math.toRadians(0)).vec())
                 .lineTo(Red_CenterParkPos.vec())
                 .build();
         Red_BackdropLeftToCornerPark = drive.trajectorySequenceBuilder(Red_BackdropLeftPos)
-                .lineTo(new Pose2d(Red_CornerParkPos.getX() - 18, Red_CornerParkPos.getY(), Math.toRadians(0)).vec())
+                .forward(4)
+                .lineTo(new Pose2d(Red_CornerParkPos.getX() + 6, Red_CornerParkPos.getY(), Math.toRadians(0)).vec())
                 .lineTo(Red_CornerParkPos.vec())
                 .build();
         Red_BackdropCenterToCenterPark = drive.trajectorySequenceBuilder(Red_BackdropCenterPos)
-                .lineTo(new Pose2d(Red_CenterParkPos.getX() - 18, Red_CenterParkPos.getY(), Math.toRadians(0)).vec())
+                .forward(4)
+                .lineTo(new Pose2d(Red_CenterParkPos.getX() + 6, Red_CenterParkPos.getY(), Math.toRadians(0)).vec())
                 .lineTo(Red_CenterParkPos.vec())
                 .build();
         Red_BackdropCenterToCornerPark = drive.trajectorySequenceBuilder(Red_BackdropCenterPos)
-                .lineTo(new Pose2d(Red_CornerParkPos.getX() - 18, Red_CornerParkPos.getY(), Math.toRadians(0)).vec())
+                .forward(4)
+                .lineTo(new Pose2d(Red_CornerParkPos.getX() + 6, Red_CornerParkPos.getY(), Math.toRadians(0)).vec())
                 .lineTo(Red_CornerParkPos.vec())
                 .build();
         Red_BackdropRightToCenterPark = drive.trajectorySequenceBuilder(Red_BackdropRightPos)
-                .lineTo(new Pose2d(Red_CenterParkPos.getX() - 18, Red_CenterParkPos.getY(), Math.toRadians(0)).vec())
+                .forward(4)
+                .lineTo(new Pose2d(Red_CenterParkPos.getX() + 6, Red_CenterParkPos.getY(), Math.toRadians(0)).vec())
                 .lineTo(Red_CenterParkPos.vec())
                 .build();
         Red_BackdropRightToCornerPark = drive.trajectorySequenceBuilder(Red_BackdropRightPos)
-                .lineTo(new Pose2d(Red_CornerParkPos.getX() - 18, Red_CornerParkPos.getY(), Math.toRadians(0)).vec())
+                .forward(4)
+                .lineTo(new Pose2d(Red_CornerParkPos.getX() + 6, Red_CornerParkPos.getY(), Math.toRadians(0)).vec())
                 .lineTo(Red_CornerParkPos.vec())
+                .build();
+
+        Red_BackdropLeftToBackdropWaypointDoor = drive.trajectorySequenceBuilder(Red_BackdropLeftPos)
+                .lineToLinearHeading(Red_DoorBackdropTransitWaypoint)
+                .build();
+        Red_BackdropRightToBackdropWaypointDoor = drive.trajectorySequenceBuilder(Red_BackdropRightPos)
+                .lineToLinearHeading(Red_DoorBackdropTransitWaypoint)
+                .build();
+        Red_BackdropCenterToBackdropWaypointDoor = drive.trajectorySequenceBuilder(Red_BackdropCenterPos)
+                .lineToLinearHeading(Red_DoorBackdropTransitWaypoint)
+                .build();
+
+        Red_BackdropLeftToBackdropWaypointTruss = drive.trajectorySequenceBuilder(Red_BackdropLeftPos)
+                .lineToLinearHeading(Red_TrussBackdropTransitWaypoint)
+                .build();
+        Red_BackdropRightToBackdropWaypointTruss = drive.trajectorySequenceBuilder(Red_BackdropRightPos)
+                .lineToLinearHeading(Red_TrussBackdropTransitWaypoint)
+                .build();
+        Red_BackdropCenterToBackdropWaypointTruss = drive.trajectorySequenceBuilder(Red_BackdropCenterPos)
+                .lineToLinearHeading(Red_TrussBackdropTransitWaypoint)
                 .build();
 
         // RED CYCLE 🟥🔁

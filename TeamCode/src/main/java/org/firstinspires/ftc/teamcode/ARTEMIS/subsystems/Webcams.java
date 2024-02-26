@@ -61,7 +61,7 @@ public class Webcams extends SubsystemBase {
         aprilTagProcessor.setDecimation(2);
 //        aprilTagBack.setDecimation(2);
 
-        frontWebcam = hardwareMap.get(WebcamName.class, "Webcam 2"); //WEBCAM 1
+        frontWebcam = hardwareMap.get(WebcamName.class, "Webcam 1"); //WEBCAM 1
         backWebcam = hardwareMap.get(WebcamName.class, "Webcam 2");
 
         CameraName switchableCamera = ClassFactory.getInstance()

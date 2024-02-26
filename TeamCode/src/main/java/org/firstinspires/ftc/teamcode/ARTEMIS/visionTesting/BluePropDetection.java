@@ -35,12 +35,12 @@ public class BluePropDetection implements VisionProcessor {
     static final Scalar GREEN = new Scalar(0, 255, 0);
 
     static final Rect LEFT_RECTANGLE = new Rect( // 640 x 480 (X by Y)
-            new Point(0, 250), //anchor (upper left corner)
-            new Point(250, 400) //width, height
+            new Point(0, 300), //anchor (upper left corner)
+            new Point(200, 470) //width, height
     );
     static final Rect RIGHT_RECTANGLE = new Rect(
-            new Point(450, 250),
-            new Point(640, 400)
+            new Point(400, 300),
+            new Point(600, 470)
     );
 
     @Override

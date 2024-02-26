@@ -45,7 +45,7 @@ public class Arm extends SubsystemBase {
     }
 
     public void toDeposit() {
-        if (highArmPosition) {
+        if (BotPositions.ARM_HIGH_POSITION) {
             sArmLeft.setPosition(BotPositions.ARM_DEPOSIT);
             sArmRight.setPosition(BotPositions.ARM_DEPOSIT);
         } else {

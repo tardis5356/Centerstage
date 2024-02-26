@@ -33,6 +33,7 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.commands.WinchPullUpCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.DroneLauncher;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Gripper;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.LEDs;
@@ -108,6 +109,8 @@ public class Gen1_TeleOp extends CommandOpMode {
     //arm and coms
     private Arm arm;
 
+    private DroneLauncher launcher;
+
     private Drivetrain drivetrain;
 
     private Webcams webcams;
@@ -153,26 +156,18 @@ public class Gen1_TeleOp extends CommandOpMode {
         winchDeployCommand = new WinchDeployCommand(winch);
         winchPullUpCommand = new WinchPullUpCommand(winch);
 
-        //init lift stuff
         lift = new Lift(hardwareMap);
         liftToIntakePositionCommand = new LiftToPositionCommand(lift, -10, 20);
 
-        //init gripper stuff
         gripper = new Gripper(hardwareMap);
-
-        //init wrist stuff
         wrist = new Wrist(hardwareMap);
-
-        //init arm stuff
         arm = new Arm(hardwareMap);
+        launcher = new DroneLauncher(hardwareMap);
 
         drivetrain = new Drivetrain(hardwareMap);
         webcams = new Webcams(hardwareMap);
 
         mW = hardwareMap.get(DcMotorEx.class, "mW");
-
-        //init the drone servo
-        sDroneLauncher = hardwareMap.get(Servo.class, "sDL");
 
         robotToDepositCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit");
         robotToIntakeCommand = new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake");
@@ -201,6 +196,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         intake.up();
         intake.disableLEDs();
         winch.retractBraces();
+        launcher.latch();
 
         leds.setLEDstate("idle");
 /*
@@ -242,6 +238,10 @@ public class Gen1_TeleOp extends CommandOpMode {
         X - toggle left gripper.
 
  */
+
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.BACK))
+                .whenActive(launcher::unlatch)
+                .whenInactive(launcher::latch);
 
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON))
                 .whenActive(robotAlignToTagTest)
@@ -392,11 +392,11 @@ public class Gen1_TeleOp extends CommandOpMode {
                 .whenActive(() -> CURRENT_SPEED_MULTIPLIER = SLOW_SPEED_MULTIPLIER);
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.BACK))
                 .toggleWhenActive(() -> {
-                    highArmPosition = true;
+                    BotPositions.ARM_HIGH_POSITION = true;
                     arm.toDeposit();
                     wrist.tiltToDeposit();
                 }, () -> {
-                    highArmPosition = false;
+                    BotPositions.ARM_HIGH_POSITION = false;
                     arm.toDeposit();
                     wrist.tiltToDeposit();
                 });
@@ -422,6 +422,7 @@ public class Gen1_TeleOp extends CommandOpMode {
                         }),
                         new WaitCommand(600),
                         new InstantCommand(intake::out),
+                        new InstantCommand(intake::up),
 //                        new WaitCommand(100),
                         new InstantCommand(arm::toTransition),
                         new InstantCommand(wrist::toTransition),
@@ -431,9 +432,7 @@ public class Gen1_TeleOp extends CommandOpMode {
                             gamepad1.rumbleBlips(2);
                             gamepad2.rumbleBlips(2);
                         }),
-                        new WaitCommand(500),
-                        new InstantCommand(intake::up),
-                        new WaitCommand(500),
+                        new WaitCommand(1000),
                         new InstantCommand(intake::stop)
                 ))
                 .cancelWhenActive(robotToDepositCommand);
@@ -565,11 +564,11 @@ public class Gen1_TeleOp extends CommandOpMode {
 
 //        }
 
-        if (gamepad1.back) { //&& gametime.seconds() > 90){
-            sDroneLauncher.setPosition(BotPositions.DRONE_UNLATCHED);
-        } else {
-            sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED);
-        }
+//        if (gamepad1.back) { //&& gametime.seconds() > 90){
+//            launcher.unlatch();
+//        } else {
+//            sDroneLauncher.setPosition(BotPositions.DRONE_LATCHED);
+//        }
 
         telemetry.addData("RobotState\n", robotState);
 

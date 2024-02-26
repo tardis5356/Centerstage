@@ -23,7 +23,7 @@ public class BotPositions {
             INTAKE_DOWN_THIRD_PIXEL = 0.35,
             INTAKE_DOWN_FOURTH_PIXEL = 0.3,
             INTAKE_DOWN_FIFTH_PIXEL = 0.25,
-            INTAKE_UP = 0.5; // torque: 0.5 down, 0.25 up // 0.65
+            INTAKE_UP = 0.67; // torque: 0.5 down, 0.25 up // 0.65
 
 
     //gripper positions
@@ -35,15 +35,27 @@ public class BotPositions {
     public static double DISTANCE_FROM_BACKDROP = 20, DISTANCE_FROM_BACKDROP_TOLERANCE;
 
     //wrist positions
-    public static double WRIST_LEFT_ROLL = 0.497, WRIST_RIGHT_ROLL = 0.432, WRIST_ROLL_CENTERED = 0.464, WRIST_TILT_TRANSITION = 0.19, WRIST_TILT_INTAKE = 0.29, WRIST_TILT_DEPOSIT = 0.78, WRIST_TILT_DEPOSIT_LOW = 0.68, WRIST_TILT_DROP_PURPLE = 0.8;
+    public static double WRIST_LEFT_pos90_ROLL = 0.561,
+            WRIST_LEFT_pos60_ROLL = 0.51,
+            WRIST_LEFT_pos30_ROLL = 0.497,
+            WRIST_ROLL_CENTERED = 0.464,
+            WRIST_RIGHT_neg30_ROLL = 0.432,
+            WRIST_RIGHT_neg60_ROLL = 0.4,
+            WRIST_RIGHT_neg90_ROLL = 0.368,
+            WRIST_TILT_TRANSITION = 0.19, WRIST_TILT_INTAKE = 0.29, WRIST_TILT_DEPOSIT = 0.78, WRIST_TILT_DEPOSIT_LOW = 0.68, WRIST_TILT_DROP_PURPLE = 0.8;
     //for tilt, 0.09 = 30º
 //    0.115 = 30º
+
+    //0.032 = 30º
 
     //arm positions
     public static double ARM_INTAKE = 0.025, ARM_TRANSITION_POSITION = 0.12, ARM_DEPOSIT = 0.65, ARM_DEPOSIT_LOW = 0.75, ARM_DROP_PURPLE = 0.9, ARM_GRAB_PIXELS = .025;
 
+    public static boolean ARM_HIGH_POSITION = false;
+
+
     //drone servo positions
-    public static double DRONE_LATCHED = 0.33, DRONE_UNLATCHED = 0.27;
+    public static double DRONE_LATCHED = 0.36, DRONE_UNLATCHED = 0.6;
 
     public static double BACK_WEBCAM_Y_OFFSET = 0, BACK_WEBCAM_X_OFFSET = 7.5; // x is front to back, y is side to side
     // 7.5

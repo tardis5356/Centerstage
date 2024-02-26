@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.subsystems;
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.teleop.Gen1_TeleOp.highArmPosition;
-
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,6 +9,8 @@ public class Wrist extends SubsystemBase {
     //Create Servo objects
     private Servo sGripperRoll, sGripperPitch;
 
+    private int rollIndex = 0;
+
     //Map Servos to physical parts
     public Wrist(HardwareMap hardwareMap) {
         sGripperRoll = hardwareMap.get(Servo.class, "sWGR"); // ROLL is side to side rotation (servo on the gripper)
@@ -19,10 +19,37 @@ public class Wrist extends SubsystemBase {
 
     @Override
     public void periodic() {
+        switch (rollIndex){
+            case -3:
+                sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg90_ROLL);
+                break;
+            case -2:
+                sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg60_ROLL);
+                break;
+            case -1:
+                sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg30_ROLL);
+                break;
+            case 0:
+            default:
+                sGripperRoll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
+                break;
+            case 1:
+                sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos30_ROLL);
+                break;
+            case 2:
+                sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos60_ROLL);
+                break;
+            case 3:
+                sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos90_ROLL);
+                break;
+        }
     }
 
+    public void setRollIndex(int index){ rollIndex = index; }
+
     public void toTransition() {
-        sGripperRoll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
+//        sGripperRoll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
+        rollIndex = 0;
         sGripperPitch.setPosition(BotPositions.WRIST_TILT_TRANSITION);
     }
 
@@ -31,7 +58,7 @@ public class Wrist extends SubsystemBase {
     }
 
     public void tiltToDeposit() {
-        if (highArmPosition)
+        if (BotPositions.ARM_HIGH_POSITION)
             sGripperPitch.setPosition(BotPositions.WRIST_TILT_DEPOSIT);
         else
             sGripperPitch.setPosition(BotPositions.WRIST_TILT_DEPOSIT_LOW);
@@ -46,15 +73,18 @@ public class Wrist extends SubsystemBase {
     }
 
     public void rollToLeft() {
-        sGripperRoll.setPosition(BotPositions.WRIST_LEFT_ROLL);
+        rollIndex++;
+//        sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos30_ROLL);
     }
 
     public void rollToRight() {
-        sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_ROLL);
+        rollIndex--;
+//        sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg30_ROLL);
     }
 
     public void rollToCentered() {
-        sGripperRoll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
+        rollIndex = 0;
+//        sGripperRoll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
     }
 
 
