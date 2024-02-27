@@ -260,6 +260,11 @@ public class Webcams extends SubsystemBase {
         }
     }
 
+    public double getAvgLeftBoxRed(){ return redPropThreshold.getAveragedLeftBoxRed(); }
+    public double getAvgRightBoxRed(){ return redPropThreshold.getAveragedRightBoxRed(); }
+    public double getAvgLeftBoxBlue(){ return redPropThreshold.getAveragedLeftBoxBlue(); }
+    public double getAvgRightBoxBlue(){ return redPropThreshold.getAveragedRightBoxBlue(); }
+
     public String getActiveCamera() {
         return activeWebcam;
     }

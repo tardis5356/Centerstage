@@ -22,11 +22,11 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySeque
  * If you are using SampleTankDrive, you should be tuning AXIAL_PID, CROSS_TRACK_PID, and HEADING_PID.
  * These coefficients can be tuned live in dashboard.
  */
-@Disabled
+//@Disabled
 @Config
 @Autonomous(group = "drive")
 public class FollowerPIDTuner extends LinearOpMode {
-    public static double DISTANCE = 48; // in
+    public static double DISTANCE = 30; // in
 
     @Override
     public void runOpMode() throws InterruptedException {

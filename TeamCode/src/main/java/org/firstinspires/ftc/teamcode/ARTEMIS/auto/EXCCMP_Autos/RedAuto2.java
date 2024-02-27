@@ -15,7 +15,7 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToCenterSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToRightSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackdropViaDoorWait;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorStackTransitWaypointToBackdropWaypointViaDoorWait;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackdropViaTruss;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackdropViaTrussWait;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackstageViaDoor;
@@ -56,8 +56,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.RobotAlignToTagRange;
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.RobotToStateCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Drivetrain;
@@ -70,6 +68,7 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Webcams;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Winch;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Wrist;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.RedPropDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
@@ -149,7 +148,7 @@ public class RedAuto2 extends CommandOpMode {
         gripper.grabLeft();
         intake.up();
         wrist.rollToCentered();
-        wrist.tiltToIntake();
+//        wrist.tiltToIntake();
         launcher.latch();
 
         drivetrain.setStartingOffsetDegs(270);
@@ -161,6 +160,8 @@ public class RedAuto2 extends CommandOpMode {
         telemetry.setMsTransmissionInterval(50);
 
         while (!isStarted() && !isStopRequested()) {
+//            telemetry.addData("avgLeftBox", "%.3f", webcam.getAvgLeftBoxRed());
+//            telemetry.addData("avgRightBox", "%.3f", webcam.getAvgRightBoxRed());
 
             telemetry.addData("raw imu degs: ", drivetrain.getRawYawDegrees());
             telemetry.addData("converted imu degs: ", drivetrain.getYawDegrees());
@@ -315,7 +316,7 @@ public class RedAuto2 extends CommandOpMode {
             if (transitVia == "door") {
                 if (wait)
                     if (deliverYellow)
-                        StackWaypointToBackWaypoint = RedWings_TransitToBackdropViaDoorWait;
+                        StackWaypointToBackWaypoint = Red_DoorStackTransitWaypointToBackdropWaypointViaDoorWait;
                     else
                         StackWaypointToBackWaypoint = RedWings_TransitToBackstageViaDoorWait;
                 else {

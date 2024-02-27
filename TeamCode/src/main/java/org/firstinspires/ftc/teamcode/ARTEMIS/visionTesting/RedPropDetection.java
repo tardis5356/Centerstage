@@ -22,7 +22,7 @@ public class RedPropDetection implements VisionProcessor {
     Mat highMatBlue = new Mat();
     Mat lowMatBlue = new Mat();
     Mat finalMatBlue = new Mat();
-    double redThreshold = 0.04;
+    double redThreshold = 0.1;
     double blueThreshold = 0.0010;
     double averagedLeftBoxRed;
     double averagedRightBoxRed;
@@ -35,12 +35,12 @@ public class RedPropDetection implements VisionProcessor {
     static final Scalar GREEN = new Scalar(0, 255, 0);
 
     static final Rect LEFT_RECTANGLE = new Rect( // 640 x 480 (X by Y)
-            new Point(0, 300), //anchor (upper left corner)
-            new Point(200, 470) //width, height
+            new Point(30, 325), //anchor (upper left corner)
+            new Point(225, 450) //width, height
     );
     static final Rect RIGHT_RECTANGLE = new Rect(
-            new Point(400, 300),
-            new Point(600, 470)
+            new Point(425, 325), //x is across the screen
+            new Point(620, 450)
     );
 
     @Override

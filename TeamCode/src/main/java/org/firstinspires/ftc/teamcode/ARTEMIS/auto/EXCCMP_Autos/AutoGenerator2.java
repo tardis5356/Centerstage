@@ -72,24 +72,26 @@ public class AutoGenerator2 {
          * general stack pickup sequence
          * */
         SequentialCommandGroup stackPickup = new SequentialCommandGroup(
-                new InstantCommand(intake::in),
+                /*new InstantCommand(intake::in),
                 new InstantCommand(() -> leds.setLEDstate("intaking")),
                 new InstantCommand(intake::downThirdPixel),
                 new WaitCommand(300),
 //                new InstantCommand(intake::downFifthPixel),
 //                new WaitCommand(250),
                 new InstantCommand(intake::out),
-                new ParallelCommandGroup(
-                        new FollowTrajectoryCommand(drive, StackToStackWaypoint),
+                new WaitCommand(300),
+                new InstantCommand(intake::in),
+                new ParallelCommandGroup(*/
+                new FollowTrajectoryCommand(drive, StackToStackWaypoint)/*,
                         new SequentialCommandGroup(
-                                new WaitCommand(200),
-                                new InstantCommand(intake::in),
-                                new WaitCommand(200),
+//                                new WaitCommand(200),
+//                                new InstantCommand(intake::in),
+                                new WaitCommand(300),
                                 new InstantCommand(intake::up),
                                 new WaitCommand(500),
                                 new InstantCommand(intake::out)
                         )
-                )
+                )*/
         );
 
         /***
@@ -140,6 +142,8 @@ public class AutoGenerator2 {
 //                            new SequentialCommandGroup(
                             new InstantCommand(gripper::grabLeft),
                             new InstantCommand(gripper::grabRight),
+                            new InstantCommand(arm::toTransition),
+                            new InstantCommand(wrist::toTransition),
 //                                    new InstantCommand(intake::up),
 //                                    new WaitCommand(150),
 //                                    new InstantCommand(intake::out)
@@ -158,12 +162,19 @@ public class AutoGenerator2 {
                  * end: backdrop yellow pos
                  */
                 autoCommands.addCommands(new SequentialCommandGroup(
-//                        new RelocalizeFromTagCommand(drive, drivetrain, aprilTagProcessor, telemetry),
+                        new InstantCommand(() -> leds.setLEDstate("red_scan")),
+                        new WaitCommand(400),
+                        new RelocalizeFromTagCommand(drive, drivetrain, aprilTagProcessor, telemetry),
+                        new WaitCommand(200),
+                        new InstantCommand(() -> leds.setLEDstate("green")),
                         new ParallelCommandGroup(
-                                new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
+//                                new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
+                                new InstantCommand(arm::toDeposit),
                                 new SequentialCommandGroup(
-                                        new WaitCommand(250),
-                                        new LiftToPositionCommand(lift, 100, 10)
+                                        new WaitCommand(300),
+                                        new InstantCommand(wrist::tiltToDeposit),
+                                        new InstantCommand(() -> wrist.setRollIndex(2)),
+                                        new LiftToPositionCommand(lift, 200, 10)
                                 ),
                                 new SequentialCommandGroup(
                                         new WaitCommand(250),
@@ -182,10 +193,10 @@ public class AutoGenerator2 {
                                 new FollowTrajectoryCommand(drive, SpikeToBackdropYellow),
 //                                new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
                                 new InstantCommand(arm::toDeposit),
-                                new InstantCommand(wrist::tiltToDeposit),
-                                new InstantCommand(() -> wrist.setRollIndex(2)),
                                 new SequentialCommandGroup(
-                                        new WaitCommand(250),
+                                        new WaitCommand(300),
+                                        new InstantCommand(wrist::tiltToDeposit),
+                                        new InstantCommand(() -> wrist.setRollIndex(2)),
                                         new LiftToPositionCommand(lift, 200, 10)
                                 )
                         ));
