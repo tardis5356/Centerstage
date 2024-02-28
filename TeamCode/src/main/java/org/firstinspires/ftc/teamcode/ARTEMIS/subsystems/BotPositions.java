@@ -35,18 +35,33 @@ public class BotPositions {
     public static double DISTANCE_FROM_BACKDROP = 20, DISTANCE_FROM_BACKDROP_TOLERANCE;
 
     //wrist positions
-    public static double WRIST_LEFT_pos90_ROLL = 0.561,
-            WRIST_LEFT_pos60_ROLL = 0.51,
-            WRIST_LEFT_pos30_ROLL = 0.497,
+    public static double
+//            WRIST_LEFT_pos90_ROLL = 0.561, // og vert? don't think it was actually used
+            //            WRIST_LEFT_pos30_ROLL = 0.497, // og tilt left
+            WRIST_LEFT_pos180_ROLL = 0.56,
+            WRIST_LEFT_pos150_ROLL = 0.544,
+            WRIST_LEFT_pos120_ROLL = 0.528,
+            WRIST_LEFT_pos90_ROLL = 0.512,
+            WRIST_LEFT_pos60_ROLL = 0.496,
+            WRIST_LEFT_pos30_ROLL = 0.48,
             WRIST_ROLL_CENTERED = 0.464,
-            WRIST_RIGHT_neg30_ROLL = 0.432,
-            WRIST_RIGHT_neg60_ROLL = 0.4,
-            WRIST_RIGHT_neg90_ROLL = 0.368,
+    //            WRIST_RIGHT_neg30_ROLL = 0.432,
+            WRIST_RIGHT_neg30_ROLL = 0.448,
+            WRIST_RIGHT_neg60_ROLL = 0.432,
+            WRIST_RIGHT_neg90_ROLL = 0.416,
+            WRIST_RIGHT_neg120_ROLL = 0.4,
+            WRIST_RIGHT_neg150_ROLL = 0.384,
+            WRIST_RIGHT_neg180_ROLL = 0.368,
             WRIST_TILT_TRANSITION = 0.19, WRIST_TILT_INTAKE = 0.29, WRIST_TILT_DEPOSIT = 0.78, WRIST_TILT_DEPOSIT_LOW = 0.68, WRIST_TILT_DROP_PURPLE = 0.8;
     //for tilt, 0.09 = 30º
 //    0.115 = 30º
 
-    //0.032 = 30º
+    //0.016 = 30º
+
+    //0.032 = 60º
+    //0.032 = 90º
+    //0.032 = 120º
+    //0.032 = 180º
 
     //arm positions
     public static double ARM_INTAKE = 0.025, ARM_TRANSITION_POSITION = 0.12, ARM_DEPOSIT = 0.65, ARM_DEPOSIT_LOW = 0.75, ARM_DROP_PURPLE = 0.9, ARM_GRAB_PIXELS = .025;

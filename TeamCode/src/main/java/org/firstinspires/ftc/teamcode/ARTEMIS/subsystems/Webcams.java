@@ -58,7 +58,7 @@ public class Webcams extends SubsystemBase {
         // Decimation = 3 ..  Detect 2" Tag from 4  feet away at 30 Frames Per Second
         // Decimation = 3 ..  Detect 5" Tag from 10 feet away at 30 Frames Per Second
         // Note: Decimation can be changed on-the-fly to adapt during a match.
-        aprilTagProcessor.setDecimation(2);
+        aprilTagProcessor.setDecimation(1);
 //        aprilTagBack.setDecimation(2);
 
         frontWebcam = hardwareMap.get(WebcamName.class, "Webcam 1"); //WEBCAM 1

@@ -1,23 +1,28 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
 
 
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_CenterSpikeToBackdropCenter;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_LeftSpikeToBackdropLeft;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_RightSpikeToBackdropRight;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_BackdropRelocWaypointToBackdropCenter;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_BackdropRelocWaypointToBackdropLeft;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_BackdropRelocWaypointToBackdropRight;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_CenterSpikeToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_LeftSpikeToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_RightSpikeToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToCenterSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToRightSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterSpikeToStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterStackToDoorWaypoint;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_DoorStackTransitWaypointToBackdropWaypointViaDoor;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterStackToTrussWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_DoorStackWaypointToBackdropWaypointViaDoor;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_LeftSpikeToStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_RightSpikeToStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToCenterSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToRightSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorStackTransitWaypointToBackdropWaypointViaDoorWait;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackdropViaTruss;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackdropViaTrussWait;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropLeftToBackdropWaypointTruss;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorStackWaypointToBackdropWaypointViaDoorWait;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TrussStackWaypointToBackdropWaypointViaTruss;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TrussStackWaypointToBackdropWaypointViaTrussWait;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackstageViaDoor;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackstageViaDoorWait;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TransitToBackstageViaTruss;
@@ -68,7 +73,6 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Webcams;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Winch;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Wrist;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.RedPropDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
@@ -106,6 +110,7 @@ public class RedAuto2 extends CommandOpMode {
             StackWaypointToBackWaypoint, // wing, cycle
             BackWaypointToBackdropYellow, // wing, cycle
             BackWaypointToBackdropWhite, // wing, cycle
+            BackdropRelocWaypointToBackdrop, // backstage
             BackWaypointToBackstage, // wing, cycle, park
             BackdropYellowSlotToWhiteSlot, // wing, cycle
             BackdropToPark, // both
@@ -152,7 +157,7 @@ public class RedAuto2 extends CommandOpMode {
         launcher.latch();
 
         drivetrain.setStartingOffsetDegs(270);
-        drivetrain.setStartingError();
+//        drivetrain.setStartingError();
 
         webcam.setCamera("front");
         webcam.setActiveProcessor("redProp");
@@ -275,13 +280,24 @@ public class RedAuto2 extends CommandOpMode {
                 if (transitVia == "door") {
                     StackToStackWaypoint = RedWings_CenterStackToDoorWaypoint;
                 } else {
-
+                    StackToStackWaypoint = RedWings_CenterStackToTrussWaypoint;
                 }
             } else { // starting in backstage
                 drive.setPoseEstimate(redBackstage_StartPos);
                 if (webcam.getPropPosition() == "left") {
                     StartToSpike = RedBackstage_StartToLeftSpike;
-                    SpikeToBackdropYellow = RedBackstage_LeftSpikeToBackdropLeft;
+                    SpikeToBackdropYellow = RedBackstage_LeftSpikeToBackdropWaypoint;
+                    BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropLeft;
+
+                    if(cycle){
+                        if(transitVia == "truss") {
+                            BackdropToBackdropWaypoint = Red_BackdropLeftToBackdropWaypointTruss;
+//                            BackdropWaypointToStackWaypoint =
+                        }
+                    } else {
+
+                    }
+
 
                     if(parkIn == "center")
                         BackdropToPark = Red_BackdropLeftToCenterPark;
@@ -291,7 +307,9 @@ public class RedAuto2 extends CommandOpMode {
                     telemetry.addLine("left spike traj");
                 } else if (webcam.getPropPosition() == "right") {
                     StartToSpike = RedBackstage_StartToRightSpike;
-                    SpikeToBackdropYellow = RedBackstage_RightSpikeToBackdropRight;
+//                    SpikeToBackdropYellow = RedBackstage_RightSpikeToBackdropRight;
+                    SpikeToBackdropYellow = RedBackstage_RightSpikeToBackdropWaypoint;
+                    BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropRight;
 
                     if(parkIn == "center")
                         BackdropToPark = Red_BackdropRightToCenterPark;
@@ -301,7 +319,9 @@ public class RedAuto2 extends CommandOpMode {
                     telemetry.addLine("right spike traj");
                 } else {
                     StartToSpike = RedBackstage_StartToCenterSpike;
-                    SpikeToBackdropYellow = RedBackstage_CenterSpikeToBackdropCenter;
+//                    SpikeToBackdropYellow = RedBackstage_CenterSpikeToBackdropCenter;
+                    SpikeToBackdropYellow = RedBackstage_CenterSpikeToBackdropWaypoint;
+                    BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropCenter;
 
                     if(parkIn == "center")
                         BackdropToPark = Red_BackdropCenterToCenterPark;
@@ -316,12 +336,12 @@ public class RedAuto2 extends CommandOpMode {
             if (transitVia == "door") {
                 if (wait)
                     if (deliverYellow)
-                        StackWaypointToBackWaypoint = Red_DoorStackTransitWaypointToBackdropWaypointViaDoorWait;
+                        StackWaypointToBackWaypoint = Red_DoorStackWaypointToBackdropWaypointViaDoorWait;
                     else
                         StackWaypointToBackWaypoint = RedWings_TransitToBackstageViaDoorWait;
                 else {
                     if (deliverYellow)
-                        StackWaypointToBackWaypoint = RedWings_DoorStackTransitWaypointToBackdropWaypointViaDoor;
+                        StackWaypointToBackWaypoint = RedWings_DoorStackWaypointToBackdropWaypointViaDoor;
                     else
                         StackWaypointToBackWaypoint = RedWings_TransitToBackstageViaDoor;
                 }
@@ -333,12 +353,12 @@ public class RedAuto2 extends CommandOpMode {
             } else { // transiting via truss
                 if (wait)
                     if (deliverYellow)
-                        StackWaypointToBackWaypoint = RedWings_TransitToBackdropViaTrussWait;
+                        StackWaypointToBackWaypoint = RedWings_TrussStackWaypointToBackdropWaypointViaTrussWait;
                     else
                         StackWaypointToBackWaypoint = RedWings_TransitToBackstageViaTrussWait;
                 else {
                     if (deliverYellow)
-                        StackWaypointToBackWaypoint = RedWings_TransitToBackdropViaTruss;
+                        StackWaypointToBackWaypoint = RedWings_TrussStackWaypointToBackdropWaypointViaTruss;
                     else
                         StackWaypointToBackWaypoint = RedWings_TransitToBackstageViaTruss;
                 }
@@ -376,6 +396,7 @@ public class RedAuto2 extends CommandOpMode {
             TrajectorySequence StackWaypointToBackWaypoint, // wing, cycle
             TrajectorySequence BackWaypointToBackdropYellow, // wing, cycle
             TrajectorySequence BackWaypointToBackdropWhite, // wing, cycle
+    TrajectorySequence BackdropRelocWaypointToBackdrop, //backstage
             TrajectorySequence BackWaypointToBackstage, // wing, cycle, park
             TrajectorySequence BackdropYellowSlotToWhiteSlot, // wing, cycle
             TrajectorySequence BackdropToPark, // both
@@ -399,6 +420,7 @@ public class RedAuto2 extends CommandOpMode {
                             StackWaypointToBackWaypoint, // wing, cycle
                             BackWaypointToBackdropYellow, // wing, cycle
                             BackWaypointToBackdropWhite, // wing, cycle
+                            BackdropRelocWaypointToBackdrop, //backstage
                             BackWaypointToBackstage, // wing, cycle, park
                             BackdropYellowSlotToWhiteSlot, // wing, cycle
                             BackdropToPark, // both

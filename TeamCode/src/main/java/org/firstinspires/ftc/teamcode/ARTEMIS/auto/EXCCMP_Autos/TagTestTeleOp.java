@@ -164,7 +164,8 @@ public class TagTestTeleOp extends CommandOpMode {
 //        );
 //
 //        imu.resetYaw();
-        drivetrain.setStartingError();
+//        drivetrain.setStartingError();
+        drivetrain.setStartingOffsetDegs(270);
 
         webcams.setCamera("back");
 

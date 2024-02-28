@@ -20,26 +20,44 @@ public class Wrist extends SubsystemBase {
     @Override
     public void periodic() {
         switch (rollIndex){
-            case -3:
+            case -180:
                 sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg90_ROLL);
                 break;
-            case -2:
+            case -150:
+                sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg90_ROLL);
+                break;
+            case -120:
+                sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg90_ROLL);
+                break;
+            case -90:
+                sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg90_ROLL);
+                break;
+            case -60:
                 sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg60_ROLL);
                 break;
-            case -1:
+            case -30:
                 sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg30_ROLL);
                 break;
             case 0:
             default:
                 sGripperRoll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
                 break;
-            case 1:
+            case 30:
                 sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos30_ROLL);
                 break;
-            case 2:
+            case 60:
                 sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos60_ROLL);
                 break;
-            case 3:
+            case 90:
+                sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos90_ROLL);
+                break;
+            case 120:
+                sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos90_ROLL);
+                break;
+            case 150:
+                sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos90_ROLL);
+                break;
+            case 180:
                 sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos90_ROLL);
                 break;
         }
@@ -73,12 +91,12 @@ public class Wrist extends SubsystemBase {
     }
 
     public void rollToLeft() {
-        rollIndex++;
+        rollIndex+=30;
 //        sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos30_ROLL);
     }
 
     public void rollToRight() {
-        rollIndex--;
+        rollIndex-=30;
 //        sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg30_ROLL);
     }
 

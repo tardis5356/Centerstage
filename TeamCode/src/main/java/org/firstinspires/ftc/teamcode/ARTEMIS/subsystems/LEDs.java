@@ -86,7 +86,7 @@ public class LEDs extends SubsystemBase {
                 blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_END_TO_END_BLEND_TO_BLACK);
                 break;
             case "red_scan":
-                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.LARSON_SCANNER_RED);
+                blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED);
                 break;
             case "red":
                 blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);

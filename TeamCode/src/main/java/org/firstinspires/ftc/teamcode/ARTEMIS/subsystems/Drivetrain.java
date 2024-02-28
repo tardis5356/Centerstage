@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class Drivetrain extends SubsystemBase {
     private DcMotor mFL;
@@ -16,10 +14,13 @@ public class Drivetrain extends SubsystemBase {
     private DcMotor mBL;
     private DcMotor mBR;
 
-    BNO055IMU imu;
+//    BNO055IMU imu;
+    private IMU imu;
 
     double startingErrorRads = 0;
     double startingOffsetRads = 0;
+
+    double correctedAngleDegrees = 0;
     
     public Drivetrain(HardwareMap hardwareMap) {
         mFL = hardwareMap.get(DcMotor.class, "mFL");
@@ -27,13 +28,29 @@ public class Drivetrain extends SubsystemBase {
         mBL = hardwareMap.get(DcMotor.class, "mBL");
         mBR = hardwareMap.get(DcMotor.class, "mBR");
 
-        imu = hardwareMap.get(BNO055IMU.class, "imuEx");
+//        imu = hardwareMap.get(BNO055IMU.class, "imuEx");
 
-        imu.initialize(new BNO055IMU.Parameters());
+//        imu.initialize(new BNO055IMU.Parameters());
+
+
+        imu = hardwareMap.get(IMU.class, "imuEx");
+
+        imu.initialize(
+                new IMU.Parameters(
+                        new RevHubOrientationOnRobot(
+                                RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
+                                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                        )
+                )
+        );
+
+        imu.resetYaw();
     }
 
     @Override
-    public void periodic() {}
+    public void periodic() {
+        correctedAngleDegrees = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES) + Math.toDegrees(startingOffsetRads);
+    }
 
     public void driveRobot(double x, double y, double yaw) {
         // Calculate wheel powers.
@@ -61,6 +78,23 @@ public class Drivetrain extends SubsystemBase {
         mBR.setPower(rightBackPower);
     }
 
+    public double getYawRadians(){
+        return Math.toRadians(correctedAngleDegrees);
+    }
+
+    public double getYawDegrees(){
+        return correctedAngleDegrees;
+    }
+
+    public void setStartingOffsetDegs(int offsetDeg){
+        startingOffsetRads = Math.toRadians(offsetDeg);
+    }
+
+    public double getRawYawDegrees(){
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+    }
+
+    /*
     public BNO055IMU getImu() {
         return imu;
     }
@@ -86,7 +120,7 @@ public class Drivetrain extends SubsystemBase {
 
     public double getRawYawDegrees(){
         return AngleUnit.normalizeDegrees(-imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle);
-    }
+    }*/
 
     // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
     // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
