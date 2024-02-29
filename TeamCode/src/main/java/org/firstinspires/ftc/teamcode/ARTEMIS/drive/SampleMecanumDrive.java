@@ -44,6 +44,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 //import org.firstinspires.ftc.teamcode.TESTBED.trajectorysequence.TrajectorySequenceRunner;
 //import org.firstinspires.ftc.teamcode.TESTBED.util.LynxModuleUtil;
 
+import org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.TrajectorySequenceBuilderWrapper;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequenceRunner;
@@ -60,6 +61,8 @@ import java.util.List;
 public class SampleMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(10, 0, 0);
+
+    public static boolean flipPose = false; // false if red, true if blue
 
     public static double LATERAL_MULTIPLIER = 1;
 
@@ -142,7 +145,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         List<Integer> lastTrackingEncVels = new ArrayList<>();
 
         // TODO: if desired, use setLocalizer() to change the localization method
-         setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
+        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
                 follower, HEADING_PID, batteryVoltageSensor,
@@ -162,11 +165,19 @@ public class SampleMecanumDrive extends MecanumDrive {
         return new TrajectoryBuilder(startPose, startHeading, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }
 
-    public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
-        return new TrajectorySequenceBuilder(
+    //    public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
+//        return new TrajectorySequenceBuilder(
+//                startPose,
+//                VEL_CONSTRAINT, ACCEL_CONSTRAINT,
+//                MAX_ANG_VEL, MAX_ANG_ACCEL
+//        );
+//    }
+    public TrajectorySequenceBuilderWrapper trajectorySequenceBuilder(Pose2d startPose) {
+
+        return new TrajectorySequenceBuilderWrapper(
                 startPose,
                 VEL_CONSTRAINT, ACCEL_CONSTRAINT,
-                MAX_ANG_VEL, MAX_ANG_ACCEL
+                MAX_ANG_VEL, MAX_ANG_ACCEL, flipPose
         );
     }
 
@@ -305,13 +316,13 @@ public class SampleMecanumDrive extends MecanumDrive {
     @Override
     public double getRawExternalHeading() {
 //        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-          return 0;
+        return 0;
     }
 
     @Override
     public Double getExternalHeadingVelocity() {
 //        return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
-          return 0.0;
+        return 0.0;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {

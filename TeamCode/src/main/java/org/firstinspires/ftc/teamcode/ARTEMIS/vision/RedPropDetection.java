@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting;
+package org.firstinspires.ftc.teamcode.ARTEMIS.vision;
 
 
 import android.graphics.Canvas;
@@ -12,7 +12,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-public class BluePropDetection implements VisionProcessor {
+public class RedPropDetection implements VisionProcessor {
 
     Mat testMatRed = new Mat();
     Mat highMatRed = new Mat();
@@ -22,8 +22,8 @@ public class BluePropDetection implements VisionProcessor {
     Mat highMatBlue = new Mat();
     Mat lowMatBlue = new Mat();
     Mat finalMatBlue = new Mat();
-    double redThreshold = 0.09;
-    double blueThreshold = 0.05;
+    double redThreshold = 0.1;
+    double blueThreshold = 0.0010;
     double averagedLeftBoxRed;
     double averagedRightBoxRed;
     double averagedLeftBoxBlue;
@@ -35,12 +35,12 @@ public class BluePropDetection implements VisionProcessor {
     static final Scalar GREEN = new Scalar(0, 255, 0);
 
     static final Rect LEFT_RECTANGLE = new Rect( // 640 x 480 (X by Y)
-            new Point(0, 300), //anchor (upper left corner)
-            new Point(200, 470) //width, height
+            new Point(30, 325), //anchor (upper left corner)
+            new Point(225, 450) //width, height
     );
     static final Rect RIGHT_RECTANGLE = new Rect(
-            new Point(400, 300),
-            new Point(600, 470)
+            new Point(425, 325), //x is across the screen
+            new Point(620, 450)
     );
 
     @Override
@@ -105,9 +105,9 @@ public class BluePropDetection implements VisionProcessor {
         averagedRightBoxBlue = rightBoxBlue / RIGHT_RECTANGLE.area() / 255; //Makes value [0,1]
 
 
-        if (averagedLeftBoxBlue > blueThreshold) {        //Must Tune Red Threshold
+        if (averagedLeftBoxRed > redThreshold) {        //Must Tune Red Threshold
             outStr = "left";
-        } else if (averagedRightBoxBlue > blueThreshold) {
+        } else if (averagedRightBoxRed > redThreshold) {
             outStr = "right";
         } else {
             outStr = "center";

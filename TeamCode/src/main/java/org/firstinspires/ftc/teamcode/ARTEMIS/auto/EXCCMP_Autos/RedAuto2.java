@@ -49,6 +49,8 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropLeft;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropRight;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.blueBackstage_StartPos;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.blueWings_StartPos;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.redBackstage_StartPos;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.redWings_StartPos;
 
@@ -99,8 +101,8 @@ public class RedAuto2 extends CommandOpMode {
 
     private Gamepad currentGamepad, previousGamepad;
 
-    private String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", parkIn = "center";
-    private boolean deliverYellow = true, cycle = false, wait = false;
+    private String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", parkIn = "center", alliance = "red";
+    private boolean park = true, deliverYellow = true, cycle = false, wait = false;
 
     private static TrajectorySequence
             StartToSpike, // both
@@ -135,6 +137,8 @@ public class RedAuto2 extends CommandOpMode {
         autoCommands = new SequentialCommandGroup();
         autoGenerator = new AutoGenerator2();
 
+        SampleMecanumDrive.flipPose = true;
+
         drive = new SampleMecanumDrive(hardwareMap);
         EXCCMP_AutoTrajectories.generateTrajectories(drive);
 
@@ -156,17 +160,17 @@ public class RedAuto2 extends CommandOpMode {
 //        wrist.tiltToIntake();
         launcher.latch();
 
-        drivetrain.setStartingOffsetDegs(270);
+//        drivetrain.setStartingOffsetDegs(90);
 //        drivetrain.setStartingError();
 
         webcam.setCamera("front");
-        webcam.setActiveProcessor("redProp");
+        webcam.setActiveProcessor("blueProp");
 
         telemetry.setMsTransmissionInterval(50);
 
         while (!isStarted() && !isStopRequested()) {
-//            telemetry.addData("avgLeftBox", "%.3f", webcam.getAvgLeftBoxRed());
-//            telemetry.addData("avgRightBox", "%.3f", webcam.getAvgRightBoxRed());
+            telemetry.addData("avgLeftBox", "%.3f", webcam.getAvgLeftBoxBlue());
+            telemetry.addData("avgRightBox", "%.3f", webcam.getAvgRightBoxBlue());
 
             telemetry.addData("raw imu degs: ", drivetrain.getRawYawDegrees());
             telemetry.addData("converted imu degs: ", drivetrain.getYawDegrees());
@@ -175,17 +179,50 @@ public class RedAuto2 extends CommandOpMode {
             currentGamepad.copy(gamepad1);
 
             // determine target backdrop tag
-            if (webcam.getPropPosition() == "left")
-                targetBackdropTag = tags.lookupTag(4);
-            else if (webcam.getPropPosition() == "right")
-                targetBackdropTag = tags.lookupTag(6);
-            else
-                targetBackdropTag = tags.lookupTag(5);
+            if (alliance == "red") {
+                if (webcam.getPropPosition() == "left")
+                    targetBackdropTag = tags.lookupTag(4);
+                else if (webcam.getPropPosition() == "right")
+                    targetBackdropTag = tags.lookupTag(6);
+                else
+                    targetBackdropTag = tags.lookupTag(5);
+            } else {
+                if (webcam.getPropPosition() == "left")
+                    targetBackdropTag = tags.lookupTag(1);
+                else if (webcam.getPropPosition() == "right")
+                    targetBackdropTag = tags.lookupTag(3);
+                else
+                    targetBackdropTag = tags.lookupTag(2);
+            }
             telemetry.addLine("target backdrop tag: " + targetBackdropTag.name);
 
             // red blue 🔵🟥
 
             //
+
+//            if(!SampleMecanumDrive.flipPose)
+//                telemetry.addLine("RIGHT | alliance: RED");
+//            else
+//                telemetry.addLine("RIGHT | alliance: BLUE");
+            telemetry.addData("RIGHT | alliance: ", alliance);
+            telemetry.addData("flipPose", SampleMecanumDrive.flipPose);
+            if (currentGamepad.dpad_right && !previousGamepad.dpad_right) {
+//                if (alliance != "red")
+//                    alliance = "red";
+//                else
+//                    alliance = "blue";
+                SampleMecanumDrive.flipPose = !SampleMecanumDrive.flipPose;
+                if (!SampleMecanumDrive.flipPose) // red
+                    webcam.setActiveProcessor("redProp");
+                else
+                    webcam.setActiveProcessor("blueProp");
+            }
+
+            if (!SampleMecanumDrive.flipPose) {
+                alliance = "red";
+            } else {
+                alliance = "blue";
+            }
 
             telemetry.addData("⬅️ LEFT | startingSide: ", startingSide);
             if (currentGamepad.dpad_left && !previousGamepad.dpad_left) {
@@ -199,7 +236,11 @@ public class RedAuto2 extends CommandOpMode {
             if (currentGamepad.dpad_up && !previousGamepad.dpad_up)
                 cycle = !cycle;
 
-            if (!cycle) {
+            telemetry.addData("A | park y/n: ", park);
+            if (currentGamepad.a && !previousGamepad.a)
+                park = !park;
+
+            if (park) {
                 telemetry.addData("X | park target: ", parkIn);
                 if (currentGamepad.x && !previousGamepad.x)
                     if (parkIn != "center")
@@ -212,8 +253,8 @@ public class RedAuto2 extends CommandOpMode {
             if (currentGamepad.b && !previousGamepad.b)
                 wait = !wait;
 
-            telemetry.addData("A | deliverYellow: ", deliverYellow);
-            if (currentGamepad.a && !previousGamepad.a)
+            telemetry.addData("BACK | deliverYellow: ", deliverYellow);
+            if (currentGamepad.back && !previousGamepad.back)
                 deliverYellow = !deliverYellow;
 
             telemetry.addData("Y | TRANSIT: ", transitVia);
@@ -231,34 +272,72 @@ public class RedAuto2 extends CommandOpMode {
                 else
                     cycleTarget = "backdrop";
 
+            if (alliance == "red")
+                drivetrain.setStartingOffsetDegs(270);
+            else
+                drivetrain.setStartingOffsetDegs(90);
+
             //determine trajectories
             if (startingSide.toLowerCase() == "wing") {
-                drive.setPoseEstimate(redWings_StartPos);
+                if (alliance == "red")
+                    drive.setPoseEstimate(redWings_StartPos);
+                else
+                    drive.setPoseEstimate(blueWings_StartPos);
 
                 //determine wing trajectories
                 if (webcam.getPropPosition() == "left") {
-                    StartToSpike = RedWings_StartToLeftSpike;
-                    SpikeToStack = RedWings_LeftSpikeToStack;
+                    if (alliance == "red") {
+                        StartToSpike = RedWings_StartToLeftSpike;
+                        SpikeToStack = RedWings_LeftSpikeToStack;
+                    } else {
+                        StartToSpike = RedWings_StartToRightSpike;
+                        SpikeToStack = RedWings_RightSpikeToStack;
+                    }
 
                     if (transitVia == "door") {
-                        BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropLeft;
-                        BackdropYellowSlotToWhiteSlot = Red_BackdropLeftToBackdropCenter;
+                        if (alliance == "red") {
+                            BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropLeft;
+                            BackdropYellowSlotToWhiteSlot = Red_BackdropLeftToBackdropCenter;
+                        } else {
+                            BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropRight;
+                            BackdropYellowSlotToWhiteSlot = Red_BackdropRightToBackdropCenter;
+                        }
                     } else {
-                        BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropLeft;
-                        BackdropYellowSlotToWhiteSlot = Red_BackdropLeftToBackdropRight;
+                        if (alliance == "red") {
+                            BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropLeft;
+                            BackdropYellowSlotToWhiteSlot = Red_BackdropLeftToBackdropRight;
+                        } else {
+                            BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropRight;
+                            BackdropYellowSlotToWhiteSlot = Red_BackdropRightToBackdropLeft;
+                        }
                     }
 
                     telemetry.addLine("left spike traj");
                 } else if (webcam.getPropPosition() == "right") {
-                    StartToSpike = RedWings_StartToRightSpike;
-                    SpikeToStack = RedWings_RightSpikeToStack;
+                    if (alliance == "red") {
+                        StartToSpike = RedWings_StartToRightSpike;
+                        SpikeToStack = RedWings_RightSpikeToStack;
+                    } else {
+                        StartToSpike = RedWings_StartToLeftSpike;
+                        SpikeToStack = RedWings_LeftSpikeToStack;
+                    }
 
                     if (transitVia == "door") {
-                        BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropRight;
-                        BackdropYellowSlotToWhiteSlot = Red_BackdropRightToBackdropLeft;
+                        if (alliance == "red") {
+                            BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropRight;
+                            BackdropYellowSlotToWhiteSlot = Red_BackdropRightToBackdropLeft;
+                        } else {
+                            BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropLeft;
+                            BackdropYellowSlotToWhiteSlot = Red_BackdropLeftToBackdropRight;
+                        }
                     } else {
-                        BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropRight;
-                        BackdropYellowSlotToWhiteSlot = Red_BackdropRightToBackdropCenter;
+                        if (alliance == "red") {
+                            BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropRight;
+                            BackdropYellowSlotToWhiteSlot = Red_BackdropRightToBackdropCenter;
+                        } else {
+                            BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropLeft;
+                            BackdropYellowSlotToWhiteSlot = Red_BackdropLeftToBackdropCenter;
+                        }
                     }
 
                     telemetry.addLine("right spike traj");
@@ -283,14 +362,24 @@ public class RedAuto2 extends CommandOpMode {
                     StackToStackWaypoint = RedWings_CenterStackToTrussWaypoint;
                 }
             } else { // starting in backstage
-                drive.setPoseEstimate(redBackstage_StartPos);
-                if (webcam.getPropPosition() == "left") {
-                    StartToSpike = RedBackstage_StartToLeftSpike;
-                    SpikeToBackdropYellow = RedBackstage_LeftSpikeToBackdropWaypoint;
-                    BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropLeft;
+                if (alliance == "red")
+                    drive.setPoseEstimate(redBackstage_StartPos);
+                else
+                    drive.setPoseEstimate(blueBackstage_StartPos);
 
-                    if(cycle){
-                        if(transitVia == "truss") {
+                if (webcam.getPropPosition() == "left") {
+                    if (alliance == "red") {
+                        StartToSpike = RedBackstage_StartToLeftSpike;
+                        SpikeToBackdropYellow = RedBackstage_LeftSpikeToBackdropWaypoint;
+                        BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropLeft;
+                    } else {
+                        StartToSpike = RedBackstage_StartToRightSpike;
+                        SpikeToBackdropYellow = RedBackstage_RightSpikeToBackdropWaypoint;
+                        BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropRight;
+                    }
+
+                    if (cycle) {
+                        if (transitVia == "truss") {
                             BackdropToBackdropWaypoint = Red_BackdropLeftToBackdropWaypointTruss;
 //                            BackdropWaypointToStackWaypoint =
                         }
@@ -299,36 +388,61 @@ public class RedAuto2 extends CommandOpMode {
                     }
 
 
-                    if(parkIn == "center")
-                        BackdropToPark = Red_BackdropLeftToCenterPark;
-                    else
-                        BackdropToPark = Red_BackdropLeftToCornerPark;
-
                     telemetry.addLine("left spike traj");
                 } else if (webcam.getPropPosition() == "right") {
-                    StartToSpike = RedBackstage_StartToRightSpike;
 //                    SpikeToBackdropYellow = RedBackstage_RightSpikeToBackdropRight;
-                    SpikeToBackdropYellow = RedBackstage_RightSpikeToBackdropWaypoint;
-                    BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropRight;
+                    if (alliance == "red") {
+                        StartToSpike = RedBackstage_StartToRightSpike;
+                        SpikeToBackdropYellow = RedBackstage_RightSpikeToBackdropWaypoint;
+                        BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropRight;
+                    } else {
+                        StartToSpike = RedBackstage_StartToLeftSpike;
+                        SpikeToBackdropYellow = RedBackstage_LeftSpikeToBackdropWaypoint;
+                        BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropLeft;
+                    }
 
-                    if(parkIn == "center")
-                        BackdropToPark = Red_BackdropRightToCenterPark;
-                    else
-                        BackdropToPark = Red_BackdropRightToCornerPark;
 
                     telemetry.addLine("right spike traj");
                 } else {
-                    StartToSpike = RedBackstage_StartToCenterSpike;
 //                    SpikeToBackdropYellow = RedBackstage_CenterSpikeToBackdropCenter;
+                    StartToSpike = RedBackstage_StartToCenterSpike;
                     SpikeToBackdropYellow = RedBackstage_CenterSpikeToBackdropWaypoint;
                     BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropCenter;
 
-                    if(parkIn == "center")
+                    telemetry.addLine("center spike traj");
+                }
+            }
+
+            if(park) {
+                if (webcam.getPropPosition() == "left") {
+                    if (parkIn == "center") {
+                        if (alliance == "red")
+                            BackdropToPark = Red_BackdropLeftToCenterPark;
+                        else
+                            BackdropToPark = Red_BackdropRightToCenterPark;
+                    } else {
+                        if (alliance == "red")
+                            BackdropToPark = Red_BackdropLeftToCornerPark;
+                        else
+                            BackdropToPark = Red_BackdropRightToCornerPark;
+                    }
+                } else if (webcam.getPropPosition() == "right") {
+                    if (parkIn == "center") {
+                        if (alliance == "red")
+                            BackdropToPark = Red_BackdropRightToCenterPark;
+                        else
+                            BackdropToPark = Red_BackdropLeftToCenterPark;
+                    } else {
+                        if (alliance == "red")
+                            BackdropToPark = Red_BackdropRightToCornerPark;
+                        else
+                            BackdropToPark = Red_BackdropLeftToCornerPark;
+                    }
+                } else {
+                    if (parkIn == "center")
                         BackdropToPark = Red_BackdropCenterToCenterPark;
                     else
                         BackdropToPark = Red_BackdropCenterToCornerPark;
-
-                    telemetry.addLine("center spike traj");
                 }
             }
 

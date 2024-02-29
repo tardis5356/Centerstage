@@ -4,6 +4,8 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
+
 
 public class Gripper extends SubsystemBase{
     private Servo sGR;
@@ -32,5 +34,18 @@ public class Gripper extends SubsystemBase{
 
     public void grabRight(){
         sGR.setPosition(BotPositions.GRIPPER_RIGHT_CLOSED);
+    }
+
+    public void purpleReleaseAuto() {
+        if(!SampleMecanumDrive.flipPose) //red
+            releaseLeft();
+        else // blue
+            releaseRight();
+    }
+    public void yellowReleaseAuto() {
+        if(!SampleMecanumDrive.flipPose) //red
+            releaseRight();
+        else // blue
+            releaseLeft();
     }
 }

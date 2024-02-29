@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.BluePropDetection;
-import org.firstinspires.ftc.teamcode.ARTEMIS.visionTesting.RedPropDetection;
+import org.firstinspires.ftc.teamcode.ARTEMIS.vision.BluePropDetection;
+import org.firstinspires.ftc.teamcode.ARTEMIS.vision.RedPropDetection;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -262,8 +262,8 @@ public class Webcams extends SubsystemBase {
 
     public double getAvgLeftBoxRed(){ return redPropThreshold.getAveragedLeftBoxRed(); }
     public double getAvgRightBoxRed(){ return redPropThreshold.getAveragedRightBoxRed(); }
-    public double getAvgLeftBoxBlue(){ return redPropThreshold.getAveragedLeftBoxBlue(); }
-    public double getAvgRightBoxBlue(){ return redPropThreshold.getAveragedRightBoxBlue(); }
+    public double getAvgLeftBoxBlue(){ return bluePropThreshold.getAveragedLeftBoxBlue(); }
+    public double getAvgRightBoxBlue(){ return bluePropThreshold.getAveragedRightBoxBlue(); }
 
     public String getActiveCamera() {
         return activeWebcam;

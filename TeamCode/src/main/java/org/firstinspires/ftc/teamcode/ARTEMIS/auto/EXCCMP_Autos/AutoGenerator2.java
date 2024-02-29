@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
 
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropCenterToCenterPark;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorBackdropTransitWaypointToBackdropCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.accelConstraint40in;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.velConstraint10in;
@@ -113,7 +114,8 @@ public class AutoGenerator2 {
                         )
                 ),
                 new WaitCommand(50),
-                new InstantCommand(gripper::releaseLeft),
+//                new InstantCommand(gripper::releaseLeft),
+                new InstantCommand(gripper::purpleReleaseAuto),
                 new WaitCommand(200)
         ));
 
@@ -129,7 +131,7 @@ public class AutoGenerator2 {
                     new ParallelCommandGroup(
                             new FollowTrajectoryCommand(drive, SpikeToStack),
                             new ParallelDeadlineGroup(
-                                    new WaitCommand(1500), //TODO: fix this bad command isFinished
+                                    new WaitCommand(2000), //TODO: fix this bad command isFinished
                                     new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds,
                                             "intakeNoRelease")
                             )
@@ -175,7 +177,7 @@ public class AutoGenerator2 {
                                 new SequentialCommandGroup(
                                         new WaitCommand(300),
                                         new InstantCommand(wrist::tiltToDeposit),
-                                        new InstantCommand(() -> wrist.setRollIndex(60)),
+                                        new InstantCommand(() -> wrist.setRollIndex(90)),
                                         new LiftToPositionCommand(lift, 250, 10)
                                 ),
                                 new SequentialCommandGroup(
@@ -194,7 +196,8 @@ public class AutoGenerator2 {
                         new SequentialCommandGroup( // turn bot around to align with backdrop
                                 new InstantCommand(arm::toDeposit),
                                 new InstantCommand(wrist::tiltToDeposit),
-                                new InstantCommand(() -> wrist.setRollIndex(90)),
+//                                new InstantCommand(() -> wrist.setRollIndex(90)),
+                                new InstantCommand(() -> wrist.rollToPurpleAuto()),
                                 new LiftToPositionCommand(lift, 250, 10),
                                 new FollowTrajectoryCommand(drive, SpikeToBackdropYellow),
                                 new InstantCommand(() -> leds.setLEDstate("red_scan")),
@@ -217,7 +220,8 @@ public class AutoGenerator2 {
              * end: yellow slot
              */
             autoCommands.addCommands(new SequentialCommandGroup(
-                    new InstantCommand(gripper::releaseRight), // drop yellow
+//                    new InstantCommand(gripper::releaseRight), // drop yellow
+                    new InstantCommand(gripper::yellowReleaseAuto), // drop yellow
                     new WaitCommand(150)
 //                    new InstantCommand(() -> { /** MOVE BOT TO HIGH DELVIERY POSITION */
 //                        BotPositions.ARM_HIGH_POSITION = true;
@@ -246,7 +250,7 @@ public class AutoGenerator2 {
                                 ),
                                 new FollowTrajectoryCommand(drive, BackdropYellowSlotToWhiteSlot)
                         ),
-                        new InstantCommand(gripper::releaseLeft),
+                        new InstantCommand(gripper::purpleReleaseAuto),
                         new WaitCommand(100)
                 ));
             }

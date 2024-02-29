@@ -4,6 +4,8 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
+
 public class Wrist extends SubsystemBase {
 
     //Create Servo objects
@@ -21,13 +23,13 @@ public class Wrist extends SubsystemBase {
     public void periodic() {
         switch (rollIndex){
             case -180:
-                sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg90_ROLL);
+                sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg180_ROLL);
                 break;
             case -150:
-                sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg90_ROLL);
+                sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg150_ROLL);
                 break;
             case -120:
-                sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg90_ROLL);
+                sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg120_ROLL);
                 break;
             case -90:
                 sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg90_ROLL);
@@ -52,13 +54,13 @@ public class Wrist extends SubsystemBase {
                 sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos90_ROLL);
                 break;
             case 120:
-                sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos90_ROLL);
+                sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos120_ROLL);
                 break;
             case 150:
-                sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos90_ROLL);
+                sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos150_ROLL);
                 break;
             case 180:
-                sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos90_ROLL);
+                sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos180_ROLL);
                 break;
         }
     }
@@ -103,6 +105,13 @@ public class Wrist extends SubsystemBase {
     public void rollToCentered() {
         rollIndex = 0;
 //        sGripperRoll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
+    }
+
+    public void rollToPurpleAuto(){
+        if(!SampleMecanumDrive.flipPose) //red
+            rollIndex = 90;
+        else
+            rollIndex = -90;
     }
 
 
