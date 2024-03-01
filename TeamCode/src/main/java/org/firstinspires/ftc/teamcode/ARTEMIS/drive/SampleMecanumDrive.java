@@ -59,7 +59,7 @@ import java.util.List;
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(13, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(10, 0, 0);
 
     public static boolean flipPose = false; // false if red, true if blue

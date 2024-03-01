@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
+package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Archive;
 
 
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.BlueBackstage_StartToOrigin;
@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories;
 import org.firstinspires.ftc.teamcode.ARTEMIS.auto.FollowTrajectoryCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;

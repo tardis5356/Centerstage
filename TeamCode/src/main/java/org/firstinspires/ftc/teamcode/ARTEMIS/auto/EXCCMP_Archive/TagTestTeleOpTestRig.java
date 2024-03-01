@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
+package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Archive;
 
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize6;
 

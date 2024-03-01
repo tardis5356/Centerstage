@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
 
 
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.DoorBackdropWaypointToStackWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.DoorStackWaypointToCenterStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.DoorStackWaypointToInnerStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.DoorStackWaypointToOuterStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_BackdropRelocWaypointToBackdropCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_BackdropRelocWaypointToBackdropLeft;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_BackdropRelocWaypointToBackdropRight;
@@ -19,7 +23,12 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToCenterSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToRightSpike;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropCenterToBackdropWaypointDoor;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropCenterToBackdropWaypointTruss;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropLeftToBackdropWaypointDoor;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropLeftToBackdropWaypointTruss;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropRightToBackdropWaypointDoor;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropRightToBackdropWaypointTruss;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorStackWaypointToBackdropWaypointViaDoorWait;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TrussStackWaypointToBackdropWaypointViaTruss;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TrussStackWaypointToBackdropWaypointViaTrussWait;
@@ -49,6 +58,10 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropLeft;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropRight;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.TrussBackdropWaypointToStackWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.TrussStackWaypointToCenterStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.TrussStackWaypointToInnerStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.TrussStackWaypointToOuterStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.blueBackstage_StartPos;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.blueWings_StartPos;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.redBackstage_StartPos;
@@ -81,7 +94,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 
 //@Disabled
 @Autonomous(group = "drive", name = "\uD83D\uDFE5 RedAuto2") // , preselectTeleOp="Gen1_TeleOp"
-public class RedAuto2 extends CommandOpMode {
+public class EXCCMP_Auto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
     private SampleMecanumDrive drive;
@@ -101,8 +114,8 @@ public class RedAuto2 extends CommandOpMode {
 
     private Gamepad currentGamepad, previousGamepad;
 
-    private String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", parkIn = "center", alliance = "red";
-    private boolean park = true, deliverYellow = true, cycle = false, wait = false;
+    public static String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", cycleVia = "door", targetStack = "center", parkIn = "center", alliance = "red";
+    public static boolean park = true, deliverYellow = true, cycle = false, wait = false;
 
     private static TrajectorySequence
             StartToSpike, // both
@@ -124,7 +137,7 @@ public class RedAuto2 extends CommandOpMode {
 
     private boolean commandsScheduled = false;
 
-    AutoGenerator2 autoGenerator;
+    AutoGenerator autoGenerator;
     private SequentialCommandGroup autoCommands;
 
     @Override
@@ -135,9 +148,9 @@ public class RedAuto2 extends CommandOpMode {
         MultipleTelemetry telemetry2 = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         autoCommands = new SequentialCommandGroup();
-        autoGenerator = new AutoGenerator2();
+        autoGenerator = new AutoGenerator();
 
-        SampleMecanumDrive.flipPose = true;
+        SampleMecanumDrive.flipPose = false;
 
         drive = new SampleMecanumDrive(hardwareMap);
         EXCCMP_AutoTrajectories.generateTrajectories(drive);
@@ -169,10 +182,10 @@ public class RedAuto2 extends CommandOpMode {
         telemetry.setMsTransmissionInterval(50);
 
         while (!isStarted() && !isStopRequested()) {
-            telemetry.addData("avgLeftBox", "%.3f", webcam.getAvgLeftBoxBlue());
-            telemetry.addData("avgRightBox", "%.3f", webcam.getAvgRightBoxBlue());
-
-            telemetry.addData("raw imu degs: ", drivetrain.getRawYawDegrees());
+//            telemetry.addData("avgLeftBox", "%.3f", webcam.getAvgLeftBoxBlue());
+//            telemetry.addData("avgRightBox", "%.3f", webcam.getAvgRightBoxBlue());
+//
+//            telemetry.addData("raw imu degs: ", drivetrain.getRawYawDegrees());
             telemetry.addData("converted imu degs: ", drivetrain.getYawDegrees());
 
             previousGamepad.copy(currentGamepad);
@@ -194,24 +207,45 @@ public class RedAuto2 extends CommandOpMode {
                 else
                     targetBackdropTag = tags.lookupTag(2);
             }
-            telemetry.addLine("target backdrop tag: " + targetBackdropTag.name);
 
             // red blue 🔵🟥
 
-            //
+            /*
+
+    Driver
+        Trigger Left -
+        Trigger Right -
+
+        Bumper Left - alliance
+        Bumper Right - startingSide
+
+        DPAD Up - targetStack
+        DPAD Right - cycleTarget
+        DPAD Down - transitVia
+        DPAD Left - cycleVia
+
+        Y/Tri - park
+        A/Cross - cycle
+        B/Circle - wait
+        X/square - parkIn
+
+        Back/Share - deliverYellow
+
+    public static String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", cycleVia = "door", targetStack = "center", parkIn = "center", alliance = "red";
+    public static boolean park = true, deliverYellow = true, cycle = false, wait = false;
+
+    Manipulator
+
+ */
 
 //            if(!SampleMecanumDrive.flipPose)
 //                telemetry.addLine("RIGHT | alliance: RED");
 //            else
 //                telemetry.addLine("RIGHT | alliance: BLUE");
-            telemetry.addData("RIGHT | alliance: ", alliance);
-            telemetry.addData("flipPose", SampleMecanumDrive.flipPose);
-            if (currentGamepad.dpad_right && !previousGamepad.dpad_right) {
-//                if (alliance != "red")
-//                    alliance = "red";
-//                else
-//                    alliance = "blue";
+            telemetry.addData("B-LEFT | alliance: ", alliance);
+            if (currentGamepad.left_bumper && !previousGamepad.left_bumper) {
                 SampleMecanumDrive.flipPose = !SampleMecanumDrive.flipPose;
+                EXCCMP_AutoTrajectories.generateTrajectories(drive);
                 if (!SampleMecanumDrive.flipPose) // red
                     webcam.setActiveProcessor("redProp");
                 else
@@ -230,6 +264,7 @@ public class RedAuto2 extends CommandOpMode {
                     startingSide = "wing";
                 else
                     startingSide = "backstage";
+                EXCCMP_AutoTrajectories.generateTrajectories(drive);
             }
 
             telemetry.addData("UP | cycle y/n: ", cycle);
@@ -263,6 +298,14 @@ public class RedAuto2 extends CommandOpMode {
                     transitVia = "door";
                 else
                     transitVia = "truss";
+            }
+
+            telemetry.addData("LEFT STICK BUTTON | CycleVia: ", cycleVia);
+            if (currentGamepad.left_stick_button && !previousGamepad.left_stick_button) {
+                if (cycleVia != "door")
+                    cycleVia = "door";
+                else
+                    cycleVia = "truss";
             }
 
             telemetry.addData("⬇️ DOWN | CYCLE TARGET: ", cycleTarget);
@@ -378,16 +421,6 @@ public class RedAuto2 extends CommandOpMode {
                         BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropRight;
                     }
 
-                    if (cycle) {
-                        if (transitVia == "truss") {
-                            BackdropToBackdropWaypoint = Red_BackdropLeftToBackdropWaypointTruss;
-//                            BackdropWaypointToStackWaypoint =
-                        }
-                    } else {
-
-                    }
-
-
                     telemetry.addLine("left spike traj");
                 } else if (webcam.getPropPosition() == "right") {
 //                    SpikeToBackdropYellow = RedBackstage_RightSpikeToBackdropRight;
@@ -413,7 +446,73 @@ public class RedAuto2 extends CommandOpMode {
                 }
             }
 
-            if(park) {
+            if (cycle) {
+                if (cycleTarget == "backdrop") {
+                    if (webcam.getPropPosition() == "right") {
+                        if (transitVia == "door")
+                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropLeft;
+                        else
+                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropCenter;
+                    } else if (webcam.getPropPosition() == "center") {
+                        if (transitVia == "door")
+                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropLeft;
+                        else
+                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropRight;
+                    } else {
+                        if (transitVia == "door")
+                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropCenter;
+                        else
+                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropRight;
+                    }
+                } else { //cycle target backstage
+                    if (transitVia == "door") {
+                        BackWaypointToBackstage = RedWings_TransitToBackstageViaDoor;
+                    } else {
+                        BackWaypointToBackstage = RedWings_TransitToBackstageViaTruss;
+                    }
+                }
+
+                if (webcam.getPropPosition() == "left") {
+                    if (transitVia == "truss") {
+                        BackdropToBackdropWaypoint = Red_BackdropLeftToBackdropWaypointTruss;
+                    } else
+                        BackdropToBackdropWaypoint = Red_BackdropLeftToBackdropWaypointDoor;
+                } else if (webcam.getPropPosition() == "right") {
+                    if (transitVia == "truss") {
+                        BackdropToBackdropWaypoint = Red_BackdropRightToBackdropWaypointTruss;
+                    } else
+                        BackdropToBackdropWaypoint = Red_BackdropRightToBackdropWaypointDoor;
+                } else {
+                    if (transitVia == "truss") {
+                        BackdropToBackdropWaypoint = Red_BackdropCenterToBackdropWaypointTruss;
+                    } else
+                        BackdropToBackdropWaypoint = Red_BackdropCenterToBackdropWaypointDoor;
+                }
+
+                if (cycleVia == "door") {
+                    BackdropWaypointToStackWaypoint = DoorBackdropWaypointToStackWaypoint;
+
+                    if (targetStack == "inner") {
+                        StackWaypointToStack = DoorStackWaypointToInnerStack;
+                    } else if (targetStack == "outer") {
+                        StackWaypointToStack = DoorStackWaypointToOuterStack;
+                    } else {
+                        StackWaypointToStack = DoorStackWaypointToCenterStack;
+                    }
+                } else {
+                    BackdropWaypointToStackWaypoint = TrussBackdropWaypointToStackWaypoint;
+
+                    if (targetStack == "inner") {
+                        StackWaypointToStack = TrussStackWaypointToInnerStack;
+                    } else if (targetStack == "outer") {
+                        StackWaypointToStack = TrussStackWaypointToOuterStack;
+                    } else {
+                        StackWaypointToStack = TrussStackWaypointToCenterStack;
+                    }
+                }
+            }
+
+            if (park) {
                 if (webcam.getPropPosition() == "left") {
                     if (parkIn == "center") {
                         if (alliance == "red")
@@ -477,14 +576,18 @@ public class RedAuto2 extends CommandOpMode {
                         StackWaypointToBackWaypoint = RedWings_TransitToBackstageViaTruss;
                 }
 
-                if (cycleTarget == "backdrop")
-                    BackdropWaypointToStackWaypoint = Red_BackdropToStackViaTruss;
-                else
-                    BackdropWaypointToStackWaypoint = Red_BackstageToStackViaTruss;
+//                if (cycleTarget == "backdrop")
+//                    BackdropWaypointToStackWaypoint = Red_BackdropToStackViaTruss;
+//                else
+//                    BackdropWaypointToStackWaypoint = Red_BackstageToStackViaTruss;
             }
 
+            telemetry.addLine();
             telemetry.addLine("waitForStart");
+            telemetry.addLine();
+            telemetry.addData("flipPose", SampleMecanumDrive.flipPose);
             telemetry.addData("Prop Position", webcam.getPropPosition());
+            telemetry.addLine("target backdrop tag: " + targetBackdropTag.name);
             telemetry.update();
             sleep(20);
         }
@@ -564,5 +667,9 @@ public class RedAuto2 extends CommandOpMode {
         }
 
         telemetry.update();
+    }
+
+    public static String getStartingSide() {
+        return startingSide;
     }
 }
