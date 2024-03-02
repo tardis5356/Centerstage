@@ -92,13 +92,23 @@ public class Wrist extends SubsystemBase {
         sGripperPitch.setPosition(BotPositions.WRIST_TILT_DROP_PURPLE);
     }
 
-    public void rollToLeft() {
+    public void rollToLeft30() {
         rollIndex+=30;
 //        sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos30_ROLL);
     }
 
-    public void rollToRight() {
+    public void rollToRight30() {
         rollIndex-=30;
+//        sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg30_ROLL);
+    }
+
+    public void rollToLeft60() {
+        rollIndex+=60;
+//        sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos30_ROLL);
+    }
+
+    public void rollToRight60() {
+        rollIndex-=60;
 //        sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg30_ROLL);
     }
 

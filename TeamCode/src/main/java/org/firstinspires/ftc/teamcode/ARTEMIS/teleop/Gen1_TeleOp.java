@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -199,6 +200,8 @@ public class Gen1_TeleOp extends CommandOpMode {
         launcher.latch();
 
         leds.setLEDstate("idle");
+        gamepad1.setLedColor(230, 0, 255, Gamepad.LED_DURATION_CONTINUOUS);
+        gamepad2.setLedColor(230, 0, 255, Gamepad.LED_DURATION_CONTINUOUS);
 /*
 
     Driver
@@ -439,10 +442,10 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         //triggers to roll wrist
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_RIGHT))
-                .whenActive(new InstantCommand(wrist::rollToRight));
+                .whenActive(new InstantCommand(wrist::rollToRight60));
 
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_LEFT))
-                .whenActive(new InstantCommand(wrist::rollToLeft));
+                .whenActive(new InstantCommand(wrist::rollToLeft60));
 
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_UP))
                 .whenActive(new InstantCommand(wrist::rollToCentered));

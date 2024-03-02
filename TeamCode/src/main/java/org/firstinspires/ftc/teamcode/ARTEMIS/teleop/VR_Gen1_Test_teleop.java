@@ -173,10 +173,10 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         //triggers to roll wrist
         new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
-                .whenActive(new InstantCommand(wrist::rollToRight));
+                .whenActive(new InstantCommand(wrist::rollToRight30));
 
         new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
-                .whenActive(new InstantCommand(wrist::rollToLeft));
+                .whenActive(new InstantCommand(wrist::rollToLeft30));
 
         new Trigger(() -> driver2.getButton(GamepadKeys.Button.DPAD_UP))
                 .whenActive(new InstantCommand(wrist::rollToCentered));

@@ -14,12 +14,12 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToCenterSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToRightSpike;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterSpikeToStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterSpikeToCenterStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterStackToDoorWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterStackToTrussWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_DoorStackWaypointToBackdropWaypointViaDoor;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_LeftSpikeToStack;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_RightSpikeToStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_LeftSpikeToCenterStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_RightSpikeToCenterStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToCenterSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToRightSpike;
@@ -48,10 +48,6 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropRightToBackdropLeft;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropRightToCenterPark;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropRightToCornerPark;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropToStackViaDoor;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropToStackViaTruss;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackstageToStackViaDoor;
-import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackstageToStackViaTruss;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorBackdropTransitWaypointToBackdropCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorBackdropTransitWaypointToBackdropLeft;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorBackdropTransitWaypointToBackdropRight;
@@ -114,8 +110,8 @@ public class EXCCMP_Auto extends CommandOpMode {
 
     private Gamepad currentGamepad, previousGamepad;
 
-    public static String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", cycleVia = "door", targetStack = "center", parkIn = "center", alliance = "red";
-    public static boolean park = true, deliverYellow = true, cycle = false, wait = false;
+    public static String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", cycleVia = "door", targetStack = "center", parkIn = "center", alliance = "blue";
+    public static boolean park = true, deliverYellow = true, cycle = true, wait = false;
 
     private static TrajectorySequence
             StartToSpike, // both
@@ -150,7 +146,7 @@ public class EXCCMP_Auto extends CommandOpMode {
         autoCommands = new SequentialCommandGroup();
         autoGenerator = new AutoGenerator();
 
-        SampleMecanumDrive.flipPose = false;
+        SampleMecanumDrive.flipPose = true;
 
         drive = new SampleMecanumDrive(hardwareMap);
         EXCCMP_AutoTrajectories.generateTrajectories(drive);
@@ -331,10 +327,10 @@ public class EXCCMP_Auto extends CommandOpMode {
                 if (webcam.getPropPosition() == "left") {
                     if (alliance == "red") {
                         StartToSpike = RedWings_StartToLeftSpike;
-                        SpikeToStack = RedWings_LeftSpikeToStack;
+                        SpikeToStack = RedWings_LeftSpikeToCenterStack;
                     } else {
                         StartToSpike = RedWings_StartToRightSpike;
-                        SpikeToStack = RedWings_RightSpikeToStack;
+                        SpikeToStack = RedWings_RightSpikeToCenterStack;
                     }
 
                     if (transitVia == "door") {
@@ -359,10 +355,10 @@ public class EXCCMP_Auto extends CommandOpMode {
                 } else if (webcam.getPropPosition() == "right") {
                     if (alliance == "red") {
                         StartToSpike = RedWings_StartToRightSpike;
-                        SpikeToStack = RedWings_RightSpikeToStack;
+                        SpikeToStack = RedWings_RightSpikeToCenterStack;
                     } else {
                         StartToSpike = RedWings_StartToLeftSpike;
-                        SpikeToStack = RedWings_LeftSpikeToStack;
+                        SpikeToStack = RedWings_LeftSpikeToCenterStack;
                     }
 
                     if (transitVia == "door") {
@@ -386,7 +382,7 @@ public class EXCCMP_Auto extends CommandOpMode {
                     telemetry.addLine("right spike traj");
                 } else {
                     StartToSpike = RedWings_StartToCenterSpike;
-                    SpikeToStack = RedWings_CenterSpikeToStack;
+                    SpikeToStack = RedWings_CenterSpikeToCenterStack;
 
                     if (transitVia == "door") {
                         BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropCenter;
@@ -559,10 +555,10 @@ public class EXCCMP_Auto extends CommandOpMode {
                         StackWaypointToBackWaypoint = RedWings_TransitToBackstageViaDoor;
                 }
 
-                if (cycleTarget == "backdrop")
-                    BackdropWaypointToStackWaypoint = Red_BackdropToStackViaDoor;
-                else
-                    BackdropWaypointToStackWaypoint = Red_BackstageToStackViaDoor;
+//                if (cycleTarget == "backdrop")
+//                    BackdropWaypointToStackWaypoint = Red_BackdropToStackViaDoor;
+//                else
+//                    BackdropWaypointToStackWaypoint = Red_BackstageToStackViaDoor;
             } else { // transiting via truss
                 if (wait)
                     if (deliverYellow)
