@@ -71,11 +71,29 @@ public class AutoGenerator {
         /**
          * general stack pickup sequence
          * */
-        class stackPickup extends SequentialCommandGroup {
+        class stackPickup extends ParallelCommandGroup {
             public stackPickup(Arm arm, Wrist wrist, Gripper gripper, Lift lift, Intake intake, Winch winch, LEDs leds) {
                 addCommands(
-                        new InstantCommand(intake::out),
-                        new InstantCommand(() -> leds.setLEDstate("intaking")),
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> leds.setLEDstate("intaking")),
+                                new InstantCommand(intake::in),
+                                new InstantCommand(intake::downThirdPixel),
+                                new WaitCommand(750),
+                                new InstantCommand(intake::downFifthPixel),
+                                new WaitCommand(500),
+                                new InstantCommand(intake::downThirdPixel),
+                                new WaitCommand(500),
+                                new InstantCommand(intake::out),
+                                new InstantCommand(intake::up),
+                                new WaitCommand(500),
+                                new InstantCommand(intake::in),
+                                new InstantCommand(intake::downFifthPixel),
+                                new WaitCommand(500),
+                                new InstantCommand(intake::out),
+                                new InstantCommand(intake::up)
+                        ),
+                        new FollowTrajectoryCommand(drive, StackToStackWaypoint)
+                        /*new InstantCommand(intake::out),
                         new InstantCommand(intake::downThirdPixel),
                         new WaitCommand(500),
 //                new InstantCommand(intake::downFifthPixel),
@@ -113,8 +131,7 @@ public class AutoGenerator {
                                         new InstantCommand(intake::up)
                                 ),
                                 new FollowTrajectoryCommand(drive, StackToStackWaypoint)
-                        )
-
+                        )*/
                 );
             }
         }
@@ -380,7 +397,7 @@ public class AutoGenerator {
                         ),
                         new InstantCommand(gripper::releaseLeft),
                         new InstantCommand(gripper::releaseRight),
-                        new WaitCommand(150)
+                        new WaitCommand(500)
                 ));
             }
 
@@ -400,9 +417,20 @@ public class AutoGenerator {
             ));
             //}
         } else {
-            autoCommands.addCommands(new SequentialCommandGroup(
-                    new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake")
-            ));
+            autoCommands.addCommands(
+//                    new ParallelCommandGroup(
+                    new SequentialCommandGroup(
+                            new WaitCommand(250),
+                            new InstantCommand(arm::toDepositHigh),
+                            new InstantCommand(wrist::tiltToDepositHigh),
+                            new WaitCommand(250),
+                            new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake")
+                    )//),
+//                    new ParallelDeadlineGroup(
+//                            new WaitCommand(500),
+//                            new FollowTrajectoryCommand(drive, BackdropToPark)
+//                    )
+            );
         }
         return autoCommands;
     }

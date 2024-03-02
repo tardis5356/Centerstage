@@ -15,11 +15,21 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToRightSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterSpikeToCenterStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterSpikeToInnerStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterSpikeToOuterStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterStackToDoorWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_CenterStackToTrussWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_DoorStackWaypointToBackdropWaypointViaDoor;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_InnerStackToDoorWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_InnerStackToTrussWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_LeftSpikeToCenterStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_LeftSpikeToInnerStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_LeftSpikeToOuterStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_OuterStackToDoorWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_OuterStackToTrussWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_RightSpikeToCenterStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_RightSpikeToInnerStack;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_RightSpikeToOuterStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToCenterSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_StartToRightSpike;
@@ -89,7 +99,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 
 //@Disabled
-@Autonomous(group = "drive", name = "\uD83D\uDFE5 RedAuto2") // , preselectTeleOp="Gen1_TeleOp"
+@Autonomous(group = "auto", name = "Champs Auto", preselectTeleOp="Gen1_TeleOp") // , preselectTeleOp="Gen1_TeleOp" //🟥
 public class EXCCMP_Auto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
@@ -110,7 +120,7 @@ public class EXCCMP_Auto extends CommandOpMode {
 
     private Gamepad currentGamepad, previousGamepad;
 
-    public static String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", cycleVia = "door", targetStack = "center", parkIn = "center", alliance = "blue";
+    public static String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", cycleVia = "door", targetStack = "center", parkIn = "center", alliance = "blue", yellowTo = "center";
     public static boolean park = true, deliverYellow = true, cycle = true, wait = false;
 
     private static TrajectorySequence
@@ -311,6 +321,24 @@ public class EXCCMP_Auto extends CommandOpMode {
                 else
                     cycleTarget = "backdrop";
 
+            telemetry.addData("RIGHTSTICK | TARGET STACK: ", targetStack);
+            if (currentGamepad.right_stick_button && !previousGamepad.right_stick_button)
+                if (targetStack == "inner")
+                    targetStack = "outer";
+                else if (targetStack == "outer")
+                    targetStack = "center";
+                else
+                    targetStack = "inner";
+
+            telemetry.addData("START | yellowTo: ", yellowTo);
+            if (currentGamepad.start && !previousGamepad.start)
+                if (yellowTo == "inner")
+                    yellowTo = "outer";
+                else if (yellowTo == "outer")
+                    yellowTo = "center";
+                else
+                    yellowTo = "inner";
+
             if (alliance == "red")
                 drivetrain.setStartingOffsetDegs(270);
             else
@@ -327,10 +355,25 @@ public class EXCCMP_Auto extends CommandOpMode {
                 if (webcam.getPropPosition() == "left") {
                     if (alliance == "red") {
                         StartToSpike = RedWings_StartToLeftSpike;
-                        SpikeToStack = RedWings_LeftSpikeToCenterStack;
+
+                        if (targetStack == "inner")
+                            SpikeToStack = RedWings_LeftSpikeToInnerStack;
+                        else if (targetStack == "outer")
+                            SpikeToStack = RedWings_LeftSpikeToOuterStack;
+                        else
+                            SpikeToStack = RedWings_LeftSpikeToCenterStack;
+
                     } else {
                         StartToSpike = RedWings_StartToRightSpike;
-                        SpikeToStack = RedWings_RightSpikeToCenterStack;
+                        //HERE
+
+                        if (targetStack == "inner")
+                            SpikeToStack = RedWings_RightSpikeToInnerStack;
+                        else if (targetStack == "outer")
+                            SpikeToStack = RedWings_RightSpikeToOuterStack;
+                        else
+                            SpikeToStack = RedWings_RightSpikeToCenterStack;
+
                     }
 
                     if (transitVia == "door") {
@@ -355,10 +398,23 @@ public class EXCCMP_Auto extends CommandOpMode {
                 } else if (webcam.getPropPosition() == "right") {
                     if (alliance == "red") {
                         StartToSpike = RedWings_StartToRightSpike;
-                        SpikeToStack = RedWings_RightSpikeToCenterStack;
+
+                        if (targetStack == "inner")
+                            SpikeToStack = RedWings_RightSpikeToInnerStack;
+                        else if (targetStack == "outer")
+                            SpikeToStack = RedWings_RightSpikeToOuterStack;
+                        else
+                            SpikeToStack = RedWings_RightSpikeToCenterStack;
                     } else {
                         StartToSpike = RedWings_StartToLeftSpike;
-                        SpikeToStack = RedWings_LeftSpikeToCenterStack;
+
+                        if (targetStack == "inner")
+                            SpikeToStack = RedWings_LeftSpikeToInnerStack;
+                        else if (targetStack == "outer")
+                            SpikeToStack = RedWings_LeftSpikeToOuterStack;
+                        else
+                            SpikeToStack = RedWings_LeftSpikeToCenterStack;
+//                        SpikeToStack = RedWings_LeftSpikeToCenterStack;
                     }
 
                     if (transitVia == "door") {
@@ -382,7 +438,12 @@ public class EXCCMP_Auto extends CommandOpMode {
                     telemetry.addLine("right spike traj");
                 } else {
                     StartToSpike = RedWings_StartToCenterSpike;
-                    SpikeToStack = RedWings_CenterSpikeToCenterStack;
+                    if (targetStack == "inner")
+                        SpikeToStack = RedWings_CenterSpikeToInnerStack;
+                    else if (targetStack == "outer")
+                        SpikeToStack = RedWings_CenterSpikeToOuterStack;
+                    else
+                        SpikeToStack = RedWings_CenterSpikeToCenterStack;
 
                     if (transitVia == "door") {
                         BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropCenter;
@@ -396,9 +457,24 @@ public class EXCCMP_Auto extends CommandOpMode {
                 }
 
                 if (transitVia == "door") {
-                    StackToStackWaypoint = RedWings_CenterStackToDoorWaypoint;
+//                    StackToStackWaypoint = RedWings_CenterStackToDoorWaypoint;
+                    if (targetStack == "inner") {
+                        StackToStackWaypoint = RedWings_InnerStackToDoorWaypoint;
+                    } else if (targetStack == "outer") {
+                        StackToStackWaypoint = RedWings_OuterStackToDoorWaypoint;
+                    } else {
+                        StackToStackWaypoint = RedWings_CenterStackToDoorWaypoint;
+                    }
                 } else {
-                    StackToStackWaypoint = RedWings_CenterStackToTrussWaypoint;
+//                    StackToStackWaypoint = RedWings_CenterStackToTrussWaypoint;
+
+                    if (targetStack == "inner") {
+                        StackToStackWaypoint = RedWings_InnerStackToTrussWaypoint;
+                    } else if (targetStack == "outer") {
+                        StackToStackWaypoint = RedWings_OuterStackToTrussWaypoint;
+                    } else {
+                        StackToStackWaypoint = RedWings_CenterStackToTrussWaypoint;
+                    }
                 }
             } else { // starting in backstage
                 if (alliance == "red")
@@ -445,20 +521,20 @@ public class EXCCMP_Auto extends CommandOpMode {
             if (cycle) {
                 if (cycleTarget == "backdrop") {
                     if (webcam.getPropPosition() == "right") {
-                        if (transitVia == "door")
-                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropLeft;
-                        else
-                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropCenter;
+//                        if (transitVia == "door")
+//                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropLeft;
+//                        else
+                        BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropCenter;
                     } else if (webcam.getPropPosition() == "center") {
                         if (transitVia == "door")
                             BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropLeft;
                         else
                             BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropRight;
                     } else {
-                        if (transitVia == "door")
-                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropCenter;
-                        else
-                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropRight;
+//                        if (transitVia == "door")
+                        BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropCenter;
+//                        else
+//                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropRight;
                     }
                 } else { //cycle target backstage
                     if (transitVia == "door") {
@@ -490,20 +566,26 @@ public class EXCCMP_Auto extends CommandOpMode {
 
                     if (targetStack == "inner") {
                         StackWaypointToStack = DoorStackWaypointToInnerStack;
+                        StackToStackWaypoint = RedWings_InnerStackToDoorWaypoint;
                     } else if (targetStack == "outer") {
                         StackWaypointToStack = DoorStackWaypointToOuterStack;
+                        StackToStackWaypoint = RedWings_OuterStackToDoorWaypoint;
                     } else {
                         StackWaypointToStack = DoorStackWaypointToCenterStack;
+                        StackToStackWaypoint = RedWings_CenterStackToDoorWaypoint;
                     }
                 } else {
                     BackdropWaypointToStackWaypoint = TrussBackdropWaypointToStackWaypoint;
 
                     if (targetStack == "inner") {
                         StackWaypointToStack = TrussStackWaypointToInnerStack;
+                        StackToStackWaypoint = RedWings_InnerStackToTrussWaypoint;
                     } else if (targetStack == "outer") {
                         StackWaypointToStack = TrussStackWaypointToOuterStack;
+                        StackToStackWaypoint = RedWings_OuterStackToTrussWaypoint;
                     } else {
                         StackWaypointToStack = TrussStackWaypointToCenterStack;
+                        StackToStackWaypoint = RedWings_CenterStackToTrussWaypoint;
                     }
                 }
             }

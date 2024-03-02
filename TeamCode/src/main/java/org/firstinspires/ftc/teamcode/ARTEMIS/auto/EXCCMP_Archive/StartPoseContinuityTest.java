@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.auto.FollowTrajectoryCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;
 
-//@Disabled
+@Disabled
 @Autonomous(group = "drive", name = "StartPoseContinuityTest")
 public class StartPoseContinuityTest extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
