@@ -123,6 +123,8 @@ public class EXCCMP_Auto extends CommandOpMode {
     public static String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", cycleVia = "door", targetStack = "center", parkIn = "center", alliance = "blue", yellowTo = "center";
     public static boolean park = true, deliverYellow = true, cycle = true, wait = false;
 
+    //2*2*2*2*3*3*2*3*2*2*2*2
+
     private static TrajectorySequence
             StartToSpike, // both
             SpikeToStack, // wing

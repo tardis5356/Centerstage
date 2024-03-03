@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.DemoBots.optimus;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+@Disabled
 @TeleOp(name="Optimus_Centerstage_TeleOp", group="demo")
 public class Optimus_CenterStage extends LinearOpMode{
 

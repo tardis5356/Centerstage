@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.Optimus_subsystems.OptimusDrive;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusTurnIMUCo
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusTurnLeftCommand;
 import org.firstinspires.ftc.teamcode.DemoBots.optimus.commands.OptimusTurnRightCommand;
 
+@Disabled
 @Autonomous(name = "OptimusAuto", group="demo")
 public class OptimusCampTardisAuto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();

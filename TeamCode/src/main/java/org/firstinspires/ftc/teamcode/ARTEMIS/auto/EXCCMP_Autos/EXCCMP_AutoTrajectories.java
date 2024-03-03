@@ -256,7 +256,7 @@ public class EXCCMP_AutoTrajectories {
                 .build();//-49 x
         // red door stack transit waypoint to backdrop transit waypoint
         Red_DoorStackWaypointToBackdropWaypointViaDoorWait = drive.trajectorySequenceBuilder(RedWings_CenterStackToDoorWaypoint.end())
-                .waitSeconds(10)
+                .waitSeconds(7)
                 .lineToLinearHeading(new Pose2d(-18, 11, Math.toRadians(0)))
                 .splineToSplineHeading(Red_DoorBackdropTransitWaypoint, Math.toRadians(140))
                 .build();
@@ -266,7 +266,7 @@ public class EXCCMP_AutoTrajectories {
                 .splineToSplineHeading(Red_TrussBackdropTransitWaypoint, Math.toRadians(220))
                 .build();
         RedWings_TrussStackWaypointToBackdropWaypointViaTrussWait = drive.trajectorySequenceBuilder(RedWings_CenterStackToTrussWaypoint.end())
-                .waitSeconds(10)
+                .waitSeconds(7)
                 .lineToLinearHeading(new Pose2d(-18, 59, Math.toRadians(0)))
                 .splineToSplineHeading(Red_TrussBackdropTransitWaypoint, Math.toRadians(220))
                 .build();
@@ -430,7 +430,7 @@ public class EXCCMP_AutoTrajectories {
                 .lineToLinearHeading(Red_CenterParkOffsetPos)
                 .build();
         RedWings_TransitToBackstageViaDoorWait = drive.trajectorySequenceBuilder(RedWings_CenterStackToDoorWaypoint.end())
-                .waitSeconds(10)
+                .waitSeconds(7)
                 .lineToLinearHeading(Red_CenterParkOffsetPos)
                 .build();
 
@@ -438,7 +438,7 @@ public class EXCCMP_AutoTrajectories {
                 .lineToLinearHeading(Red_CornerParkOffsetPos)
                 .build();
         RedWings_TransitToBackstageViaTrussWait = drive.trajectorySequenceBuilder(RedWings_CenterStackToTrussWaypoint.end())
-                .waitSeconds(10)
+                .waitSeconds(7)
                 .lineToLinearHeading(Red_CornerParkOffsetPos)
                 .build();
 

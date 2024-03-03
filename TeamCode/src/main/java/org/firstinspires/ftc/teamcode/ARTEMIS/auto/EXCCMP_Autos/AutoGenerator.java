@@ -89,8 +89,10 @@ public class AutoGenerator {
                                 new InstantCommand(intake::in),
                                 new InstantCommand(intake::downFifthPixel),
                                 new WaitCommand(500),
-                                new InstantCommand(intake::out),
-                                new InstantCommand(intake::up)
+                                new InstantCommand(intake::up),
+                                new WaitCommand(500),
+                                new InstantCommand(intake::out)//,
+//                                new InstantCommand(intake::up)
                         ),
                         new FollowTrajectoryCommand(drive, StackToStackWaypoint)
                         /*new InstantCommand(intake::out),
@@ -194,15 +196,16 @@ public class AutoGenerator {
 
                     new ParallelCommandGroup(
                             new InstantCommand(() -> leds.setLEDstate("yellow")),
-//                            new SequentialCommandGroup(
-                            new InstantCommand(gripper::grabLeft),
-                            new InstantCommand(gripper::grabRight),
-                            new InstantCommand(arm::toTransition),
-                            new InstantCommand(wrist::toTransition),
+                            new SequentialCommandGroup(
+                                    new InstantCommand(gripper::grabLeft),
+                                    new InstantCommand(gripper::grabRight),
+                                    new WaitCommand(300),
+                                    new InstantCommand(arm::toTransition),
+                                    new InstantCommand(wrist::toTransition)
 //                                    new InstantCommand(intake::up),
 //                                    new WaitCommand(150),
 //                                    new InstantCommand(intake::out)
-//                            ),
+                            ),
                             new FollowTrajectoryCommand(drive, StackWaypointToBackWaypoint),
                             new SequentialCommandGroup(
                                     new WaitCommand(1000),
