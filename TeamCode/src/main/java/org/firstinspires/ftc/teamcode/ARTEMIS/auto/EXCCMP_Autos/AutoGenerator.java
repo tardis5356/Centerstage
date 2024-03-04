@@ -169,7 +169,7 @@ public class AutoGenerator {
                 new WaitCommand(50),
 //                new InstantCommand(gripper::releaseLeft),
                 new InstantCommand(gripper::purpleReleaseAuto),
-                new WaitCommand(200)
+                new WaitCommand(500)
         ));
 
         // get extra pixel on first cycle (start: spike, end: back)

@@ -21,6 +21,11 @@ public class Wrist extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if(rollIndex > 180)
+            rollIndex = -180;
+        else if(rollIndex < -180)
+            rollIndex = 180;
+
         switch (rollIndex){
             case -180:
                 sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg180_ROLL);
@@ -121,8 +126,14 @@ public class Wrist extends SubsystemBase {
         if(!SampleMecanumDrive.flipPose) //red
             rollIndex = 60; //90
         else
-            rollIndex = -90;
+            rollIndex = -60;
     }
 
+//    public void rollToYellowAuto(){
+//        if(!SampleMecanumDrive.flipPose) //red
+//            rollIndex = 60; //90
+//        else
+//            rollIndex = -90;
+//    }
 
 }
