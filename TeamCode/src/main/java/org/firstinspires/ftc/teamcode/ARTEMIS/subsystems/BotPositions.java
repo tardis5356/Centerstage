@@ -15,7 +15,20 @@ public class BotPositions {
     public static double LEFT_BRACE_EXTENDED = 0.69, RIGHT_BRACE_EXTENDED = 0.68, RIGHT_BRACE_RETRACTED = 0.92, LEFT_BRACE_OVEREXTENDED = 0.28, RIGHT_BRACE_OVEREXTENDED = 0.35;
 
     //intake powers and positions
-    public static double INTAKE_MOTOR_INWARD_POWER = 1, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.25, INTAKE_MOTOR_OUTWARD_POWER_SUPER_SLOW = -.2;
+    public static double INTAKE_MOTOR_INWARD_POWER = 0.8, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.25, INTAKE_MOTOR_OUTWARD_POWER_SUPER_SLOW = -.2;
+
+    // TORQUE POSITTIOOUNS
+    public static double
+            INTAKE_DOWN_TELEOP = 0.45,
+            INTAKE_DOWN_FIRST_PIXEL = 0.25,
+            INTAKE_DOWN_SECOND_PIXEL = 0.3,
+            INTAKE_DOWN_THIRD_PIXEL = 0.35,
+            INTAKE_DOWN_FOURTH_PIXEL = 0.4,
+            INTAKE_DOWN_FIFTH_PIXEL = 0.45,
+            INTAKE_UP = 0.16; // torque: 0.5 down, 0.25 up // 0.65
+
+    /*
+    // SAVOX POSITTIOOUNS
     public static double
             INTAKE_DOWN_TELEOP = 0.2,
             INTAKE_DOWN_FIRST_PIXEL = 0.39,
@@ -24,6 +37,7 @@ public class BotPositions {
             INTAKE_DOWN_FOURTH_PIXEL = 0.3,
             INTAKE_DOWN_FIFTH_PIXEL = 0.25,
             INTAKE_UP = 0.67; // torque: 0.5 down, 0.25 up // 0.65
+     */
 
 
     //gripper positions
