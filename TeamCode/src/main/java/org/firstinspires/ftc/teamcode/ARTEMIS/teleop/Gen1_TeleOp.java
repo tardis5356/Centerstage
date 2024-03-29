@@ -24,6 +24,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ARTEMIS.commands.WinchLatchCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.intakeCommands.IntakeInCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.intakeCommands.IntakeOutCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.LiftToPositionCommand;
@@ -196,7 +197,7 @@ public class Gen1_TeleOp extends CommandOpMode {
         wrist.rollToCentered();
         intake.up();
         intake.disableLEDs();
-        winch.retractBraces();
+//        winch.retractBraces();
         launcher.latch();
 
         leds.setLEDstate("idle");
@@ -246,12 +247,18 @@ public class Gen1_TeleOp extends CommandOpMode {
                 .whenActive(launcher::unlatch)
                 .whenInactive(launcher::latch);
 
+//        new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON))
+//                .whenActive(robotAlignToTagTest)
+//                .whenActive(() -> {
+//                    aTagHomingActive = true;
+//                })
+//                .whenInactive(() -> aTagHomingActive = false);
+
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON))
-                .whenActive(robotAlignToTagTest)
-                .whenActive(() -> {
-                    aTagHomingActive = true;
-                })
-                .whenInactive(() -> aTagHomingActive = false);
+                .whenActive(new WinchLatchCommand(winch));
+
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON))
+                .whenActive(new WinchDeployCommand(winch));
 
         //button map intake commands
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.15 || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.15)
@@ -304,18 +311,17 @@ public class Gen1_TeleOp extends CommandOpMode {
                 .cancelWhenActive(robotToIntakeCommand);
 
         //button map winch commands
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))
-                .whenActive(new InstantCommand(winch::extendBraces));
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
+                .whenActive(new InstantCommand(winch::unlatchHook))
+                .whenInactive(new InstantCommand(winch::latchHook));
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))
                 .toggleWhenActive(winchPullUpCommand, new InstantCommand(winch::stopWinch));
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_RIGHT))
                 .toggleWhenActive(() -> mW.setPower(-BotPositions.WINCH_MOTOR_POWER), () -> mW.setPower(0)); //, () -> mW.setPower(BotPositions.WINCH_MOTOR_POWER)
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
-                .whenActive(new SequentialCommandGroup(
-                        new InstantCommand(winch::overextendBraces)//,
-//                        new WaitCommand(1000),
-//                        new InstantCommand(winch::disablePWM)
-                ));
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))
+//                .whenActive(new InstantCommand(winch::unlatchHook))
+//                .whenInactive(new InstantCommand(winch::latchHook));
+                .whenActive(winchDeployCommand);
 
         // ORIGINALLY new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
 //        new Trigger(() -> driver1.getButton(GamepadKeys.Button.BACK))

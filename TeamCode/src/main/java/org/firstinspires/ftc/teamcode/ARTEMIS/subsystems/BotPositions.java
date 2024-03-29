@@ -12,20 +12,31 @@ public class BotPositions {
     public static double WINCH_MOTOR_POWER = 0.8, WINCH_SERVO_DEPLOYED = 0.35, WINCH_SERVO_RETRACTED = 0.6;
 
     //brace positions
-    public static double LEFT_BRACE_EXTENDED = 0.69, RIGHT_BRACE_EXTENDED = 0.68, RIGHT_BRACE_RETRACTED = 0.92, LEFT_BRACE_OVEREXTENDED = 0.28, RIGHT_BRACE_OVEREXTENDED = 0.35;
+//    public static double LEFT_BRACE_EXTENDED = 0.69, RIGHT_BRACE_EXTENDED = 0.68, RIGHT_BRACE_RETRACTED = 0.92, LEFT_BRACE_OVEREXTENDED = 0.28, RIGHT_BRACE_OVEREXTENDED = 0.35;
+    public static  double BAR_LATCHED = 0.713                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             , BAR_UNLATCHED = 0.5, HOOK_LATCHED = 0.7, HOOK_UNLATCHED = 0.3;
 
     //intake powers and positions
-    public static double INTAKE_MOTOR_INWARD_POWER = 0.8, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.25, INTAKE_MOTOR_OUTWARD_POWER_SUPER_SLOW = -.2;
+    public static double INTAKE_MOTOR_INWARD_POWER = 1.0, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.25, INTAKE_MOTOR_OUTWARD_POWER_SUPER_SLOW = -.2;
 
     // TORQUE POSITTIOOUNS
     public static double
-            INTAKE_DOWN_TELEOP = 0.45,
+            INTAKE_DOWN_TELEOP = 0.48,
             INTAKE_DOWN_FIRST_PIXEL = 0.25,
             INTAKE_DOWN_SECOND_PIXEL = 0.3,
             INTAKE_DOWN_THIRD_PIXEL = 0.35,
             INTAKE_DOWN_FOURTH_PIXEL = 0.4,
             INTAKE_DOWN_FIFTH_PIXEL = 0.45,
-            INTAKE_UP = 0.16; // torque: 0.5 down, 0.25 up // 0.65
+            INTAKE_UP = 0.3; // torque: 0.5 down, 0.25 up // 0.65  //0.25
+
+    // TORQUE SHORT BAR POSITTIOOUNS
+    /*public static double
+            INTAKE_DOWN_TELEOP = 0.42,
+            INTAKE_DOWN_FIRST_PIXEL = 0.25,
+            INTAKE_DOWN_SECOND_PIXEL = 0.3,
+            INTAKE_DOWN_THIRD_PIXEL = 0.35,
+            INTAKE_DOWN_FOURTH_PIXEL = 0.4,
+            INTAKE_DOWN_FIFTH_PIXEL = 0.45,
+            INTAKE_UP = 0.16; // torque: 0.5 down, 0.25 up // 0.65*/
 
     /*
     // SAVOX POSITTIOOUNS

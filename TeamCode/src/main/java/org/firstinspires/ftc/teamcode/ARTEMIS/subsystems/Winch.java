@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.ARTEMIS.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.hardware.ServoEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -15,15 +14,15 @@ public class Winch extends SubsystemBase {
     //includes the winch motor, servo, and brace servos
     private DcMotor mWinch;
     private Servo sWinch;
-    private ServoImplEx sBraceL;
-    private ServoImplEx sBraceR;
+    private ServoImplEx sBarDeploy;
+    private ServoImplEx sHookDeploy;
 
     //hardwaremap the above objects to their physical counterparts
     public Winch(HardwareMap hardwareMap) {
         mWinch = hardwareMap.get(DcMotor.class, "mW");
 //        sWinch = hardwareMap.get(Servo.class, "sW");
-        sBraceL = hardwareMap.get(ServoImplEx.class, "sBL");
-        sBraceR = hardwareMap.get(ServoImplEx.class, "sBR");
+        sBarDeploy = hardwareMap.get(ServoImplEx.class, "sBD"); // sBD, 5 on control hub
+        sHookDeploy = hardwareMap.get(ServoImplEx.class, "sHD"); // sHD, 4 on control hub
     }
 
     @Override
@@ -39,38 +38,36 @@ public class Winch extends SubsystemBase {
 //    }
 
     //deploys the braces
-    public void extendBraces() {
-        sBraceL.setPosition(BotPositions.LEFT_BRACE_EXTENDED);
-        sBraceR.setPosition(BotPositions.RIGHT_BRACE_EXTENDED);
+    public void unlatchBar() {
+        sBarDeploy.setPosition(BotPositions.BAR_UNLATCHED);
     }
-    public void overextendBraces() {
-        sBraceL.setPosition(BotPositions.LEFT_BRACE_OVEREXTENDED);
-        sBraceR.setPosition(BotPositions.RIGHT_BRACE_OVEREXTENDED);
+
+    public void latchBar() {
+        sBarDeploy.setPosition(BotPositions.BAR_LATCHED);
+    }
+
+    public void unlatchHook() {
+        sHookDeploy.setPosition(BotPositions.HOOK_UNLATCHED);
+    }
+
+    public void latchHook() {
+        sHookDeploy.setPosition(BotPositions.HOOK_LATCHED);
     }
 
     public void disablePWM() {
-        sBraceL.setPwmDisable();
-        sBraceR.setPwmDisable();
+        sBarDeploy.setPwmDisable();
+        sHookDeploy.setPwmDisable();
     }
 
     public void enablePWM() {
-        sBraceL.setPwmEnable();
-        sBraceR.setPwmEnable();
+        sBarDeploy.setPwmEnable();
+        sHookDeploy.setPwmEnable();
     }
 
-    public void retractBraces() {
-        sBraceR.setPosition(BotPositions.RIGHT_BRACE_RETRACTED);
-    }
-
-    //retracts the scissor lift
-//    public void retractScissor() {
-//        sWinch.setPosition(BotPositions.WINCH_SERVO_RETRACTED);
-//    }
-
-    //actually lifts the bot. pls work
     public void liftRobot() {
         mWinch.setPower(BotPositions.WINCH_MOTOR_POWER);
     }
+
     public void stopWinch() {
         mWinch.setPower(0);
     }
