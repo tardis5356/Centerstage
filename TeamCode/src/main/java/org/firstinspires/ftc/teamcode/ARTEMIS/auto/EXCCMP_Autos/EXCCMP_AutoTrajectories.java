@@ -13,6 +13,13 @@ public class EXCCMP_AutoTrajectories {
     // blue cycle emojis \uD83D\uDFE6
     // red cycle emojis \uD83D\uDFE5
 
+    /*
+    public static double MAX_VEL = 52.48291908330528;
+    public static double MAX_ACCEL = 52.48291908330528;
+    public static double MAX_ANG_VEL = Math.toRadians(167.05832);
+    public static double MAX_ANG_ACCEL = Math.toRadians(167.05832);
+ */
+
     public static final TrajectoryVelocityConstraint
             velConstraint70in = SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),//70
             velConstraint55in = SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
@@ -43,7 +50,7 @@ public class EXCCMP_AutoTrajectories {
     public static Pose2d startPose;
 
     // RED
-    public static final Pose2d Red_InnerStackPos = new Pose2d(56, 12, Math.toRadians(0)); //originally x=58
+    public static final Pose2d Red_InnerStackPos = new Pose2d(55, 12, Math.toRadians(0)); //originally x=58
     public static final Pose2d Red_CenterStackPos = new Pose2d(56, 24, Math.toRadians(0));
     public static final Pose2d Red_OuterStackPos = new Pose2d(56, 36, Math.toRadians(0));
     public static final double cycleStackPos = 58;
@@ -209,12 +216,12 @@ public class EXCCMP_AutoTrajectories {
                 .lineTo(Red_DoorStackTransitWaypoint.vec())
                 .build();
         RedWings_InnerStackToDoorWaypoint = drive.trajectorySequenceBuilder(RedWings_CenterSpikeToInnerStack.end()) /**no fixed start pos**/
-                .forward(1, velConstraint20in, accelConstraint40in)
-                .waitSeconds(0.5)
-                .back(3, velConstraint20in, accelConstraint40in)
-                .waitSeconds(1)
-                .forward(4)
-                .back(4)
+//                .forward(1, velConstraint20in, accelConstraint40in)
+//                .waitSeconds(0.5)
+//                .back(3, velConstraint20in, accelConstraint40in)
+//                .waitSeconds(1)
+//                .forward(4)
+//                .back(4)
 //                .back(0.01)
                 .lineTo(Red_DoorStackTransitWaypoint.vec())
                 .build();

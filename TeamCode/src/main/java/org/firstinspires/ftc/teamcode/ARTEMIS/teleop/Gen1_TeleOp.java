@@ -312,16 +312,18 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         //button map winch commands
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
-                .whenActive(new InstantCommand(winch::unlatchHook))
-                .whenInactive(new InstantCommand(winch::latchHook));
+//                .whenActive(new InstantCommand(winch::unlatchHook))
+//                .whenInactive(new InstantCommand(winch::latchHook));
+                .whenActive(new InstantCommand(winch::unlatchBar))
+                .whenInactive(new InstantCommand(winch::latchBar));
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))
                 .toggleWhenActive(winchPullUpCommand, new InstantCommand(winch::stopWinch));
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_RIGHT))
                 .toggleWhenActive(() -> mW.setPower(-BotPositions.WINCH_MOTOR_POWER), () -> mW.setPower(0)); //, () -> mW.setPower(BotPositions.WINCH_MOTOR_POWER)
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))
-//                .whenActive(new InstantCommand(winch::unlatchHook))
-//                .whenInactive(new InstantCommand(winch::latchHook));
-                .whenActive(winchDeployCommand);
+                .whenActive(new InstantCommand(winch::unlatchHook))
+                .whenInactive(new InstantCommand(winch::latchHook));
+//                .whenActive(winchDeployCommand);
 
         // ORIGINALLY new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
 //        new Trigger(() -> driver1.getButton(GamepadKeys.Button.BACK))

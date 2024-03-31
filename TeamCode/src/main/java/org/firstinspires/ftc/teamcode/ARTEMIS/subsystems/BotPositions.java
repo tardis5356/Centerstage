@@ -21,7 +21,7 @@ public class BotPositions {
     // TORQUE POSITTIOOUNS
     public static double
             INTAKE_DOWN_TELEOP = 0.48,
-            INTAKE_DOWN_FIRST_PIXEL = 0.25,
+            INTAKE_DOWN_FIRST_PIXEL = 0.38,
             INTAKE_DOWN_SECOND_PIXEL = 0.3,
             INTAKE_DOWN_THIRD_PIXEL = 0.35,
             INTAKE_DOWN_FOURTH_PIXEL = 0.4,

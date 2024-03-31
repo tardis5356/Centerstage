@@ -120,8 +120,8 @@ public class EXCCMP_Auto extends CommandOpMode {
 
     private Gamepad currentGamepad, previousGamepad;
 
-    public static String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", cycleVia = "door", targetStack = "center", parkIn = "center", alliance = "blue", yellowTo = "center";
-    public static boolean park = true, deliverYellow = true, cycle = true, wait = false;
+    public static String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", cycleVia = "door", targetStack = "inner", parkIn = "center", alliance = "red", yellowTo = "center";
+    public static boolean park = false, deliverYellow = true, cycle = true, wait = false;
 
     //2*2*2*2*3*3*2*3*2*2*2*2
 
