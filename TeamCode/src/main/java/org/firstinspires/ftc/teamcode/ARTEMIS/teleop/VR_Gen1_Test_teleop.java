@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.commands.intakeCommands.IntakeInCo
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.intakeCommands.IntakeOutCommand;
 
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Winch;
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.WinchDeployCommand;
+import org.firstinspires.ftc.teamcode.ARTEMIS.commands.HookDeployCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.WinchPullUpCommand;
 
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Lift;
@@ -55,7 +55,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
     //winch and winch commands
     private Winch winch;
-    private WinchDeployCommand winchDeployCommand;
+    private HookDeployCommand hookDeployCommand;
     private WinchPullUpCommand winchPullUpCommand;
 
     //lift and lift coms
@@ -90,7 +90,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         //init winch stuff
         winch = new Winch(hardwareMap);
-        winchDeployCommand = new WinchDeployCommand(winch);
+        hookDeployCommand = new HookDeployCommand(winch);
         winchPullUpCommand = new WinchPullUpCommand(winch);
 
         //init lift stuff
@@ -119,7 +119,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         //button map winch commands
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))// && gametime.seconds() > 90)
-                .whenActive(winchDeployCommand);
+                .whenActive(hookDeployCommand);
 
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))// && gametime.seconds() > 90)
                 .whileActiveContinuous(winchPullUpCommand);

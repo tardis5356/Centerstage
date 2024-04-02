@@ -30,7 +30,7 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.commands.intakeCommands.IntakeOutC
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.LiftToPositionCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.RobotAlignToTagRange;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.RobotToStateCommand;
-import org.firstinspires.ftc.teamcode.ARTEMIS.commands.WinchDeployCommand;
+import org.firstinspires.ftc.teamcode.ARTEMIS.commands.HookDeployCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.commands.WinchPullUpCommand;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions;
@@ -90,7 +90,7 @@ public class Gen1_TeleOp extends CommandOpMode {
 
     //winch and winch commands
     private Winch winch;
-    private WinchDeployCommand winchDeployCommand;
+    private HookDeployCommand hookDeployCommand;
     private WinchPullUpCommand winchPullUpCommand;
 
     //lift and lift coms
@@ -155,7 +155,7 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         //init winch stuff
         winch = new Winch(hardwareMap);
-        winchDeployCommand = new WinchDeployCommand(winch);
+        hookDeployCommand = new HookDeployCommand(winch);
         winchPullUpCommand = new WinchPullUpCommand(winch);
 
         lift = new Lift(hardwareMap);
@@ -258,15 +258,40 @@ public class Gen1_TeleOp extends CommandOpMode {
                 .whenActive(new WinchLatchCommand(winch));
 
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON))
-                .whenActive(new WinchDeployCommand(winch));
+                .whenActive(new HookDeployCommand(winch));
+
+        double[] pixelHeightThresholds = {0.1, 0.3, 0.5, 0.7, 0.9};
 
         //button map intake commands
-        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.15 || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.15)
+        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[0] || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[0])
                 .cancelWhenActive(intakeOutCommand)
                 .whenActive(intakeInCommand)
                 .whenActive(new InstantCommand(() -> {
-                    if (intakeStageActive)
-                        intake.downTeleOp();
+                    intake.downFirstPixel();
+                }));
+        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[1] || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[1])
+                .cancelWhenActive(intakeOutCommand)
+                .whenActive(intakeInCommand)
+                .whenActive(new InstantCommand(() -> {
+                    intake.downSecondPixel();
+                }));
+        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[2] || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[2])
+                .cancelWhenActive(intakeOutCommand)
+                .whenActive(intakeInCommand)
+                .whenActive(new InstantCommand(() -> {
+                    intake.downThirdPixel();
+                }));
+        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[3] || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[3])
+                .cancelWhenActive(intakeOutCommand)
+                .whenActive(intakeInCommand)
+                .whenActive(new InstantCommand(() -> {
+                    intake.downFourthPixel();
+                }));
+        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[4] || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[4])
+                .cancelWhenActive(intakeOutCommand)
+                .whenActive(intakeInCommand)
+                .whenActive(new InstantCommand(() -> {
+                    intake.downTeleOp();
                 }));
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.15 || driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.15)
                 .cancelWhenActive(intakeInCommand)
@@ -318,10 +343,11 @@ public class Gen1_TeleOp extends CommandOpMode {
                 .whenInactive(new InstantCommand(winch::latchBar));
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))
                 .toggleWhenActive(winchPullUpCommand, new InstantCommand(winch::stopWinch));
+//                .whileActiveContinuous();
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_RIGHT))
                 .toggleWhenActive(() -> mW.setPower(-BotPositions.WINCH_MOTOR_POWER), () -> mW.setPower(0)); //, () -> mW.setPower(BotPositions.WINCH_MOTOR_POWER)
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))
-                .whenActive(new InstantCommand(winch::unlatchHook))
+                .whenActive(new HookDeployCommand(winch))
                 .whenInactive(new InstantCommand(winch::latchHook));
 //                .whenActive(winchDeployCommand);
 
@@ -431,9 +457,10 @@ public class Gen1_TeleOp extends CommandOpMode {
                             robotState = RobotState.TRANSITION;
                             leds.setLEDstate("green");
                         }),
-                        new WaitCommand(600),
-                        new InstantCommand(intake::out),
+                        new WaitCommand(300),
+                        new InstantCommand(intake::stop),
                         new InstantCommand(intake::up),
+                        new WaitCommand(300),
 //                        new WaitCommand(100),
                         new InstantCommand(arm::toTransition),
                         new InstantCommand(wrist::toTransition),
@@ -443,7 +470,9 @@ public class Gen1_TeleOp extends CommandOpMode {
                             gamepad1.rumbleBlips(2);
                             gamepad2.rumbleBlips(2);
                         }),
-                        new WaitCommand(1000),
+                        new WaitCommand(200),
+                        new InstantCommand(intake::out),
+                        new WaitCommand(500),
                         new InstantCommand(intake::stop)
                 ))
                 .cancelWhenActive(robotToDepositCommand);

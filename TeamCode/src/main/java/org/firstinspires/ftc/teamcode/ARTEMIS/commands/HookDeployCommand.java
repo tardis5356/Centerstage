@@ -6,14 +6,15 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Winch;
 
-public class WinchDeployCommand extends SequentialCommandGroup {
-    public WinchDeployCommand(Winch winch) {
+public class HookDeployCommand extends SequentialCommandGroup {
+    public HookDeployCommand(Winch winch) {
         addCommands(
-                new InstantCommand(winch::unlatchHook),
+                new InstantCommand(winch::unlatchHookStage1),
+//                new WaitCommand(150),
+                new InstantCommand(winch::unlatchHookStage2),
                 new WaitCommand(500),
-                new InstantCommand(winch::unlatchBar),
-                new WaitCommand(500),
-                new InstantCommand(winch::disablePWM)
+                new InstantCommand(winch::latchHook)
         );
     }
 }
+

@@ -13,7 +13,7 @@ public class BotPositions {
 
     //brace positions
 //    public static double LEFT_BRACE_EXTENDED = 0.69, RIGHT_BRACE_EXTENDED = 0.68, RIGHT_BRACE_RETRACTED = 0.92, LEFT_BRACE_OVEREXTENDED = 0.28, RIGHT_BRACE_OVEREXTENDED = 0.35;
-    public static  double BAR_LATCHED = 0.713                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             , BAR_UNLATCHED = 0.5, HOOK_LATCHED = 0.7, HOOK_UNLATCHED = 0.3;
+    public static  double BAR_LATCHED = 0.713, BAR_UNLATCHED = 0.5, HOOK_LATCHED = 0.7, HOOK_STAGE2_UNLATCHED = 0.6, HOOK_STAGE1_UNLATCHED = 0.64;
 
     //intake powers and positions
     public static double INTAKE_MOTOR_INWARD_POWER = 1.0, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.25, INTAKE_MOTOR_OUTWARD_POWER_SUPER_SLOW = -.2;
@@ -21,11 +21,11 @@ public class BotPositions {
     // TORQUE POSITTIOOUNS
     public static double
             INTAKE_DOWN_TELEOP = 0.48,
+            INTAKE_DOWN_FIFTH_PIXEL = 0.48,
+            INTAKE_DOWN_FOURTH_PIXEL = 0.45,
+            INTAKE_DOWN_THIRD_PIXEL = 0.41,
+            INTAKE_DOWN_SECOND_PIXEL = 0.38,
             INTAKE_DOWN_FIRST_PIXEL = 0.38,
-            INTAKE_DOWN_SECOND_PIXEL = 0.3,
-            INTAKE_DOWN_THIRD_PIXEL = 0.35,
-            INTAKE_DOWN_FOURTH_PIXEL = 0.4,
-            INTAKE_DOWN_FIFTH_PIXEL = 0.45,
             INTAKE_UP = 0.3; // torque: 0.5 down, 0.25 up // 0.65  //0.25
 
     // TORQUE SHORT BAR POSITTIOOUNS

@@ -10,12 +10,10 @@ public class WinchPullUpCommand extends SequentialCommandGroup {
 
     public WinchPullUpCommand(Winch winch) {
         addCommands(
-//            new InstantCommand(winch::retractScissor),
-            new InstantCommand(winch::disablePWM),
-//        new InstantCommand(winch::extendBraces),
-
-            //new WaitCommand(1500),
-            new InstantCommand(winch::liftRobot)
+                new InstantCommand(winch::unlatchBar),
+                new WaitCommand(500),
+                new InstantCommand(winch::disablePWM),
+                new InstantCommand(winch::liftRobot)
         );
     }
 }

@@ -46,8 +46,12 @@ public class Winch extends SubsystemBase {
         sBarDeploy.setPosition(BotPositions.BAR_LATCHED);
     }
 
-    public void unlatchHook() {
-        sHookDeploy.setPosition(BotPositions.HOOK_UNLATCHED);
+    public void unlatchHookStage1() {
+        sHookDeploy.setPosition(BotPositions.HOOK_STAGE1_UNLATCHED);
+    }
+
+    public void unlatchHookStage2() {
+        sHookDeploy.setPosition(BotPositions.HOOK_STAGE2_UNLATCHED);
     }
 
     public void latchHook() {
