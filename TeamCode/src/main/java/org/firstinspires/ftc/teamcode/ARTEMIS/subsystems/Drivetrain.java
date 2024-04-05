@@ -20,7 +20,7 @@ public class Drivetrain extends SubsystemBase {
     double startingErrorRads = 0;
     double startingOffsetRads = 0;
 
-    double correctedAngleDegrees = 0;
+//    double correctedAngleDegrees = 0;
     
     public Drivetrain(HardwareMap hardwareMap) {
         mFL = hardwareMap.get(DcMotor.class, "mFL");
@@ -47,10 +47,41 @@ public class Drivetrain extends SubsystemBase {
         imu.resetYaw();
     }
 
+
+
+    public void setStartingOffsetDegs(int offsetDeg){
+        startingOffsetRads = Math.toRadians(offsetDeg);
+    }
+
+    public double getStartingOffsetDegs(){
+        return Math.toDegrees(startingOffsetRads);
+    }
+
+    public double getRawYawDegrees(){
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+    }
+
     @Override
     public void periodic() {
-        correctedAngleDegrees = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES) + Math.toDegrees(startingOffsetRads);
+
     }
+
+    public double getYawDegrees(){
+        return getRawYawDegrees() + getStartingOffsetDegs();
+    }
+
+    public double getYawRadians(){
+        return Math.toRadians(getYawDegrees());
+    }
+
+    public double getPose2dYawRads(){
+        return Math.toRadians((getYawDegrees() + 360) % 360);
+    }
+
+    public double getPose2dYawDegs(){
+        return ((getYawDegrees() + 360) % 360);
+    }
+
 
     public void driveRobot(double x, double y, double yaw) {
         // Calculate wheel powers.
@@ -78,21 +109,6 @@ public class Drivetrain extends SubsystemBase {
         mBR.setPower(rightBackPower);
     }
 
-    public double getYawRadians(){
-        return Math.toRadians(correctedAngleDegrees);
-    }
-
-    public double getYawDegrees(){
-        return correctedAngleDegrees;
-    }
-
-    public void setStartingOffsetDegs(int offsetDeg){
-        startingOffsetRads = Math.toRadians(offsetDeg);
-    }
-
-    public double getRawYawDegrees(){
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-    }
 
     /*
     public BNO055IMU getImu() {

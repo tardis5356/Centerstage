@@ -75,6 +75,7 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -148,12 +149,16 @@ public class EXCCMP_Auto extends CommandOpMode {
     AutoGenerator autoGenerator;
     private SequentialCommandGroup autoCommands;
 
+    private ElapsedTime imuRelocTimer;
+
     @Override
     public void initialize() {
         currentGamepad = new Gamepad();
         previousGamepad = new Gamepad();
 
         MultipleTelemetry telemetry2 = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        imuRelocTimer = new ElapsedTime();
 
         autoCommands = new SequentialCommandGroup();
         autoGenerator = new AutoGenerator();
@@ -194,7 +199,7 @@ public class EXCCMP_Auto extends CommandOpMode {
 //            telemetry.addData("avgRightBox", "%.3f", webcam.getAvgRightBoxBlue());
 //
 //            telemetry.addData("raw imu degs: ", drivetrain.getRawYawDegrees());
-            telemetry.addData("converted imu degs: ", drivetrain.getYawDegrees());
+//            telemetry.addData("converted imu degs: ", drivetrain.getYawDegrees());
 
             previousGamepad.copy(currentGamepad);
             currentGamepad.copy(gamepad1);
@@ -662,6 +667,9 @@ public class EXCCMP_Auto extends CommandOpMode {
 //                    BackdropWaypointToStackWaypoint = Red_BackstageToStackViaTruss;
             }
 
+            telemetry.addData("converted imu degs: ", drivetrain.getYawDegrees());
+            telemetry.addData("offset in degs: ", drivetrain.getStartingOffsetDegs());
+            telemetry.addData("raw imu degs: ", drivetrain.getRawYawDegrees());
             telemetry.addLine();
             telemetry.addLine("waitForStart");
             telemetry.addLine();
@@ -738,12 +746,20 @@ public class EXCCMP_Auto extends CommandOpMode {
             telemetry.addData("liftBase", lift.getLiftBase());
             telemetry.addLine();
             telemetry.addData("heading degs", drivetrain.getYawDegrees());
-            telemetry.addData("converted heading ", (drivetrain.getYawDegrees() + 360) % 360);
+            telemetry.addData("converted heading ", drivetrain.getPose2dYawDegs());
             telemetry.addLine();
             telemetry.addData("heading rads", drivetrain.getYawRadians());
+            telemetry.addData("heading rads", drivetrain.getPose2dYawRads());
             telemetry.addLine();
             telemetry.addData("poseEstimate", drive.getPoseEstimate());
             telemetry.update();
+
+            if(imuRelocTimer.seconds() >= 20){
+//                drive.setPoseEstimate(new Pose2d(drive.getPoseEstimate().getX(), drive.getPoseEstimate().getY(), Math.toRadians((drivetrain.getYawDegrees() + 360) % 360)));
+                telemetry.addData("relocalized using imu ", (drivetrain.getYawDegrees() + 360) % 360);
+                imuRelocTimer.reset();
+            }
+
         }
 
         telemetry.update();

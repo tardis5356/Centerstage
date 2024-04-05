@@ -86,6 +86,8 @@ public class RobotToStateCommand extends ParallelCommandGroup {
 //                                new WaitUntilCommand(() -> arm.fullIntake()),
                                         new WaitCommand(800),
 
+                                        new InstantCommand(intake::slowOut),
+
                                         // send wrist to intake position
                                         new InstantCommand(wrist::tiltToIntake),
 

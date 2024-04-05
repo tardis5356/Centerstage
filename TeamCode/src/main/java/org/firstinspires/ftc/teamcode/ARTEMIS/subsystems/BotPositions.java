@@ -13,7 +13,7 @@ public class BotPositions {
 
     //brace positions
 //    public static double LEFT_BRACE_EXTENDED = 0.69, RIGHT_BRACE_EXTENDED = 0.68, RIGHT_BRACE_RETRACTED = 0.92, LEFT_BRACE_OVEREXTENDED = 0.28, RIGHT_BRACE_OVEREXTENDED = 0.35;
-    public static  double BAR_LATCHED = 0.713, BAR_UNLATCHED = 0.5, HOOK_LATCHED = 0.7, HOOK_STAGE2_UNLATCHED = 0.6, HOOK_STAGE1_UNLATCHED = 0.64;
+    public static  double BAR_LATCHED = 0.713, BAR_UNLATCHED = 0.5, HOOK_LATCHED = 0.74, HOOK_STAGE2_UNLATCHED = 0.6, HOOK_STAGE1_UNLATCHED = 0.64;
 
     //intake powers and positions
     public static double INTAKE_MOTOR_INWARD_POWER = 1.0, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.25, INTAKE_MOTOR_OUTWARD_POWER_SUPER_SLOW = -.2;
@@ -89,7 +89,7 @@ public class BotPositions {
     //0.032 = 180º
 
     //arm positions
-    public static double ARM_INTAKE = 0.025, ARM_TRANSITION_POSITION = 0.12, ARM_DEPOSIT = 0.65, ARM_DEPOSIT_LOW = 0.75, ARM_DROP_PURPLE = 0.9, ARM_GRAB_PIXELS = .025;
+    public static double ARM_INTAKE = 0.03, ARM_TRANSITION_POSITION = 0.12, ARM_DEPOSIT = 0.65, ARM_DEPOSIT_LOW = 0.75, ARM_DROP_PURPLE = 0.9, ARM_GRAB_PIXELS = .025;
 
     public static boolean ARM_HIGH_POSITION = false;
 

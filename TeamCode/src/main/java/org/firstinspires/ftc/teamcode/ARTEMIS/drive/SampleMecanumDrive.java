@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 //import org.firstinspires.ftc.teamcode.TESTBED.trajectorysequence.TrajectorySequence;
 //import org.firstinspires.ftc.teamcode.TESTBED.trajectorysequence.TrajectorySequenceBuilder;
@@ -45,6 +46,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 //import org.firstinspires.ftc.teamcode.TESTBED.util.LynxModuleUtil;
 
 import org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.TrajectorySequenceBuilderWrapper;
+import org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.ARTEMIS.trajectorysequence.TrajectorySequenceRunner;
@@ -53,6 +55,7 @@ import org.firstinspires.ftc.teamcode.ARTEMIS.util.LynxModuleUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
 
 /*
  * Simple mecanum drive hardware implementation for REV hardware.
@@ -85,6 +88,9 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private List<Integer> lastEncPositions = new ArrayList<>();
     private List<Integer> lastEncVels = new ArrayList<>();
+
+    Drivetrain drivetrain;
+    ElapsedTime gyroRelocTimer = new ElapsedTime();
 
     public SampleMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
@@ -140,6 +146,8 @@ public class SampleMecanumDrive extends MecanumDrive {
         leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
 //        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        drivetrain = new Drivetrain(hardwareMap);
 
         List<Integer> lastTrackingEncPositions = new ArrayList<>();
         List<Integer> lastTrackingEncVels = new ArrayList<>();
@@ -224,6 +232,11 @@ public class SampleMecanumDrive extends MecanumDrive {
         updatePoseEstimate();
         DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
         if (signal != null) setDriveSignal(signal);
+//        if (gyroRelocTimer.seconds() >= 3 && isBusy()) {
+//            setPoseEstimate(new Pose2d(getPoseEstimate().getX(), getPoseEstimate().getY(), drivetrain.getPose2dYawDegs()));
+////            telemetry.addData("relocalized using imu ", (drivetrain.getYawDegrees() + 360) % 360);
+//            gyroRelocTimer.reset();
+//        }
     }
 
     public void waitForIdle() {
