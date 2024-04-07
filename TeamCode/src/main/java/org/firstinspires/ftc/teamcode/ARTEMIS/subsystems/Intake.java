@@ -65,6 +65,9 @@ public class Intake extends SubsystemBase {
     public void in() {
         mIntake.setPower(BotPositions.INTAKE_MOTOR_INWARD_POWER);
     }
+    public void inSlow() {
+        mIntake.setPower(BotPositions.INTAKE_MOTOR_INWARD_POWER_SLOW);
+    }
 
     public void out() {
         mIntake.setPower(BotPositions.INTAKE_MOTOR_OUTWARD_POWER);

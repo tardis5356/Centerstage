@@ -77,14 +77,29 @@ public class AutoGenerator {
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> leds.setLEDstate("intaking")),
                                 new InstantCommand(intake::in),
-                                new InstantCommand(intake::downThirdPixel),
-                                new WaitCommand(750),
+//                                new InstantCommand(intake::downFirstPixel),
+//                                new WaitCommand(750),
+//                                new InstantCommand(intake::downTeleOp),
+//                                new WaitCommand(500),
+//                                new InstantCommand(intake::downSecondPixel),
+//                                new WaitCommand(750),
+                                new InstantCommand(intake::downTeleOp),
+                                new WaitCommand(1500),
+                                new InstantCommand(intake::up),
+                                new InstantCommand(intake::out),
+                                new WaitCommand(250),
+                                new InstantCommand(intake::in),
+                                new InstantCommand(intake::downTeleOp),
 //                                new InstantCommand(intake::downFifthPixel),
 //                                new WaitCommand(500),
-                                new InstantCommand(intake::downThirdPixel),
-                                new WaitCommand(500),
+//                                new InstantCommand(intake::downTeleOp),
+                                new WaitCommand(1000),
+                                new InstantCommand(intake::up),
                                 new InstantCommand(intake::out),
-                                new InstantCommand(intake::up)//,
+                                new WaitCommand(250),
+                                new InstantCommand(intake::in),
+                                new InstantCommand(intake::downTeleOp),
+                                new WaitCommand(500)
 //                                new WaitCommand(500),
 //                                new InstantCommand(intake::in),
 //                                new InstantCommand(intake::downFifthPixel),
@@ -95,45 +110,6 @@ public class AutoGenerator {
 //                                new InstantCommand(intake::up)
                         ),
                         new FollowTrajectoryCommand(drive, StackToStackWaypoint)
-                        /*new InstantCommand(intake::out),
-                        new InstantCommand(intake::downThirdPixel),
-                        new WaitCommand(500),
-//                new InstantCommand(intake::downFifthPixel),
-//                new WaitCommand(250),
-//                        new InstantCommand(intake::out),
-//                        new WaitCommand(300),
-                        new InstantCommand(intake::in),
-//                        new InstantCommand(intake::downThirdPixel),
-                        new WaitCommand(300),
-                        new InstantCommand(intake::downFifthPixel),
-                        new WaitCommand(150),
-//                        new InstantCommand(intake::downThirdPixel),
-//                        new WaitCommand(300),
-                        new InstantCommand(intake::out),
-                        new InstantCommand(intake::up),
-                        new WaitCommand(300),
-//                        new InstantCommand(intake::in),
-//                        new InstantCommand(intake::downFifthPixel),
-//                        new WaitCommand(300),
-//                        new InstantCommand(intake::up),
-//                        new InstantCommand(intake::in),
-////                        new InstantCommand(intake::downThirdPixel),
-//                        new WaitCommand(100),
-//                        new InstantCommand(intake::downFifthPixel),
-//                        new WaitCommand(300),
-//                        new InstantCommand(intake::up),
-//                        new InstantCommand(intake::out),
-                        new ParallelCommandGroup(
-                                new SequentialCommandGroup(
-                                        new InstantCommand(intake::in),
-                                        new WaitCommand(500),
-                                        new InstantCommand(intake::downFourthPixel),
-                                        new WaitCommand(1000),
-                                        new InstantCommand(intake::out),
-                                        new InstantCommand(intake::up)
-                                ),
-                                new FollowTrajectoryCommand(drive, StackToStackWaypoint)
-                        )*/
                 );
             }
         }
@@ -142,7 +118,7 @@ public class AutoGenerator {
             public relocSequence(Arm arm, Wrist wrist, Gripper gripper, Lift lift, Intake intake, Winch winch, LEDs leds) {
                 addCommands(
                         new InstantCommand(() -> leds.setLEDstate("red_scan")),
-                        new WaitCommand(300),
+                        new WaitCommand(150),
                         new RelocalizeFromTagCommand(drive, drivetrain, aprilTagProcessor, telemetry),
                         new WaitCommand(50),
                         new InstantCommand(() -> leds.setLEDstate("green"))
@@ -199,7 +175,7 @@ public class AutoGenerator {
                     new InstantCommand(intake::downFirstPixel),
                     new WaitCommand(500),
                     new ParallelCommandGroup(
-                            new InstantCommand(intake::up),
+                            new InstantCommand(intake::downTeleOp),
                             new FollowTrajectoryCommand(drive, StackToStackWaypoint),
                             new SequentialCommandGroup(
                                     new WaitCommand(750),
@@ -264,13 +240,17 @@ public class AutoGenerator {
                  */
                 autoCommands.addCommands(
                         new SequentialCommandGroup( // turn bot around to align with backdrop
-                                new InstantCommand(arm::toDeposit),
-                                new InstantCommand(wrist::tiltToDeposit),
-//                                new InstantCommand(() -> wrist.setRollIndex(90)),
-                                new InstantCommand(() -> wrist.rollToPurpleAuto()),
-                                new LiftToPositionCommand(lift, 150, 10),
+                                new InstantCommand(arm::toArmStraightUp),
                                 new FollowTrajectoryCommand(drive, SpikeToBackdropYellow),
-                                new relocSequence(arm, wrist, gripper, lift, intake, winch, leds),
+                                new ParallelCommandGroup(
+                                        new SequentialCommandGroup(
+                                                new InstantCommand(arm::toDeposit),
+                                                new InstantCommand(wrist::tiltToDeposit),
+//                                new InstantCommand(() -> wrist.setRollIndex(90)),
+                                                new InstantCommand(() -> wrist.rollToPurpleAuto()),
+                                                new LiftToPositionCommand(lift, 150, 10)),
+                                        new relocSequence(arm, wrist, gripper, lift, intake, winch, leds)
+                                ),
                                 new FollowTrajectoryCommand(drive, BackdropRelocWaypointToBackdrop)
 //                                new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
 //                                new InstantCommand(arm::toDeposit),
@@ -339,9 +319,11 @@ public class AutoGenerator {
                                             new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "intake")
                                     )
                             ),
+                            new InstantCommand(wrist::rollToCentered),
                             new InstantCommand(intake::out),
                             new FollowTrajectoryCommand(drive, BackdropToBackdropWaypoint)
                     ),
+                    new relocSequence(arm, wrist, gripper, lift, intake, winch, leds),
                     new InstantCommand(intake::stop),
                     new InstantCommand(() -> leds.setLEDstate("plaid")),
                     new FollowTrajectoryCommand(drive, BackdropWaypointToStackWaypoint),
@@ -363,9 +345,9 @@ public class AutoGenerator {
                                 new SequentialCommandGroup(
                                         new InstantCommand(gripper::grabLeft),
                                         new InstantCommand(gripper::grabRight),
-                                        new InstantCommand(intake::up),
-                                        new WaitCommand(150),
+                                        new WaitCommand(500),
 //                                    new IntakeOutCommand(intake)
+                                        new InstantCommand(intake::up),
                                         new InstantCommand(intake::out),
                                         new WaitCommand(200),
                                         new InstantCommand(arm::toTransition),
@@ -373,20 +355,23 @@ public class AutoGenerator {
                                 ),
                                 new FollowTrajectoryCommand(drive, StackWaypointToBackWaypoint)
                         ),
+                        new InstantCommand(intake::stop),
                         new relocSequence(arm, wrist, gripper, lift, intake, winch, leds),
                         new ParallelCommandGroup(
                                 new SequentialCommandGroup(
                                         new InstantCommand(arm::toDeposit),
                                         new WaitCommand(500),
-                                        new InstantCommand(wrist::tiltToDeposit)
+                                        new InstantCommand(() -> wrist.setRollIndex(90)),
+                                        new InstantCommand(wrist::tiltToDeposit),
+                                        new WaitCommand(750)
                                 ),
-                                new InstantCommand(() -> wrist.setRollIndex(90)),
 //                                new InstantCommand(() -> wrist.rollToCentered()),
                                 new LiftToPositionCommand(lift, 250, 10),
                                 new FollowTrajectoryCommand(drive, BackWaypointToBackdropWhite)
                         ),
-                        new InstantCommand(gripper::releaseLeft),
-                        new InstantCommand(gripper::releaseRight)
+                        new InstantCommand(gripper::releaseRight),
+                        new WaitCommand(100),
+                        new InstantCommand(gripper::releaseLeft)
                 ));
             } else {
                 autoCommands.addCommands(new SequentialCommandGroup(

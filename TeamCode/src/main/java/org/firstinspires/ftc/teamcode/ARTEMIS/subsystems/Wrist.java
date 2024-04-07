@@ -124,7 +124,7 @@ public class Wrist extends SubsystemBase {
 
     public void rollToPurpleAuto(){
         if(!SampleMecanumDrive.flipPose) //red
-            rollIndex = 60; //90
+            rollIndex = 120; //90
         else
             rollIndex = -60;
     }

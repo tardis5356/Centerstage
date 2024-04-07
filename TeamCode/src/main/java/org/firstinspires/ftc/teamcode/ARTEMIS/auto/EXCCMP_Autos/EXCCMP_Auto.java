@@ -39,6 +39,7 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropLeftToBackdropWaypointTruss;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropRightToBackdropWaypointDoor;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropRightToBackdropWaypointTruss;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorBackdropTransitWaypointToBackdropLeftSide;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorStackWaypointToBackdropWaypointViaDoorWait;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TrussStackWaypointToBackdropWaypointViaTruss;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TrussStackWaypointToBackdropWaypointViaTrussWait;
@@ -64,6 +65,7 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropLeft;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropRight;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropRightSide;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.TrussBackdropWaypointToStackWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.TrussStackWaypointToCenterStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.TrussStackWaypointToInnerStack;
@@ -100,7 +102,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 
 //@Disabled
-@Autonomous(group = "auto", name = "Champs Auto", preselectTeleOp="Gen1_TeleOp") // , preselectTeleOp="Gen1_TeleOp" //🟥
+@Autonomous(group = "auto", name = "Champs Auto", preselectTeleOp = "Gen1_TeleOp")
+// , preselectTeleOp="Gen1_TeleOp" //🟥
 public class EXCCMP_Auto extends CommandOpMode {
     ElapsedTime runtime = new ElapsedTime();
 
@@ -121,8 +124,8 @@ public class EXCCMP_Auto extends CommandOpMode {
 
     private Gamepad currentGamepad, previousGamepad;
 
-    public static String startingSide = "wing", cycleTarget = "backdrop", transitVia = "door", cycleVia = "door", targetStack = "inner", parkIn = "center", alliance = "red", yellowTo = "center";
-    public static boolean park = false, deliverYellow = true, cycle = true, wait = false;
+    public static String startingSide = "backstage", cycleTarget = "backdrop", transitVia = "door", cycleVia = "door", targetStack = "inner", parkIn = "center", alliance = "red", yellowTo = "center";
+    public static boolean park = false, deliverYellow = true, cycle = true, wait = false, cycleDeliverToSide = true;
 
     //2*2*2*2*3*3*2*3*2*2*2*2
 
@@ -163,7 +166,7 @@ public class EXCCMP_Auto extends CommandOpMode {
         autoCommands = new SequentialCommandGroup();
         autoGenerator = new AutoGenerator();
 
-        SampleMecanumDrive.flipPose = true;
+        SampleMecanumDrive.flipPose = false;
 
         drive = new SampleMecanumDrive(hardwareMap);
         EXCCMP_AutoTrajectories.generateTrajectories(drive);
@@ -190,7 +193,7 @@ public class EXCCMP_Auto extends CommandOpMode {
 //        drivetrain.setStartingError();
 
         webcam.setCamera("front");
-        webcam.setActiveProcessor("blueProp");
+        webcam.setActiveProcessor("redProp");
 
         telemetry.setMsTransmissionInterval(50);
 
@@ -527,21 +530,28 @@ public class EXCCMP_Auto extends CommandOpMode {
 
             if (cycle) {
                 if (cycleTarget == "backdrop") {
-                    if (webcam.getPropPosition() == "right") {
+                    if (cycleDeliverToSide)
+                        if (transitVia == "door")
+                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropLeftSide;
+                        else
+                            BackWaypointToBackdropWhite = Red_TrussBackdropTransitWaypointToBackdropRightSide;
+                    else {
+                        if (webcam.getPropPosition() == "right") { //Red_DoorBackdropTransitWaypointToBackdropLeftSide
 //                        if (transitVia == "door")
 //                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropLeft;
 //                        else
-                        BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropCenter;
-                    } else if (webcam.getPropPosition() == "center") {
-                        if (transitVia == "door")
-                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropLeft;
-                        else
-                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropRight;
-                    } else {
+                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropCenter;
+                        } else if (webcam.getPropPosition() == "center") {
+                            if (transitVia == "door")
+                                BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropLeft;
+                            else
+                                BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropRight;
+                        } else {
 //                        if (transitVia == "door")
-                        BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropCenter;
+                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropCenter;
 //                        else
 //                            BackWaypointToBackdropWhite = Red_DoorBackdropTransitWaypointToBackdropRight;
+                        }
                     }
                 } else { //cycle target backstage
                     if (transitVia == "door") {
@@ -754,7 +764,7 @@ public class EXCCMP_Auto extends CommandOpMode {
             telemetry.addData("poseEstimate", drive.getPoseEstimate());
             telemetry.update();
 
-            if(imuRelocTimer.seconds() >= 20){
+            if (imuRelocTimer.seconds() >= 20) {
 //                drive.setPoseEstimate(new Pose2d(drive.getPoseEstimate().getX(), drive.getPoseEstimate().getY(), Math.toRadians((drivetrain.getYawDegrees() + 360) % 360)));
                 telemetry.addData("relocalized using imu ", (drivetrain.getYawDegrees() + 360) % 360);
                 imuRelocTimer.reset();

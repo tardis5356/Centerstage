@@ -16,7 +16,7 @@ public class BotPositions {
     public static  double BAR_LATCHED = 0.713, BAR_UNLATCHED = 0.5, HOOK_LATCHED = 0.74, HOOK_STAGE2_UNLATCHED = 0.6, HOOK_STAGE1_UNLATCHED = 0.64;
 
     //intake powers and positions
-    public static double INTAKE_MOTOR_INWARD_POWER = 1.0, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.25, INTAKE_MOTOR_OUTWARD_POWER_SUPER_SLOW = -.2;
+    public static double INTAKE_MOTOR_INWARD_POWER = 1.0, INTAKE_MOTOR_INWARD_POWER_SLOW = 0.75, INTAKE_MOTOR_OUTWARD_POWER = -.6, INTAKE_MOTOR_OUTWARD_POWER_SLOW = -.25, INTAKE_MOTOR_OUTWARD_POWER_SUPER_SLOW = -.2;
 
     // TORQUE POSITTIOOUNS
     public static double
@@ -66,7 +66,7 @@ public class BotPositions {
             WRIST_LEFT_pos180_ROLL = 0.58,
             WRIST_LEFT_pos150_ROLL = 0.544,
             WRIST_LEFT_pos120_ROLL = 0.54,
-            WRIST_LEFT_pos90_ROLL = 0.512,
+            WRIST_LEFT_pos90_ROLL = 0.514,
             WRIST_LEFT_pos60_ROLL = 0.496,
             WRIST_LEFT_pos30_ROLL = 0.48,
             WRIST_ROLL_CENTERED = 0.464,
@@ -78,6 +78,8 @@ public class BotPositions {
             WRIST_RIGHT_neg150_ROLL = 0.384,
             WRIST_RIGHT_neg180_ROLL = 0.345,
             WRIST_TILT_TRANSITION = 0.19, WRIST_TILT_INTAKE = 0.29, WRIST_TILT_DEPOSIT = 0.78, WRIST_TILT_DEPOSIT_LOW = 0.68, WRIST_TILT_DROP_PURPLE = 0.8;
+                                                            // 0.29
+
     //for tilt, 0.09 = 30º
 //    0.115 = 30º
 
@@ -89,7 +91,7 @@ public class BotPositions {
     //0.032 = 180º
 
     //arm positions
-    public static double ARM_INTAKE = 0.03, ARM_TRANSITION_POSITION = 0.12, ARM_DEPOSIT = 0.65, ARM_DEPOSIT_LOW = 0.75, ARM_DROP_PURPLE = 0.9, ARM_GRAB_PIXELS = .025;
+    public static double ARM_INTAKE = 0.03, ARM_TRANSITION_POSITION = 0.12, ARM_STRAIGHT_UP = 0.4, ARM_DEPOSIT = 0.65, ARM_DEPOSIT_LOW = 0.75, ARM_DROP_PURPLE = 0.9, ARM_GRAB_PIXELS = .025;
 
     public static boolean ARM_HIGH_POSITION = false;
 
