@@ -135,6 +135,8 @@ public class Gen1_TeleOp extends CommandOpMode {
     private double integral = 0;
     private double prevError = 0;
 
+    private int storedLiftHeight = -10;
+
 //    int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 //    OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 //    FtcDashboard.getInstance().startCameraStream(camera,
@@ -260,39 +262,21 @@ public class Gen1_TeleOp extends CommandOpMode {
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON))
                 .whenActive(new HookDeployCommand(winch));
 
-        double[] pixelHeightThresholds = {0.1, 0.3, 0.5, 0.7, 0.9};
+        double pixelHeightThreshold = 0.05;
 
         //button map intake commands
-        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[0] || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[0])
-                .cancelWhenActive(intakeOutCommand)
-                .whenActive(intakeInCommand)
-                .whenActive(new InstantCommand(() -> {
-                    intake.downFirstPixel();
-                }));
-        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[1] || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[1])
-                .cancelWhenActive(intakeOutCommand)
-                .whenActive(intakeInCommand)
-                .whenActive(new InstantCommand(() -> {
-                    intake.downSecondPixel();
-                }));
-        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[2] || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[2])
-                .cancelWhenActive(intakeOutCommand)
-                .whenActive(intakeInCommand)
-                .whenActive(new InstantCommand(() -> {
-                    intake.downThirdPixel();
-                }));
-        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[3] || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[3])
-                .cancelWhenActive(intakeOutCommand)
-                .whenActive(intakeInCommand)
-                .whenActive(new InstantCommand(() -> {
-                    intake.downFourthPixel();
-                }));
-        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[4] || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThresholds[4])
+        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThreshold || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThreshold)
                 .cancelWhenActive(intakeOutCommand)
                 .whenActive(intakeInCommand)
                 .whenActive(new InstantCommand(() -> {
                     intake.downTeleOp();
                 }));
+//        new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThreshold || driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > pixelHeightThreshold)
+//                .cancelWhenActive(intakeOutCommand)
+//                .whenActive(intakeInCommand)
+//                .whenActive(new InstantCommand(() -> {
+//                    intake.downThirdPixel();
+//                }));
         new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.15 || driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.15)
                 .cancelWhenActive(intakeInCommand)
                 .whenActive(intakeOutCommand);
@@ -323,30 +307,38 @@ public class Gen1_TeleOp extends CommandOpMode {
 //                        )
                 )
                 .whenActive(new InstantCommand(() -> {
-                    robotState = RobotState.INTAKE;
+//                    robotState = RobotState.INTAKE;
+                    storedLiftHeight = (int) lift.getLiftPosition();
                 }))
                 .cancelWhenActive(robotGrabPixelsCommand)
                 .cancelWhenActive(robotToDepositCommand);
         new Trigger(() -> (driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER) || driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER)))// && robotState != RobotState.DEPOSIT)
-                .whenActive(robotToDepositCommand)
+//                .whenActive(robotToDepositCommand)
+                .whenActive(new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"))
+                .whenActive(
+                        new SequentialCommandGroup(
+                                new WaitCommand(300),
+                                new LiftToPositionCommand(lift, storedLiftHeight, 25)
+                        ))
                 .whenActive(new InstantCommand(() -> {
                     robotState = RobotState.DEPOSIT;
+
                 }))
                 .cancelWhenActive(robotGrabPixelsCommand)
                 .cancelWhenActive(robotToIntakeCommand);
 
         //button map winch commands
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_LEFT))// && driver2.getButton(GamepadKeys.Button.START))
 //                .whenActive(new InstantCommand(winch::unlatchHook))
 //                .whenInactive(new InstantCommand(winch::latchHook));
                 .whenActive(new InstantCommand(winch::unlatchBar))
                 .whenInactive(new InstantCommand(winch::latchBar));
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_DOWN))
+        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.DPAD_DOWN)))// && driver2.getButton(GamepadKeys.Button.START))
                 .toggleWhenActive(winchPullUpCommand, new InstantCommand(winch::stopWinch));
 //                .whileActiveContinuous();
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_RIGHT))
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_RIGHT))// && driver2.getButton(GamepadKeys.Button.START))
                 .toggleWhenActive(() -> mW.setPower(-BotPositions.WINCH_MOTOR_POWER), () -> mW.setPower(0)); //, () -> mW.setPower(BotPositions.WINCH_MOTOR_POWER)
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))
+        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))// && driver2.getButton(GamepadKeys.Button.START))
                 .whenActive(new HookDeployCommand(winch))
                 .whenInactive(new InstantCommand(winch::latchHook));
 //                .whenActive(winchDeployCommand);
@@ -646,7 +638,13 @@ public class Gen1_TeleOp extends CommandOpMode {
     }
 
     private double cubicScaling(float joystickValue) {
-        return (0.2 * joystickValue + 0.8 * Math.pow(joystickValue, 3));
+        double v = 0.05 * joystickValue + 0.95 * Math.pow(joystickValue, 3);
+        if (joystickValue > 0.02)
+            return 0.1 + v;
+        else if (joystickValue < -0.02)
+            return -0.1 + v;
+        else
+            return 0;
     }
 
 //    public PIDController(double kp, double ki, double kd) {

@@ -146,7 +146,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
 //                                new InstantCommand(intake::out),
                                 new InstantCommand(wrist::toTransition),
 
-                                new WaitCommand(300),
+                                new WaitCommand(500),
 
                                 // ensure arm isn't in intake anymore
 //                                new WaitUntilCommand(() -> !arm.inIntakeExiting()),
@@ -186,7 +186,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
 //                                new InstantCommand(intake::out),
                                 new InstantCommand(wrist::toTransition),
 
-                                new WaitCommand(300),
+                                new WaitCommand(500),
 
                                 // ensure arm isn't in intake anymore
 //                                new WaitUntilCommand(() -> !arm.inIntakeExiting()),
@@ -226,7 +226,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
 //                                new InstantCommand(intake::out),
                                 new InstantCommand(wrist::toTransition),
 
-                                new WaitCommand(400),
+                                new WaitCommand(600),
 
                                 // ensure arm isn't in intake anymore
 //                                new WaitUntilCommand(() -> !arm.inIntakeExiting()),

@@ -77,7 +77,7 @@ public class BotPositions {
             WRIST_RIGHT_neg120_ROLL = 0.385,
             WRIST_RIGHT_neg150_ROLL = 0.384,
             WRIST_RIGHT_neg180_ROLL = 0.345,
-            WRIST_TILT_TRANSITION = 0.19, WRIST_TILT_INTAKE = 0.29, WRIST_TILT_DEPOSIT = 0.78, WRIST_TILT_DEPOSIT_LOW = 0.68, WRIST_TILT_DROP_PURPLE = 0.8;
+            WRIST_TILT_TRANSITION = 0.17, WRIST_TILT_INTAKE = 0.29, WRIST_TILT_DEPOSIT = 0.77, WRIST_TILT_DEPOSIT_LOW = 0.69, WRIST_TILT_DROP_PURPLE = 0.8;
                                                             // 0.29
 
     //for tilt, 0.09 = 30º
