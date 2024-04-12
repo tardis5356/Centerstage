@@ -21,12 +21,12 @@ public class Wrist extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(rollIndex > 180)
+        if (rollIndex > 180)
             rollIndex = -180;
-        else if(rollIndex < -180)
+        else if (rollIndex < -180)
             rollIndex = 180;
 
-        switch (rollIndex){
+        switch (rollIndex) {
             case -180:
                 sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg180_ROLL);
                 break;
@@ -70,7 +70,9 @@ public class Wrist extends SubsystemBase {
         }
     }
 
-    public void setRollIndex(int index){ rollIndex = index; }
+    public void setRollIndex(int index) {
+        rollIndex = index;
+    }
 
     public void toTransition() {
 //        sGripperRoll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
@@ -98,22 +100,22 @@ public class Wrist extends SubsystemBase {
     }
 
     public void rollToLeft30() {
-        rollIndex+=30;
+        rollIndex += 30;
 //        sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos30_ROLL);
     }
 
     public void rollToRight30() {
-        rollIndex-=30;
+        rollIndex -= 30;
 //        sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg30_ROLL);
     }
 
     public void rollToLeft60() {
-        rollIndex+=60;
+        rollIndex += 60;
 //        sGripperRoll.setPosition(BotPositions.WRIST_LEFT_pos30_ROLL);
     }
 
     public void rollToRight60() {
-        rollIndex-=60;
+        rollIndex -= 60;
 //        sGripperRoll.setPosition(BotPositions.WRIST_RIGHT_neg30_ROLL);
     }
 
@@ -122,11 +124,22 @@ public class Wrist extends SubsystemBase {
 //        sGripperRoll.setPosition(BotPositions.WRIST_ROLL_CENTERED);
     }
 
-    public void rollToPurpleAuto(){
-        if(!SampleMecanumDrive.flipPose) //red
-            rollIndex = 120; //90
-        else
-            rollIndex = -60;
+    public void rollToPurpleAuto(String position) {
+        if (!SampleMecanumDrive.flipPose) { //red
+            if (position == "left")
+                rollIndex = 120;
+            else if (position == "right")
+                rollIndex = 60;
+            else //center
+                rollIndex = 60;
+        } else { // blue
+            if (position == "left")
+                rollIndex = -60;
+            if (position == "right")
+                rollIndex = -120;
+            else
+                rollIndex = -60;
+        }
     }
 
 //    public void rollToYellowAuto(){

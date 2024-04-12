@@ -7,7 +7,9 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.DoorStackWaypointToOuterStack;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_BackdropRelocWaypointToBackdropCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_BackdropRelocWaypointToBackdropLeft;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_BackdropRelocWaypointToBackdropLeftCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_BackdropRelocWaypointToBackdropRight;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_BackdropRelocWaypointToBackdropRightCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_CenterSpikeToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_LeftSpikeToBackdropWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_RightSpikeToBackdropWaypoint;
@@ -39,7 +41,10 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropLeftToBackdropWaypointTruss;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropRightToBackdropWaypointDoor;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_BackdropRightToBackdropWaypointTruss;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorBackdropTransitWaypointToBackdropCenterCenter;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorBackdropTransitWaypointToBackdropLeftCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorBackdropTransitWaypointToBackdropLeftSide;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorBackdropTransitWaypointToBackdropRightCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorStackWaypointToBackdropWaypointViaDoorWait;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TrussStackWaypointToBackdropWaypointViaTruss;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedWings_TrussStackWaypointToBackdropWaypointViaTrussWait;
@@ -63,8 +68,11 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorBackdropTransitWaypointToBackdropLeft;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_DoorBackdropTransitWaypointToBackdropRight;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropCenter;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropCenterCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropLeft;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropLeftCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropRight;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropRightCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.Red_TrussBackdropTransitWaypointToBackdropRightSide;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.TrussBackdropWaypointToStackWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.TrussStackWaypointToCenterStack;
@@ -77,7 +85,6 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -124,7 +131,7 @@ public class EXCCMP_Auto extends CommandOpMode {
 
     private Gamepad currentGamepad, previousGamepad;
 
-    public static String startingSide = "backstage", cycleTarget = "backdrop", transitVia = "door", cycleVia = "door", targetStack = "inner", parkIn = "center", alliance = "red", yellowTo = "center";
+    public static String startingSide = "backstage", cycleTarget = "backdrop", transitVia = "door", cycleVia = "door", targetStack = "inner", parkIn = "center", alliance = "red", yellowTo = "center", yellowPixelPosition = "center";
     public static boolean park = false, deliverYellow = true, cycle = true, wait = false, cycleDeliverToSide = true;
 
     //2*2*2*2*3*3*2*3*2*2*2*2
@@ -274,8 +281,8 @@ public class EXCCMP_Auto extends CommandOpMode {
                 alliance = "blue";
             }
 
-            telemetry.addData("⬅️ LEFT | startingSide: ", startingSide);
-            if (currentGamepad.dpad_left && !previousGamepad.dpad_left) {
+            telemetry.addData("⬅️ B-RIGHT | startingSide: ", startingSide);
+            if (currentGamepad.right_bumper && !previousGamepad.right_bumper) {
                 if (startingSide != "wing")
                     startingSide = "wing";
                 else
@@ -340,6 +347,15 @@ public class EXCCMP_Auto extends CommandOpMode {
                 else
                     targetStack = "inner";
 
+            telemetry.addData("LEFT | YELLOW DROP POS: ", yellowPixelPosition);
+            if (currentGamepad.dpad_left && !previousGamepad.dpad_left)
+                if (yellowPixelPosition == "left")
+                    yellowPixelPosition = "center";
+                else if (yellowPixelPosition == "center")
+                    yellowPixelPosition = "right";
+                else
+                    yellowPixelPosition = "left";
+
             telemetry.addData("START | yellowTo: ", yellowTo);
             if (currentGamepad.start && !previousGamepad.start)
                 if (yellowTo == "inner")
@@ -388,18 +404,30 @@ public class EXCCMP_Auto extends CommandOpMode {
 
                     if (transitVia == "door") {
                         if (alliance == "red") {
-                            BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropLeft;
+                            if (yellowPixelPosition == "center")
+                                BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropLeft;
+                            else
+                                BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropLeftCenter;
                             BackdropYellowSlotToWhiteSlot = Red_BackdropLeftToBackdropCenter;
                         } else {
-                            BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropRight;
+                            if (yellowPixelPosition == "center")
+                                BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropRight;
+                            else
+                                BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropRightCenter;
                             BackdropYellowSlotToWhiteSlot = Red_BackdropRightToBackdropCenter;
                         }
                     } else {
                         if (alliance == "red") {
-                            BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropLeft;
+                            if (yellowPixelPosition == "center")
+                                BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropLeft;
+                            else
+                                BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropLeftCenter;
                             BackdropYellowSlotToWhiteSlot = Red_BackdropLeftToBackdropRight;
                         } else {
-                            BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropRight;
+                            if (yellowPixelPosition == "center")
+                                BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropRight;
+                            else
+                                BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropRightCenter;
                             BackdropYellowSlotToWhiteSlot = Red_BackdropRightToBackdropLeft;
                         }
                     }
@@ -429,18 +457,30 @@ public class EXCCMP_Auto extends CommandOpMode {
 
                     if (transitVia == "door") {
                         if (alliance == "red") {
-                            BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropRight;
+                            if (yellowPixelPosition == "center")
+                                BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropRight;
+                            else
+                                BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropRightCenter;
                             BackdropYellowSlotToWhiteSlot = Red_BackdropRightToBackdropLeft;
                         } else {
-                            BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropLeft;
+                            if (yellowPixelPosition == "center")
+                                BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropLeft;
+                            else
+                                BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropLeftCenter;
                             BackdropYellowSlotToWhiteSlot = Red_BackdropLeftToBackdropRight;
                         }
                     } else {
                         if (alliance == "red") {
-                            BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropRight;
+                            if (yellowPixelPosition == "center")
+                                BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropRight;
+                            else
+                                BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropRightCenter;
                             BackdropYellowSlotToWhiteSlot = Red_BackdropRightToBackdropCenter;
                         } else {
-                            BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropLeft;
+                            if (yellowPixelPosition == "center")
+                                BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropLeft;
+                            else
+                                BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropLeftCenter;
                             BackdropYellowSlotToWhiteSlot = Red_BackdropLeftToBackdropCenter;
                         }
                     }
@@ -456,10 +496,16 @@ public class EXCCMP_Auto extends CommandOpMode {
                         SpikeToStack = RedWings_CenterSpikeToCenterStack;
 
                     if (transitVia == "door") {
-                        BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropCenter;
+                        if (yellowPixelPosition == "center")
+                            BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropCenter;
+                        else
+                            BackWaypointToBackdropYellow = Red_DoorBackdropTransitWaypointToBackdropCenterCenter;
                         BackdropYellowSlotToWhiteSlot = Red_BackdropCenterToBackdropLeft;
                     } else {
-                        BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropCenter;
+                        if (yellowPixelPosition == "center")
+                            BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropCenter;
+                        else
+                            BackWaypointToBackdropYellow = Red_TrussBackdropTransitWaypointToBackdropCenterCenter;
                         BackdropYellowSlotToWhiteSlot = Red_BackdropCenterToBackdropRight;
                     }
 
@@ -496,11 +542,17 @@ public class EXCCMP_Auto extends CommandOpMode {
                     if (alliance == "red") {
                         StartToSpike = RedBackstage_StartToLeftSpike;
                         SpikeToBackdropYellow = RedBackstage_LeftSpikeToBackdropWaypoint;
-                        BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropLeft;
+                        if (yellowPixelPosition == "center")
+                            BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropLeft;
+                        else
+                            BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropLeftCenter;
                     } else {
                         StartToSpike = RedBackstage_StartToRightSpike;
                         SpikeToBackdropYellow = RedBackstage_RightSpikeToBackdropWaypoint;
-                        BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropRight;
+                        if (yellowPixelPosition == "center")
+                            BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropRight;
+                        else
+                            BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropRightCenter;
                     }
 
                     telemetry.addLine("left spike traj");
@@ -509,11 +561,17 @@ public class EXCCMP_Auto extends CommandOpMode {
                     if (alliance == "red") {
                         StartToSpike = RedBackstage_StartToRightSpike;
                         SpikeToBackdropYellow = RedBackstage_RightSpikeToBackdropWaypoint;
-                        BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropRight;
+                        if (yellowPixelPosition == "center")
+                            BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropRight;
+                        else
+                            BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropRight;
                     } else {
                         StartToSpike = RedBackstage_StartToLeftSpike;
                         SpikeToBackdropYellow = RedBackstage_LeftSpikeToBackdropWaypoint;
-                        BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropLeft;
+                        if (yellowPixelPosition == "center")
+                            BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropLeft;
+                        else
+                            BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropLeft;
                     }
 
 
@@ -522,7 +580,10 @@ public class EXCCMP_Auto extends CommandOpMode {
 //                    SpikeToBackdropYellow = RedBackstage_CenterSpikeToBackdropCenter;
                     StartToSpike = RedBackstage_StartToCenterSpike;
                     SpikeToBackdropYellow = RedBackstage_CenterSpikeToBackdropWaypoint;
-                    BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropCenter;
+                    if (yellowPixelPosition == "center")
+                        BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropCenter;
+                    else
+                        BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropCenter;
 
                     telemetry.addLine("center spike traj");
                 }
@@ -742,7 +803,7 @@ public class EXCCMP_Auto extends CommandOpMode {
                             BackdropToBackdropWaypoint, // cycle
                             BackdropWaypointToStackWaypoint, // cycle
                             StackWaypointToStack, // cycle
-                            "red", startingSide, cycleTarget, transitVia, parkIn, cycle,
+                            "red", startingSide, cycleTarget, transitVia, parkIn, yellowPixelPosition, cycle,
                             wait, deliverYellow, telemetry
                     )
             );

@@ -65,7 +65,7 @@ public class AutoGenerator {
                                                         TrajectorySequence BackdropToBackdropWaypoint, // cycle
                                                         TrajectorySequence BackdropWaypointToStackWaypoint, // cycle
                                                         TrajectorySequence StackWaypointToStack, // cycle
-                                                        String alliance, String startingSide, String cycleTarget, String transitVia, String parkIn,
+                                                        String alliance, String startingSide, String cycleTarget, String transitVia, String parkIn, String yellowPixelPosition,
                                                         boolean cycle, boolean wait, boolean deliverYellow, Telemetry telemetry) {
 
         /**
@@ -100,6 +100,48 @@ public class AutoGenerator {
                                 new InstantCommand(intake::in),
                                 new InstantCommand(intake::downTeleOp),
                                 new WaitCommand(500)
+//                                new WaitCommand(500),
+//                                new InstantCommand(intake::in),
+//                                new InstantCommand(intake::downFifthPixel),
+//                                new WaitCommand(500),
+//                                new InstantCommand(intake::up),
+//                                new WaitCommand(500),
+//                                new InstantCommand(intake::out)//,
+//                                new InstantCommand(intake::up)
+                        ),
+                        new FollowTrajectoryCommand(drive, StackToStackWaypoint)
+                );
+            }
+        }
+        class stackPickup2 extends ParallelCommandGroup {
+            public stackPickup2(Arm arm, Wrist wrist, Gripper gripper, Lift lift, Intake intake, Winch winch, LEDs leds) {
+                addCommands(
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> leds.setLEDstate("intaking")),
+                                new InstantCommand(intake::in),
+//                                new InstantCommand(intake::downFirstPixel),
+//                                new WaitCommand(750),
+//                                new InstantCommand(intake::downTeleOp),
+//                                new WaitCommand(500),
+//                                new InstantCommand(intake::downSecondPixel),
+//                                new WaitCommand(750),
+                                new InstantCommand(intake::downTeleOp),
+                                new WaitCommand(1500),
+                                new InstantCommand(intake::up),
+                                new InstantCommand(intake::out),
+                                new WaitCommand(250),
+                                new InstantCommand(intake::in),
+                                new InstantCommand(intake::downTeleOp),
+//                                new InstantCommand(intake::downFifthPixel),
+//                                new WaitCommand(500),
+//                                new InstantCommand(intake::downTeleOp),
+                                new WaitCommand(1000),
+                                new InstantCommand(intake::up),
+                                new InstantCommand(intake::out),
+                                new WaitCommand(250),
+                                new InstantCommand(intake::in),
+                                new InstantCommand(intake::downTeleOp),
+                                new WaitCommand(1000)
 //                                new WaitCommand(500),
 //                                new InstantCommand(intake::in),
 //                                new InstantCommand(intake::downFifthPixel),
@@ -171,11 +213,12 @@ public class AutoGenerator {
 
                     // INTAKE SEQUENCE
 //                    new stackPickup(arm, wrist, gripper, lift, intake, winch, leds), //ends at stack waypoint
-                    new InstantCommand(intake::in),
-                    new InstantCommand(intake::downFirstPixel),
-                    new WaitCommand(500),
+//                    new InstantCommand(intake::in),
+//                    new InstantCommand(intake::downFirstPixel),
+//                    new WaitCommand(500),
                     new ParallelCommandGroup(
-                            new InstantCommand(intake::downTeleOp),
+//                            new InstantCommand(intake::downTeleOp),
+                            new stackPickup2(arm, wrist, gripper, lift, intake, winch, leds),
                             new FollowTrajectoryCommand(drive, StackToStackWaypoint),
                             new SequentialCommandGroup(
                                     new WaitCommand(750),
@@ -223,7 +266,7 @@ public class AutoGenerator {
                                 new SequentialCommandGroup(
                                         new WaitCommand(300),
                                         new InstantCommand(wrist::tiltToDeposit),
-                                        new InstantCommand(wrist::rollToPurpleAuto),
+                                        new InstantCommand(() -> wrist.rollToPurpleAuto(yellowPixelPosition)),
                                         new LiftToPositionCommand(lift, 200, 10)
                                 ),
                                 new SequentialCommandGroup(
@@ -247,7 +290,7 @@ public class AutoGenerator {
                                                 new InstantCommand(arm::toDeposit),
                                                 new InstantCommand(wrist::tiltToDeposit),
 //                                new InstantCommand(() -> wrist.setRollIndex(90)),
-                                                new InstantCommand(() -> wrist.rollToPurpleAuto()),
+                                                new InstantCommand(() -> wrist.rollToPurpleAuto(yellowPixelPosition)),
                                                 new LiftToPositionCommand(lift, 150, 10)),
                                         new relocSequence(arm, wrist, gripper, lift, intake, winch, leds)
                                 ),
