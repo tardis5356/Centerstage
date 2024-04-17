@@ -159,7 +159,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                 new InstantCommand(intake::out),
                                 //new LiftToPositionCommand(lift, 100, 25),
 
-                                new WaitCommand(150),
+                                new WaitCommand(400),
 
 //                                new WaitCommand(100),
                                 new InstantCommand(wrist::tiltToDeposit),
@@ -199,7 +199,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                 new InstantCommand(intake::out),
                                 //new LiftToPositionCommand(lift, 100, 25),
 
-                                new WaitCommand(150),
+                                new WaitCommand(400),
 
 //                                new WaitCommand(100),
                                 new InstantCommand(wrist::tiltToDepositHigh),
@@ -239,7 +239,7 @@ public class RobotToStateCommand extends ParallelCommandGroup {
                                 new InstantCommand(intake::out),
                                 new LiftToPositionCommand(lift, 100, 25),
 
-                                new WaitCommand(150),
+                                new WaitCommand(400),
 
 //                                new WaitCommand(100),
                                 new InstantCommand(wrist::tiltToDropPurplePixel),

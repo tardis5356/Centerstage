@@ -462,7 +462,7 @@ public class Gen1_TeleOp extends CommandOpMode {
                             gamepad1.rumbleBlips(2);
                             gamepad2.rumbleBlips(2);
                         }),
-                        new WaitCommand(200),
+                        new WaitCommand(100),
                         new InstantCommand(intake::out),
                         new WaitCommand(500),
                         new InstantCommand(intake::stop)

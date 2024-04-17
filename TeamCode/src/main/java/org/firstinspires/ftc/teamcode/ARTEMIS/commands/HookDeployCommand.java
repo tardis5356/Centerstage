@@ -10,7 +10,7 @@ public class HookDeployCommand extends SequentialCommandGroup {
     public HookDeployCommand(Winch winch) {
         addCommands(
                 new InstantCommand(winch::unlatchHookStage1),
-//                new WaitCommand(150),
+                new WaitCommand(100),
                 new InstantCommand(winch::unlatchHookStage2),
                 new WaitCommand(500),
                 new InstantCommand(winch::latchHook)
