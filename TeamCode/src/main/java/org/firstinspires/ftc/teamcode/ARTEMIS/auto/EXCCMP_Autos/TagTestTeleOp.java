@@ -126,7 +126,7 @@ public class TagTestTeleOp extends CommandOpMode {
 
         //init intake stuff and LEDs
         intake = new Intake(hardwareMap);
-        leds = new LEDs(hardwareMap);
+        leds = new LEDs(hardwareMap, gripper);
 
         //init winch stuff
         winch = new Winch(hardwareMap);

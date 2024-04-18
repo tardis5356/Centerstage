@@ -179,7 +179,7 @@ public class EXCCMP_Auto extends CommandOpMode {
         EXCCMP_AutoTrajectories.generateTrajectories(drive);
 
         intake = new Intake(hardwareMap);
-        leds = new LEDs(hardwareMap);
+        leds = new LEDs(hardwareMap, gripper);
         lift = new Lift(hardwareMap);
         gripper = new Gripper(hardwareMap);
         wrist = new Wrist(hardwareMap);

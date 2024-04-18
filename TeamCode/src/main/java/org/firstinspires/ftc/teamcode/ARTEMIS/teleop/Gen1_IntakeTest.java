@@ -73,7 +73,7 @@ public class Gen1_IntakeTest extends CommandOpMode {
 
         //init intake stuff and LEDs
         intake = new Intake(hardwareMap);
-        leds = new LEDs(hardwareMap);
+        leds = new LEDs(hardwareMap, gripper);
         intakeInCommand = new IntakeInCommand(intake, leds);
         intakeOutCommand = new IntakeOutCommand(intake);
 

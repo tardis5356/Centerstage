@@ -117,7 +117,7 @@ public class OLD_redWings_PurpleWAITYellowCenterParkAuto extends CommandOpMode {
         OLD_Artemis_PurpleYellowParkAutoTrajectories.generateTrajectories(drive);
 
         intake = new Intake(hardwareMap);
-        leds = new LEDs(hardwareMap);
+        leds = new LEDs(hardwareMap, gripper);
         lift = new Lift(hardwareMap);
         gripper = new Gripper(hardwareMap);
         wrist = new Wrist(hardwareMap);

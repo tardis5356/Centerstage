@@ -151,7 +151,7 @@ public class Gen1_TeleOp extends CommandOpMode {
 
         //init intake stuff and LEDs
         intake = new Intake(hardwareMap);
-        leds = new LEDs(hardwareMap);
+        leds = new LEDs(hardwareMap, gripper);
         intakeInCommand = new IntakeInCommand(intake, leds);
         intakeOutCommand = new IntakeOutCommand(intake);
 
@@ -338,7 +338,7 @@ public class Gen1_TeleOp extends CommandOpMode {
 //                .whileActiveContinuous();
         new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_RIGHT))// && driver2.getButton(GamepadKeys.Button.START))
                 .toggleWhenActive(() -> mW.setPower(-BotPositions.WINCH_MOTOR_POWER), () -> mW.setPower(0)); //, () -> mW.setPower(BotPositions.WINCH_MOTOR_POWER)
-        new Trigger(() -> driver1.getButton(GamepadKeys.Button.DPAD_UP))// && driver2.getButton(GamepadKeys.Button.START))
+        new Trigger(() -> (driver1.getButton(GamepadKeys.Button.DPAD_UP) && driver1.getButton(GamepadKeys.Button.DPAD_UP)))// && driver2.getButton(GamepadKeys.Button.START))
                 .whenActive(new HookDeployCommand(winch))
                 .whenInactive(new InstantCommand(winch::latchHook));
 //                .whenActive(winchDeployCommand);

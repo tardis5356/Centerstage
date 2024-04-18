@@ -115,7 +115,7 @@ public class OLD_blueWings_FARBACK_PurpleYellowCornerParkAuto extends CommandOpM
         OLD_Artemis_PurpleYellowParkAutoTrajectories.generateTrajectories(drive);
 
         intake = new Intake(hardwareMap);
-        leds = new LEDs(hardwareMap);
+        leds = new LEDs(hardwareMap, gripper);
         lift = new Lift(hardwareMap);
         gripper = new Gripper(hardwareMap);
         wrist = new Wrist(hardwareMap);

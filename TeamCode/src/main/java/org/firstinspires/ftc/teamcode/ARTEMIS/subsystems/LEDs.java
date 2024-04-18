@@ -21,6 +21,7 @@ public class LEDs extends SubsystemBase {
     double EvenOrOdd = 0;
 
     Gamepad driver, manipulator;
+    Gripper gripper;
 
     // setup colors
     public RevBlinkinLedDriver.BlinkinPattern
@@ -40,7 +41,7 @@ public class LEDs extends SubsystemBase {
     static String LEDstate = "Idle";
 
     // map physical objects
-    public LEDs(HardwareMap hardwareMap) {
+    public LEDs(HardwareMap hardwareMap, Gripper gripper) {
         colorLeft = hardwareMap.get(ColorSensor.class, "colorLeft");
         colorRight = hardwareMap.get(ColorSensor.class, "colorRight");
         blinkin = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
@@ -69,6 +70,16 @@ public class LEDs extends SubsystemBase {
                 } else if (!checkLeftPixel() && !checkRightPixel()) {
                     blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                 }
+                break;
+            case "intakingAndGrab":
+                if (checkLeftPixel() && !checkRightPixel() || !checkLeftPixel() && checkRightPixel()) {
+                    blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+                } else if (checkLeftPixel() && checkRightPixel()) {
+                    blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GREEN);
+                } else if (!checkLeftPixel() && !checkRightPixel()) {
+                    blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                }
+                grabIfPixelDetected(gripper);
                 break;
             case "yellow":
                 blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
@@ -130,6 +141,13 @@ public class LEDs extends SubsystemBase {
         } else {
             return false;
         }
+    }
+
+    public void grabIfPixelDetected(Gripper gripper) {
+        if(checkLeftPixel())
+            gripper.grabLeft();
+        if(checkRightPixel())
+            gripper.grabLeft();
     }
 
 }

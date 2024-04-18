@@ -75,7 +75,7 @@ public class AutoGenerator {
             public stackPickup(Arm arm, Wrist wrist, Gripper gripper, Lift lift, Intake intake, Winch winch, LEDs leds) {
                 addCommands(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> leds.setLEDstate("intaking")),
+                                new InstantCommand(() -> leds.setLEDstate("intakingAndGrab")),
                                 new InstantCommand(intake::in),
 //                                new InstantCommand(intake::downFirstPixel),
 //                                new WaitCommand(750),
@@ -117,7 +117,7 @@ public class AutoGenerator {
             public stackPickup2(Arm arm, Wrist wrist, Gripper gripper, Lift lift, Intake intake, Winch winch, LEDs leds) {
                 addCommands(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> leds.setLEDstate("intaking")),
+                                new InstantCommand(() -> leds.setLEDstate("intakingAndGrab")),
                                 new InstantCommand(intake::in),
 //                                new InstantCommand(intake::downFirstPixel),
 //                                new WaitCommand(750),
@@ -236,16 +236,16 @@ public class AutoGenerator {
                                     new InstantCommand(gripper::grabRight),
                                     new WaitCommand(300),
                                     new InstantCommand(arm::toTransition),
-                                    new InstantCommand(wrist::toTransition)
-//                                    new InstantCommand(intake::up),
-//                                    new WaitCommand(150),
-//                                    new InstantCommand(intake::out)
+                                    new InstantCommand(wrist::toTransition),
+                                    new InstantCommand(intake::up),
+                                    new WaitCommand(150),
+                                    new InstantCommand(intake::out)
                             ),
-                            new FollowTrajectoryCommand(drive, StackWaypointToBackWaypoint),
-                            new SequentialCommandGroup(
-                                    new WaitCommand(1000),
-                                    new InstantCommand(intake::stop)
-                            )
+                            new FollowTrajectoryCommand(drive, StackWaypointToBackWaypoint)//,
+//                            new SequentialCommandGroup(
+//                                    new WaitCommand(1000),
+//                                    new InstantCommand(intake::stop)
+//                            )
                     )
             ));
         }
@@ -260,6 +260,7 @@ public class AutoGenerator {
                  */
                 autoCommands.addCommands(new SequentialCommandGroup(
                         new relocSequence(arm, wrist, gripper, lift, intake, winch, leds),
+                        new InstantCommand(intake::stop),
                         new ParallelCommandGroup(
 //                                new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
                                 new InstantCommand(arm::toDeposit),

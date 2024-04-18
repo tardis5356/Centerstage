@@ -84,7 +84,7 @@ public class VR_Gen1_Test_teleop extends CommandOpMode {
 
         //init intake stuff and LEDs
         intake = new Intake(hardwareMap);
-        leds = new LEDs(hardwareMap);
+        leds = new LEDs(hardwareMap, gripper);
         intakeInCommand = new IntakeInCommand(intake, leds);
         intakeOutCommand = new IntakeOutCommand(intake);
 
