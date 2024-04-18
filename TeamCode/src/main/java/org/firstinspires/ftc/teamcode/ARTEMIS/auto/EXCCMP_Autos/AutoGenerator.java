@@ -218,15 +218,15 @@ public class AutoGenerator {
 //                    new WaitCommand(500),
                     new ParallelCommandGroup(
 //                            new InstantCommand(intake::downTeleOp),
-                            new stackPickup2(arm, wrist, gripper, lift, intake, winch, leds),
-                            new FollowTrajectoryCommand(drive, StackToStackWaypoint),
-                            new SequentialCommandGroup(
-                                    new WaitCommand(750),
-                                    new InstantCommand(gripper::grabLeft),
-                                    new InstantCommand(gripper::grabRight),
-                                    new WaitCommand(500),
-                                    new InstantCommand(intake::out)
-                            )
+                            new stackPickup2(arm, wrist, gripper, lift, intake, winch, leds)//,
+//                            new FollowTrajectoryCommand(drive, StackToStackWaypoint),
+//                            new SequentialCommandGroup(
+//                                    new WaitCommand(750),
+////                                    new InstantCommand(gripper::grabLeft),
+////                                    new InstantCommand(gripper::grabRight),
+//                                    new WaitCommand(500),
+//                                    new InstantCommand(intake::out)
+//                            )
                     ),
 
                     new ParallelCommandGroup(

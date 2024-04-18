@@ -52,7 +52,7 @@ public class EXCCMP_AutoTrajectories {
     // RED
     public static final Pose2d Red_InnerStackPos = new Pose2d(55, 15, Math.toRadians(0)); //originally x=58, y=12
     public static final Pose2d Red_CenterStackPos = new Pose2d(55, 24, Math.toRadians(0)); // originally (55, 24)
-    public static final Pose2d Red_OuterStackPos = new Pose2d(55, 40, Math.toRadians(0)); // originally (55, 36)
+    public static final Pose2d Red_OuterStackPos = new Pose2d(55, 37, Math.toRadians(0)); // originally (55, 36)
 
     public static final Pose2d Red_DoorStackTransitWaypoint = new Pose2d(56, 12, Math.toRadians(0));
     public static final Pose2d Red_TrussStackTransitWaypoint = new Pose2d(56, 56, Math.toRadians(0));
@@ -357,7 +357,7 @@ public class EXCCMP_AutoTrajectories {
         // RED BACKSTAGE 🟥🟥🟥🟥
         // redBackstage 🟥🎭 start 🏁 to spike 🌵
         RedBackstage_StartToLeftSpike = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(-14, 35, Math.toRadians(180)), Math.toRadians(290))
+                .splineToLinearHeading(new Pose2d(-13, 35, Math.toRadians(180)), Math.toRadians(290))
                 .build();
         RedBackstage_StartToCenterSpike = drive.trajectorySequenceBuilder(startPose)
                 .splineToLinearHeading(new Pose2d(-28, 29.5, Math.toRadians(160)), 180) // center spike
