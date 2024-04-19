@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Archive;
 
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize6;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalizeFrontCamera;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.AngleController;
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
@@ -36,7 +37,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
-@Disabled
+//@Disabled
 @TeleOp(name = "TagTestTeleopTestRig", group = "AA")
 public class TagTestTeleOpTestRig extends CommandOpMode {
     //gamepads
@@ -97,7 +98,7 @@ public class TagTestTeleOpTestRig extends CommandOpMode {
 
         imu.resetYaw();
 
-        webcams.setCamera("back");
+        webcams.setCamera("front");
         webcams.setActiveProcessor("apriltag");
     }
 
@@ -114,7 +115,7 @@ public class TagTestTeleOpTestRig extends CommandOpMode {
 
         telemetry.addLine();
 
-        telemetry.addData("localize6", relocalize6(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), currentThetaRads, telemetry));
+        telemetry.addData("localize6", relocalizeFrontCamera(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), currentThetaRads, telemetry));
 
         telemetry.update();
     }

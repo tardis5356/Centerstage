@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
 
 import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.BACK_WEBCAM_X_OFFSET;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.BACK_WEBCAM_Y_OFFSET;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.subsystems.BotPositions.FRONT_WEBCAM_X_OFFSET;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
@@ -83,6 +84,75 @@ public class AutoUtils {
             // 2. Tag vs Field
             double x_tagInRR = -tagPose.getX();
             double y_tagInRR = -tagPose.getY();
+
+            telemetry.addData("x_tagInRR", numFormat, x_tagInRR);
+            telemetry.addData("y_tagInRR", numFormat, y_tagInRR);
+
+            // 3. Bot vs Field
+            double x_botToField = x_botToTag + x_tagInRR;
+            double y_botToField = y_botToTag + y_tagInRR;
+
+            telemetry.addData("x_botToField", numFormat, x_botToField);
+            telemetry.addData("y_botToField", numFormat, y_botToField);
+
+            finalX += x_botToField;
+            finalY += y_botToField;
+
+            telemetry.addLine();
+        }
+        if (finalX == 0)
+            return null;
+        else
+            return new Pose2d(finalX / detections.size(), finalY / detections.size(), headingRad);
+    }
+
+    public static Pose2d relocalizeFrontCamera(List<AprilTagDetection> detections, double headingRad, Telemetry telemetry) {
+        List<Double> x = new ArrayList<>();
+        List<Double> y = new ArrayList<>();
+
+        String numFormat = "%.2f";
+
+        /*
+
+        **ALL POSITIONS ARE TO CENTERS OF ELEMENTS**
+
+        1. Bot location vs Tag
+        2. Tag vs Field
+        3. Bot vs Field
+
+        TODO: make case to flip x axis when quaternion x is 0 (for audience wall tags)
+
+         */
+
+        // flip heading because this is an inverse transformation (coordinate system isn't rotating, bot is rotating)
+        double flippedHeading = -headingRad;
+
+        double finalX = 0;
+        double finalY = 0;
+
+        for (AprilTagDetection detection : detections) {
+//            if(detection.metadata.fieldOrientation.x == 0){} // if tag is on wall
+
+
+//            Pose2d tagPose = vectorFToPose2d(detection.metadata.fieldPosition);
+            Pose2d tagPose = vectorFToPose2d(AutoUtils.getCenterStageTagLibrary().lookupTag(detection.metadata.id).fieldPosition);
+            AprilTagPoseFtc ftcPose = detection.ftcPose;
+
+            telemetry.addData("tag name", detection.metadata.name);
+
+            // 1. Bot location vs Tag
+            double x_camera = ftcPose.x;
+            double y_camera = ftcPose.y;
+
+            double x_botToTag = -((y_camera + FRONT_WEBCAM_X_OFFSET) * Math.cos(flippedHeading) - x_camera * Math.sin(flippedHeading));
+            double y_botToTag = -(-(y_camera + FRONT_WEBCAM_X_OFFSET) * Math.sin(flippedHeading) - x_camera * Math.cos(flippedHeading));
+
+            telemetry.addData("x_botToTag", numFormat, x_botToTag);
+            telemetry.addData("y_botToTag", numFormat, y_botToTag);
+
+            // 2. Tag vs Field
+            double x_tagInRR = tagPose.getX();
+            double y_tagInRR = tagPose.getY();
 
             telemetry.addData("x_tagInRR", numFormat, x_tagInRR);
             telemetry.addData("y_tagInRR", numFormat, y_tagInRR);

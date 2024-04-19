@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalize6;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.AutoUtils.relocalizeFrontCamera;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.AngleController;
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
@@ -167,7 +168,7 @@ public class TagTestTeleOp extends CommandOpMode {
 //        drivetrain.setStartingError();
         drivetrain.setStartingOffsetDegs(270);
 
-        webcams.setCamera("back");
+        webcams.setCamera("front");
 
         leds.setLEDstate("idle");
 
@@ -214,7 +215,7 @@ public class TagTestTeleOp extends CommandOpMode {
         telemetry.addData("# of detections: ", webcams.getActiveAprilTagProcessor().getDetections().size());
 
 
-        Pose2d newPose = relocalize6(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), drivetrain.getYawRadians(), telemetry);
+        Pose2d newPose = relocalizeFrontCamera(webcams.getCurrentDetections(webcams.getActiveAprilTagProcessor()), drivetrain.getYawRadians(), telemetry);
         if (newPose != null) {
             drive.setPoseEstimate(newPose);
 //            telemetry.addData("relocalized using apriltags ", newPose);
