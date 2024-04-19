@@ -463,12 +463,15 @@ public class EXCCMP_AutoTrajectories {
                 .build();
 
         Red_BackdropLeftToBackdropWaypointDoor = drive.trajectorySequenceBuilder(RedBackstage_BackdropRelocWaypointToBackdropLeft.end())
+                .lineToLinearHeading(Red_BackdropLeftOffsetPos)
                 .lineToLinearHeading(Red_DoorBackdropTransitWaypoint)
                 .build();
         Red_BackdropRightToBackdropWaypointDoor = drive.trajectorySequenceBuilder(RedBackstage_BackdropRelocWaypointToBackdropRight.end())
+                .lineToLinearHeading(Red_BackdropRightOffsetPos)
                 .lineToLinearHeading(Red_DoorBackdropTransitWaypoint)
                 .build();
         Red_BackdropCenterToBackdropWaypointDoor = drive.trajectorySequenceBuilder(RedBackstage_BackdropRelocWaypointToBackdropCenter.end())
+                .lineToLinearHeading(Red_BackdropCenterOffsetPos)
                 .lineToLinearHeading(Red_DoorBackdropTransitWaypoint)
                 .build();
 
