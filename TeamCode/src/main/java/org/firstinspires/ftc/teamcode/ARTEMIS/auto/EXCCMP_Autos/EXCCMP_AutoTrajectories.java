@@ -169,7 +169,7 @@ public class EXCCMP_AutoTrajectories {
         RedWings_StartToLeftSpike =
                 drive.trajectorySequenceBuilder(startPose)
                         .splineToSplineHeading(new Pose2d(50, 25, Math.toRadians(300)), Math.toRadians(300))
-                        .lineToLinearHeading(new Pose2d(50, 21, Math.toRadians(300)))
+                        .lineToLinearHeading(new Pose2d(48, 20, Math.toRadians(300))) // 50, 21
                         .build();
 
         // redwings 🟥🪽 spike 🌵 to stack 🥞
@@ -234,10 +234,10 @@ public class EXCCMP_AutoTrajectories {
 //                .back(4, velConstraint40in, accelConstraint40in)
 //                .turn(Math.toRadians(10))
 //                .forward(5, velConstraint40in, accelConstraint40in)
-                .back(5, velConstraint40in, accelConstraint40in)
+                .back(5, velConstraint40in, accelConstraint40in) //
 //                .turn(Math.toRadians(-20))
 //                .waitSeconds(0.5)
-                .forward(4, velConstraint40in, accelConstraint40in)
+                .forward(4, velConstraint40in, accelConstraint40in) //
 //                .back(3, velConstraint40in, accelConstraint40in)
 //                .back(2, velConstraint20in, accelConstraint25in)
 //                .back(0.01)
