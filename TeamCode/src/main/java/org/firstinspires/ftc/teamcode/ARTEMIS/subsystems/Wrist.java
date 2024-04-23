@@ -134,9 +134,9 @@ public class Wrist extends SubsystemBase {
                 rollIndex = 60;
         } else { // blue
             if (position == "left")
-                rollIndex = -60;
-            if (position == "right")
                 rollIndex = -120;
+            if (position == "right")
+                rollIndex = -60;
             else
                 rollIndex = -60;
         }

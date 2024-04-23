@@ -11,8 +11,11 @@ import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_Au
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_BackdropRelocWaypointToBackdropRight;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_BackdropRelocWaypointToBackdropRightCenter;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_CenterSpikeToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_CenterSpikeToTigersWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_LeftSpikeToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_LeftSpikeToTigersWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_RightSpikeToBackdropWaypoint;
+import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_RightSpikeToTigersWaypoint;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToCenterSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToLeftSpike;
 import static org.firstinspires.ftc.teamcode.ARTEMIS.auto.EXCCMP_Autos.EXCCMP_AutoTrajectories.RedBackstage_StartToRightSpike;
@@ -150,7 +153,8 @@ public class EXCCMP_Auto extends CommandOpMode {
             BackdropToPark, // both
             BackdropToBackdropWaypoint, // cycle
             BackdropWaypointToStackWaypoint, // cycle
-            StackWaypointToStack; // cycle
+            StackWaypointToStack, // cycle
+            SpikeToTigersWaypoint;
 
     private static AprilTagMetadata targetBackdropTag;
 
@@ -555,6 +559,7 @@ public class EXCCMP_Auto extends CommandOpMode {
                             BackdropRelocWaypointToBackdrop = RedBackstage_BackdropRelocWaypointToBackdropRightCenter;
                     }
 
+
                     telemetry.addLine("left spike traj");
                 } else if (webcam.getPropPosition() == "right") {
 //                    SpikeToBackdropYellow = RedBackstage_RightSpikeToBackdropRight;
@@ -738,6 +743,15 @@ public class EXCCMP_Auto extends CommandOpMode {
 //                    BackdropWaypointToStackWaypoint = Red_BackstageToStackViaTruss;
             }
 
+            if (!cycle && startingSide == "backstage") {
+                if (webcam.getPropPosition() == "left")
+                    SpikeToBackdropYellow = RedBackstage_LeftSpikeToTigersWaypoint;
+                else if(webcam.getPropPosition() == "right")
+                    SpikeToBackdropYellow = RedBackstage_RightSpikeToTigersWaypoint;
+                else
+                    SpikeToBackdropYellow = RedBackstage_CenterSpikeToTigersWaypoint;
+            }
+
             telemetry.addData("converted imu degs: ", drivetrain.getYawDegrees());
             telemetry.addData("offset in degs: ", drivetrain.getStartingOffsetDegs());
             telemetry.addData("raw imu degs: ", drivetrain.getRawYawDegrees());
@@ -803,6 +817,7 @@ public class EXCCMP_Auto extends CommandOpMode {
                             BackdropToBackdropWaypoint, // cycle
                             BackdropWaypointToStackWaypoint, // cycle
                             StackWaypointToStack, // cycle
+                            SpikeToTigersWaypoint,
                             "red", startingSide, cycleTarget, transitVia, parkIn, yellowPixelPosition, cycle,
                             wait, deliverYellow, telemetry
                     )

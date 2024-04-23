@@ -65,6 +65,7 @@ public class AutoGenerator {
                                                         TrajectorySequence BackdropToBackdropWaypoint, // cycle
                                                         TrajectorySequence BackdropWaypointToStackWaypoint, // cycle
                                                         TrajectorySequence StackWaypointToStack, // cycle
+                                                        TrajectorySequence SpikeToTigersWaypoint, // cycle
                                                         String alliance, String startingSide, String cycleTarget, String transitVia, String parkIn, String yellowPixelPosition,
                                                         boolean cycle, boolean wait, boolean deliverYellow, Telemetry telemetry) {
 
@@ -180,14 +181,14 @@ public class AutoGenerator {
                 new ParallelCommandGroup(
                         new FollowTrajectoryCommand(drive, StartToSpike),
                         new SequentialCommandGroup(
-                                new WaitCommand(500),
+                                new WaitCommand(200),
                                 new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "dropPurple")
                         )
                 ),
-                new WaitCommand(50),
+//                new WaitCommand(50),
 //                new InstantCommand(gripper::releaseLeft),
                 new InstantCommand(gripper::purpleReleaseAuto),
-                new WaitCommand(500)
+                new WaitCommand(100)
         ));
 
         // get extra pixel on first cycle (start: spike, end: back)
@@ -271,7 +272,7 @@ public class AutoGenerator {
                                         new LiftToPositionCommand(lift, 200, 10)
                                 ),
                                 new SequentialCommandGroup(
-                                        new WaitCommand(250),
+//                                        new WaitCommand(250),
                                         new FollowTrajectoryCommand(drive, BackWaypointToBackdropYellow)
                                 )
                         )
@@ -282,27 +283,52 @@ public class AutoGenerator {
                  * start: spike
                  * end: backdrop yellow pos
                  */
-                autoCommands.addCommands(
-                        new SequentialCommandGroup( // turn bot around to align with backdrop
-                                new InstantCommand(arm::toArmStraightUp),
-                                new FollowTrajectoryCommand(drive, SpikeToBackdropYellow),
-                                new ParallelCommandGroup(
-                                        new SequentialCommandGroup(
-                                                new InstantCommand(arm::toDeposit),
-                                                new InstantCommand(wrist::tiltToDeposit),
+                if(!cycle && startingSide == "backstage"){
+                    autoCommands.addCommands(
+                            new SequentialCommandGroup( // turn bot around to align with backdrop
+                                    new InstantCommand(arm::toArmStraightUp),
+                                    new FollowTrajectoryCommand(drive, SpikeToBackdropYellow),
+                                    new ParallelCommandGroup(
+                                            new SequentialCommandGroup(
+                                                    new InstantCommand(arm::toDeposit),
+                                                    new InstantCommand(wrist::tiltToDeposit),
 //                                new InstantCommand(() -> wrist.setRollIndex(90)),
-                                                new InstantCommand(() -> wrist.rollToPurpleAuto(yellowPixelPosition)),
-                                                new LiftToPositionCommand(lift, 150, 10)),
-                                        new relocSequence(arm, wrist, gripper, lift, intake, winch, leds)
-                                ),
-                                new FollowTrajectoryCommand(drive, BackdropRelocWaypointToBackdrop)
+                                                    new InstantCommand(() -> wrist.rollToPurpleAuto(yellowPixelPosition)),
+                                                    new LiftToPositionCommand(lift, 200, 10)),
+                                            new relocSequence(arm, wrist, gripper, lift, intake, winch, leds)
+                                    ),
+                                    new FollowTrajectoryCommand(drive, BackdropRelocWaypointToBackdrop)
 //                                new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
 //                                new InstantCommand(arm::toDeposit),
 //                                new SequentialCommandGroup(
 //                                new WaitCommand(50),
 //                                new InstantCommand(wrist::tiltToDeposit),
 //                                )
-                        ));
+                            ));
+                } else {
+                    autoCommands.addCommands(
+                            new SequentialCommandGroup( // turn bot around to align with backdrop
+                                    new InstantCommand(arm::toArmStraightUp),
+                                    new FollowTrajectoryCommand(drive, SpikeToBackdropYellow),
+                                    new ParallelCommandGroup(
+                                            new SequentialCommandGroup(
+                                                    new InstantCommand(arm::toDeposit),
+                                                    new InstantCommand(wrist::tiltToDeposit),
+//                                new InstantCommand(() -> wrist.setRollIndex(90)),
+                                                    new InstantCommand(() -> wrist.rollToPurpleAuto(yellowPixelPosition)),
+                                                    new LiftToPositionCommand(lift, 150, 10)),
+                                            new relocSequence(arm, wrist, gripper, lift, intake, winch, leds)
+                                    ),
+                                    new FollowTrajectoryCommand(drive, BackdropRelocWaypointToBackdrop)
+//                                new RobotToStateCommand(arm, wrist, gripper, lift, intake, winch, leds, "deposit"),
+//                                new InstantCommand(arm::toDeposit),
+//                                new SequentialCommandGroup(
+//                                new WaitCommand(50),
+//                                new InstantCommand(wrist::tiltToDeposit),
+//                                )
+                            ));
+                }
+
             }
             /**
              * deliver yellow pixel
@@ -312,7 +338,7 @@ public class AutoGenerator {
             autoCommands.addCommands(new SequentialCommandGroup(
 //                    new InstantCommand(gripper::releaseRight), // drop yellow
                     new InstantCommand(gripper::yellowReleaseAuto), // drop yellow
-                    new WaitCommand(150)
+                    new WaitCommand(50) //150
 //                    new InstantCommand(() -> { /** MOVE BOT TO HIGH DELVIERY POSITION */
 //                        BotPositions.ARM_HIGH_POSITION = true;
 //                        arm.toDeposit();
