@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-@Disabled
+//@Disabled
 @TeleOp(name="Optimus_TeleOp", group="demo")
 //@Disabled
 public class Optimus_TeleOp extends LinearOpMode{
@@ -141,10 +141,10 @@ public class Optimus_TeleOp extends LinearOpMode{
                 if (lB2) {
                     wristPosition = 1;
                 }
-//            else if (lB2){
-//                wristPosition = 0;
-//
-//            }
+            else if (lB2){
+                wristPosition = 0;
+
+            }
                 else if (rB2) {
                     wristPosition = .7;
                 } else if (rB2 == false && lB2 == false) {
@@ -201,9 +201,9 @@ public class Optimus_TeleOp extends LinearOpMode{
                 ArmPosition = 3750;
                 PositionDiff = ArmPosition - mA.getCurrentPosition();
             }
-//            if (ArmPosition >= 3850){
-//                mA.setPower(-.5);
-//            }
+            if (ArmPosition >= 3850){
+                mA.setPower(-.5);
+            }
 
 
 

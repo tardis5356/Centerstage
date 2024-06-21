@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Disabled
+//@Disabled
 @TeleOp(name = "Primus_TeleOp", group="demo")
 public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
 
@@ -17,6 +17,7 @@ public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
     double PosDiff;
     boolean FarForward;
     boolean FarBack;
+    double vArmPower;
     TouchSensor ArmLim;
 
     @Override
@@ -53,6 +54,8 @@ public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
 
         while (opModeIsActive()) {
 
+
+
             armPosition = mBR.getCurrentPosition() + PosDiff;
 
 //            telemetry.addData("armLimit", armLimit.getVoltage());
@@ -78,7 +81,7 @@ public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
             double rightY2 = gamepad2.right_stick_y;
             boolean aButton = gamepad2.a;
             boolean bButton = gamepad2.b;
-
+            vArmPower = rightY2;
 
             //Drivetrain controls
             mBL.setPower(leftY1 - rightX1);
@@ -87,17 +90,21 @@ public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
             mFR.setPower(leftY1 + rightX1);
 
             if(ArmLim.isPressed() == false || (FarForward == false && FarBack == false)){
-                mArm.setPower(rightY2);
+                mArm.setPower(vArmPower);
 //                FarForward = false;
             }
             if(ArmLim.isPressed() == true){
                 armPosition = 1000;
                 PosDiff = armPosition - mBR.getCurrentPosition();
                 FarForward = true;
-                mArm.setPower(1);
+                if(rightY2 < 0){
+                    vArmPower = (0);
+                }
+
+                mArm.setPower(vArmPower);
             }
             if(armPosition < 2000 && FarForward == true){
-                mArm.setPower(Math.abs(rightY2));
+                mArm.setPower(vArmPower);
             }
             if(armPosition >= 2000){
                 FarForward = false;
