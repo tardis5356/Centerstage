@@ -44,6 +44,7 @@ public class AutoUtils {
         String numFormat = "%.2f";
 
         /*
+        This method assumes we are using the camera in the back of the robot
 
         **ALL POSITIONS ARE TO CENTERS OF ELEMENTS**
 
