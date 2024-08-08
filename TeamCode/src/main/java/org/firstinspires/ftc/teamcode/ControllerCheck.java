@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@Disabled
+//@Disabled
 @TeleOp(name="ControllerCheck")
 public class ControllerCheck extends LinearOpMode{
         @Override

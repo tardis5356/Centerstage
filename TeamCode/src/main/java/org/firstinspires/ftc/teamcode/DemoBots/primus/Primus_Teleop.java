@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-//@Disabled
+@Disabled
 @TeleOp(name = "Primus_TeleOp", group="demo")
 public class Primus_Teleop extends BaseClass_PP {    // LinearOpMode {
 
